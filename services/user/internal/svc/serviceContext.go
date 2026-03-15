@@ -3,17 +3,26 @@ package svc
 import (
 	"context"
 
-	"github.com/HappyLadySauce/Beehive-M/services/auth/internal/config"
+	"github.com/HappyLadySauce/Beehive-M/services/user/internal/config"
 	"github.com/redis/go-redis/v9"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type ServiceContext struct {
 	Config config.Config
+	DB	*gorm.DB
 
 	Redis *redis.Client
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	// Connect to PostgreSQL
+	db, err := gorm.Open(postgres.Open(c.PostgreSQLDSN), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect to PostgreSQL: " + err.Error())
+	}
+
 	// Connect to Redis
 	redis := redis.NewClient(&redis.Options{
 		Addr:     c.RedisHost,
@@ -21,7 +30,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		DB:       c.RedisDB,
 	})
 	// Ping Redis to check if the connection is successful
-	_, err := redis.Ping(context.Background()).Result()
+	_, err = redis.Ping(context.Background()).Result()
 	if err != nil {
 		panic("failed to connect to Redis: " + err.Error())
 	}
@@ -29,6 +38,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	// Return the ServiceContext
 	return &ServiceContext{
 		Config: c,
+		DB:     db,
 		Redis:  redis,
 	}
 }
