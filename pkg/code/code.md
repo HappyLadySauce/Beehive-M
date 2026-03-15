@@ -37,4 +37,4 @@ import (
 return nil, errors.New(code.CodeInvalidParam, "user_id is required")
 ```
 
-Gateway 对外统一响应格式为 `{"code": <码>, "msg": "<描述>", "data": ...}`，由 `xhttp.JsonBaseResponseCtx` 与 `httpx.SetErrorHandler` 保证。
+Gateway 对外统一响应格式为 `{"code": <码>, "msg": "<描述>", "data": ...}`，由各 handler 内对成功/错误均调用 `xhttp.JsonBaseResponseCtx` 保证（含对 `*errors.CodeMsg` 的识别与序列化）。
