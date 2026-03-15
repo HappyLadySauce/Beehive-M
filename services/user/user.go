@@ -25,6 +25,11 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 
+	// 延迟关闭 DB 与 Redis 连接
+	defer func() {
+		_ = ctx.Close()
+	}()
+
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		pb.RegisterUserServiceServer(grpcServer, userserviceServer.NewUserServiceServer(ctx))
 
