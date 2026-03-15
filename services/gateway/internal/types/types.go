@@ -3,7 +3,4 @@
 
 package types
 
-type HealthResp struct {
-	Code    int64  `json:"code"`
-	Message string `json:"message"`
-}
+type HealthResp struct{}

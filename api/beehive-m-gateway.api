@@ -6,10 +6,8 @@ info (
 )
 
 type (
-	HealthResp {
-		Code    int64  `json:"code"`
-		Message string `json:"message"`
-	}
+	// HealthResp 健康检查 data 部分，顶层 code/msg 由统一响应格式提供
+	HealthResp {}
 )
 
 @server (

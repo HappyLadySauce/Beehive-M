@@ -8,7 +8,7 @@ import (
 
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/logic/gateway"
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/svc"
-	"github.com/zeromicro/go-zero/rest/httpx"
+	xhttp "github.com/zeromicro/x/http"
 )
 
 func HealthHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -16,9 +16,9 @@ func HealthHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := gateway.NewHealthLogic(r.Context(), svcCtx)
 		resp, err := l.Health()
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			xhttp.JsonBaseResponseCtx(r.Context(), w, err)
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			xhttp.JsonBaseResponseCtx(r.Context(), w, resp)
 		}
 	}
 }
