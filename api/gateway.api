@@ -1,0 +1,26 @@
+syntax = "v1"
+
+info (
+    title:  "Beehive Gateway API"
+    desc:   "WebSocket 网关入口与"
+)
+
+
+type (
+    HealthResp {
+        Code    int64   `json:"code"`
+        Message string  `json:"message"`
+    }
+)
+
+@server (
+    name:   gateway
+    group:  gateway
+)
+service gateway-api {
+    @handler WsEntry
+    get /ws
+
+    @handler Health
+    get /healthz returns (HealthResp)
+}
