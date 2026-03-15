@@ -68,8 +68,8 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
 	}
 
-	// 4. 回写缓存
-	userBytes, err = json.Marshal(user)
+	// 4. 回写缓存（传指针避免复制含 sync.Mutex 的 pb.User）
+	userBytes, err = json.Marshal(&user)
 	if err != nil {
 		// 4.1 如果序列化失败，则返回序列化失败
 		l.Logger.Errorf("marshal user profile to json failed: %v", err)

@@ -25,11 +25,6 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 
-	// 延迟关闭 DB 与 Redis 连接
-	defer func() {
-		_ = ctx.Close()
-	}()
-
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		pb.RegisterUserServiceServer(grpcServer, userserviceServer.NewUserServiceServer(ctx))
 
@@ -37,6 +32,8 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
+	// defer 为 LIFO：后定义的先执行。顺序为：先 s.Stop()，再 ctx.Close()，保证优雅退出。
+	defer func() { _ = ctx.Close() }()
 	defer s.Stop()
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
