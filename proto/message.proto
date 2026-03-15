@@ -4,7 +4,7 @@ package message;
 
 option go_package = "./service/message/pb";
 
-// MessageService 私聊/群聊消息、已读、撤回、会话列表、同步
+// MessageService 私聊/群聊消息、已读、撤回、引用、会话列表、同步
 service MessageService {
   // 私聊
   rpc SendPrivateMessage(SendPrivateMessageRequest) returns (SendPrivateMessageResponse);
@@ -19,6 +19,7 @@ service MessageService {
   // 通用
   rpc RecallMessage(RecallMessageRequest) returns (RecallMessageResponse);
   rpc GetMessage(GetMessageRequest) returns (GetMessageResponse);
+  rpc ListMessageReferences(ListMessageReferencesRequest) returns (ListMessageReferencesResponse);
   // 会话
   rpc ListConversations(ListConversationsRequest) returns (ListConversationsResponse);
   rpc SetConversationPin(SetConversationPinRequest) returns (SetConversationPinResponse);
@@ -33,25 +34,26 @@ service MessageService {
 // 通用模型
 // ----------------------------------------
 
-// 消息类型：1文本 2图片 3文件 4表情
-// 会话目标类型：1用户 2群组
-// 消息来源类型：1私聊 2群聊
+// scene_type：1私聊 2群聊
+// content_type：1文本 2图片 3文件 4表情
+// target_type：1用户 2群组
 
 message Message {
-  int64  msg_id     = 1;
-  int32  msg_type   = 2; // 1私聊 2群聊
-  int64  sender_id  = 3;
-  string content    = 4;
-  string file_url   = 5;
-  string file_name  = 6;
-  int64  file_size  = 7;
-  int64  send_time  = 8;
-  int32  is_recalled = 9; // 0否 1是
-  // 私聊
-  int64 receiver_id = 10;
-  // 群聊
-  int64  group_id     = 11;
-  string at_user_ids  = 12; // JSON 数组，@ 的用户 ID 列表
+  int64 msg_id = 1;
+  int32 scene_type = 2;   // 1私聊 2群聊
+  int64 sender_id = 3;
+  string content = 4;
+  string file_url = 5;
+  string file_name = 6;
+  int64 file_size = 7;
+  int64 send_time = 8;
+  int32 is_recalled = 9;  // 0否 1是
+  int64 receiver_id = 10; // 私聊时使用
+  int64 group_id = 11;    // 群聊时使用
+  string at_user_ids = 12; // JSON 数组，@ 的用户 ID 列表
+  int32 content_type = 13; // 1文本 2图片 3文件 4表情
+  int64 ref_msg_id = 14;   // 引用消息ID，可选
+  int32 ref_scene_type = 15; // 引用消息场景，可选：1私聊 2群聊
 }
 
 // 会话（与 conversations 表对齐）
@@ -74,13 +76,15 @@ message Conversation {
 // ----------------------------------------
 
 message SendPrivateMessageRequest {
-  int64  sender_id   = 1;
-  int64  receiver_id = 2;
-  int32  msg_type    = 3; // 1文本 2图片 3文件 4表情
-  string content     = 4;
-  string file_url    = 5;
-  string file_name   = 6;
-  int64  file_size   = 7;
+  int64 sender_id = 1;
+  int64 receiver_id = 2;
+  int32 content_type = 3; // 1文本 2图片 3文件 4表情
+  string content = 4;
+  string file_url = 5;
+  string file_name = 6;
+  int64 file_size = 7;
+  int64 ref_msg_id = 8;
+  int32 ref_scene_type = 9;
 }
 
 message SendPrivateMessageResponse {
@@ -119,14 +123,16 @@ message GetPrivateUnreadCountResponse {
 // ----------------------------------------
 
 message SendGroupMessageRequest {
-  int64  group_id   = 1;
-  int64  sender_id  = 2;
-  int32  msg_type   = 3; // 1文本 2图片 3文件 4表情
-  string content    = 4;
-  string file_url   = 5;
-  string file_name  = 6;
-  int64  file_size  = 7;
+  int64 group_id = 1;
+  int64 sender_id = 2;
+  int32 content_type = 3; // 1文本 2图片 3文件 4表情
+  string content = 4;
+  string file_url = 5;
+  string file_name = 6;
+  int64 file_size = 7;
   string at_user_ids = 8; // JSON 数组
+  int64 ref_msg_id = 9;
+  int32 ref_scene_type = 10;
 }
 
 message SendGroupMessageResponse {
@@ -165,19 +171,39 @@ message GetGroupUnreadCountResponse {
 // ----------------------------------------
 
 message RecallMessageRequest {
-  int64 msg_id   = 1;
-  int32 msg_type = 2; // 1私聊 2群聊
+  int64 msg_id = 1;
+  int32 scene_type = 2; // 1私聊 2群聊
 }
 
 message RecallMessageResponse {}
 
 message GetMessageRequest {
-  int64 msg_id   = 1;
-  int32 msg_type = 2; // 1私聊 2群聊
+  int64 msg_id = 1;
+  int32 scene_type = 2; // 1私聊 2群聊
 }
 
 message GetMessageResponse {
   Message message = 1;
+}
+
+message MessageReference {
+  int64 reference_id = 1;
+  int64 msg_id = 2;
+  int32 scene_type = 3; // 当前消息场景：1私聊 2群聊
+  int64 ref_msg_id = 4;
+  int32 ref_scene_type = 5; // 被引用消息场景：1私聊 2群聊
+  int64 ref_sender_id = 6;
+  string ref_content_preview = 7;
+  int64 create_time = 8;
+}
+
+message ListMessageReferencesRequest {
+  int64 msg_id = 1;
+  int32 scene_type = 2;
+}
+
+message ListMessageReferencesResponse {
+  repeated MessageReference references = 1;
 }
 
 // ----------------------------------------

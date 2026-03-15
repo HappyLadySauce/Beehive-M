@@ -20,10 +20,12 @@ service PresenceService {
 
 message OnlineStatus {
   int64  user_id           = 1;
-  int32  status            = 2; // 0离线 1在线 2忙碌 3离开
-  int64  last_heartbeat_at = 3;
+  string device_id         = 2;
+  int32  status            = 3; // 0离线 1在线 2忙碌 3离开
   string device_type       = 4; // web/android/ios
-  string device_id         = 5;
+  string client_ip         = 5;
+  int64  last_heartbeat_at = 6;
+  int64  update_time       = 7;
 }
 
 // ----------------------------------------
@@ -45,10 +47,11 @@ message ReportHeartbeatResponse {}
 
 message GetOnlineStatusRequest {
   int64 user_id = 1;
+  string device_id = 2; // 空表示获取该用户全部设备状态
 }
 
 message GetOnlineStatusResponse {
-  OnlineStatus status = 1;
+  repeated OnlineStatus statuses = 1;
 }
 
 // ----------------------------------------
@@ -69,7 +72,7 @@ message BatchGetOnlineStatusResponse {
 
 message KickDeviceRequest {
   int64  user_id   = 1;
-  string device_id = 2;
+  string device_id = 2; // 空表示踢该用户全部设备
 }
 
 message KickDeviceResponse {}

@@ -4,7 +4,7 @@ package group;
 
 option go_package = "./service/group/pb";
 
-// GroupService 群组、成员、申请/邀请、公告
+// GroupService 群组、成员、申请/邀请、公告、管理员角色权限
 service GroupService {
   // 群
   rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse);
@@ -32,6 +32,11 @@ service GroupService {
   rpc CreateAnnouncement(CreateAnnouncementRequest) returns (CreateAnnouncementResponse);
   rpc ListAnnouncements(ListAnnouncementsRequest) returns (ListAnnouncementsResponse);
   rpc MarkAnnouncementRead(MarkAnnouncementReadRequest) returns (MarkAnnouncementReadResponse);
+  // 管理员角色权限
+  rpc ListAdminRoles(ListAdminRolesRequest) returns (ListAdminRolesResponse);
+  rpc GrantRole(GrantRoleRequest) returns (GrantRoleResponse);
+  rpc RevokeRole(RevokeRoleRequest) returns (RevokeRoleResponse);
+  rpc GetMemberRole(GetMemberRoleRequest) returns (GetMemberRoleResponse);
 }
 
 // ----------------------------------------
@@ -105,6 +110,28 @@ message Announcement {
   int64  expire_time     = 9;
   int32  read_count      = 10;
   int32  status          = 11; // 1正常 2删除
+}
+
+// 管理员角色（与 group_admin_roles 表对齐）
+message AdminRole {
+  int64 role_id = 1;
+  int64 group_id = 2;
+  string role_name = 3;
+  string permissions = 4; // JSON
+  int32 is_default = 5;   // 0否 1是
+  int64 create_time = 6;
+}
+
+// 管理员授权记录（与 group_admin_permissions 表对齐）
+message AdminPermission {
+  int64 id = 1;
+  int64 group_id = 2;
+  int64 user_id = 3;
+  int64 role_id = 4;
+  string custom_permissions = 5; // JSON
+  int64 expire_time = 6;
+  int64 grant_time = 7;
+  int64 grantor_id = 8;
 }
 
 // ----------------------------------------
@@ -338,3 +365,42 @@ message MarkAnnouncementReadRequest {
 }
 
 message MarkAnnouncementReadResponse {}
+
+// ----------------------------------------
+// 管理员角色权限
+// ----------------------------------------
+
+message ListAdminRolesRequest {
+  int64 group_id = 1;
+}
+
+message ListAdminRolesResponse {
+  repeated AdminRole roles = 1;
+}
+
+message GrantRoleRequest {
+  int64 group_id = 1;
+  int64 user_id = 2;
+  int64 role_id = 3;
+  string custom_permissions = 4; // JSON
+  int64 expire_time = 5;
+  int64 grantor_id = 6;
+}
+
+message GrantRoleResponse {}
+
+message RevokeRoleRequest {
+  int64 group_id = 1;
+  int64 user_id = 2;
+}
+
+message RevokeRoleResponse {}
+
+message GetMemberRoleRequest {
+  int64 group_id = 1;
+  int64 user_id = 2;
+}
+
+message GetMemberRoleResponse {
+  AdminPermission permission = 1;
+}
