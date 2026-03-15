@@ -1,0 +1,20 @@
+CREATE TABLE private_messages (
+    msg_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    sender_id BIGINT NOT NULL COMMENT '发送者ID',
+    receiver_id BIGINT NOT NULL COMMENT '接收者ID',
+    msg_type TINYINT NOT NULL COMMENT '消息类型: 1-文本 2-图片 3-文件 4-表情',
+    content TEXT COMMENT '消息内容',
+    file_url VARCHAR(500) COMMENT '文件URL',
+    file_size INT COMMENT '文件大小(字节)',
+    file_name VARCHAR(255) COMMENT '文件名',
+    is_read TINYINT DEFAULT 0 COMMENT '是否已读: 0-未读 1-已读',
+    is_recalled TINYINT DEFAULT 0 COMMENT '是否撤回: 0-否 1-是',
+    send_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    read_time DATETIME COMMENT '已读时间',
+    recall_time DATETIME COMMENT '撤回时间',
+    INDEX idx_sender_receiver(sender_id, receiver_id),
+    INDEX idx_receiver_send_time(receiver_id, send_time),
+    INDEX idx_pair_time(sender_id, receiver_id, send_time),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id),
+    FOREIGN KEY (receiver_id) REFERENCES users(user_id)
+) COMMENT '私聊消息表';

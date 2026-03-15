@@ -1,0 +1,20 @@
+CREATE TABLE users (
+    user_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    account VARCHAR(50) UNIQUE NOT NULL COMMENT '账号',
+    nickname VARCHAR(100) NOT NULL COMMENT '昵称',
+    avatar VARCHAR(500) COMMENT '头像URL',
+    password_hash VARCHAR(255) NOT NULL COMMENT '密码哈希',
+    phone VARCHAR(20) COMMENT '手机号',
+    email VARCHAR(100) COMMENT '邮箱',
+    gender TINYINT DEFAULT 0 COMMENT '0:未知 1:男 2:女',
+    birthday DATE COMMENT '生日',
+    signature VARCHAR(500) COMMENT '个性签名',
+    status TINYINT DEFAULT 1 COMMENT '状态: 1-正常 2-冻结',
+    last_login_time DATETIME COMMENT '最后登录时间',
+    last_login_ip VARCHAR(50) COMMENT '最后登录IP',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_account(account),
+    INDEX idx_phone(phone),
+    INDEX idx_email(email)
+) COMMENT '用户表';
