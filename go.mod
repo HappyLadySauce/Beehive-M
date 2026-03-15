@@ -5,6 +5,7 @@ go 1.26.1
 require (
 	github.com/redis/go-redis/v9 v9.17.3
 	github.com/zeromicro/go-zero v1.10.0
+	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.36.11
 	gorm.io/driver/postgres v1.6.0
