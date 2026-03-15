@@ -34,15 +34,15 @@ const (
 // UserService 供 WS Gateway / 其他微服务调用的用户 RPC
 type UserServiceClient interface {
 	// 按 user_id 查单个用户（会话头、资料页等）
-	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 	// 批量按 user_id 查（会话列表、群成员列表等）
 	GetUserBatch(ctx context.Context, in *GetUserBatchRequest, opts ...grpc.CallOption) (*GetUserBatchResponse, error)
 	// 按账号查（登录、搜索用）
-	GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*User, error)
+	GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*GetUserByAccountResponse, error)
 	// 关键词搜索用户（全文检索），分页
 	SearchUsers(ctx context.Context, in *SearchUsersRequest, opts ...grpc.CallOption) (*SearchUsersResponse, error)
 	// 更新当前用户资料（昵称、头像、签名等）
-	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*User, error)
+	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error)
 	// 仅内部使用：按 user_id 查用户（含 password_hash），供 auth 登录校验
 	GetUserForAuth(ctx context.Context, in *GetUserForAuthRequest, opts ...grpc.CallOption) (*UserForAuth, error)
 }
@@ -55,9 +55,9 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error) {
+func (c *userServiceClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(User)
+	out := new(GetUserResponse)
 	err := c.cc.Invoke(ctx, UserService_GetUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -75,9 +75,9 @@ func (c *userServiceClient) GetUserBatch(ctx context.Context, in *GetUserBatchRe
 	return out, nil
 }
 
-func (c *userServiceClient) GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*User, error) {
+func (c *userServiceClient) GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*GetUserByAccountResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(User)
+	out := new(GetUserByAccountResponse)
 	err := c.cc.Invoke(ctx, UserService_GetUserByAccount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -95,9 +95,9 @@ func (c *userServiceClient) SearchUsers(ctx context.Context, in *SearchUsersRequ
 	return out, nil
 }
 
-func (c *userServiceClient) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*User, error) {
+func (c *userServiceClient) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(User)
+	out := new(UpdateProfileResponse)
 	err := c.cc.Invoke(ctx, UserService_UpdateProfile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -122,15 +122,15 @@ func (c *userServiceClient) GetUserForAuth(ctx context.Context, in *GetUserForAu
 // UserService 供 WS Gateway / 其他微服务调用的用户 RPC
 type UserServiceServer interface {
 	// 按 user_id 查单个用户（会话头、资料页等）
-	GetUser(context.Context, *GetUserRequest) (*User, error)
+	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
 	// 批量按 user_id 查（会话列表、群成员列表等）
 	GetUserBatch(context.Context, *GetUserBatchRequest) (*GetUserBatchResponse, error)
 	// 按账号查（登录、搜索用）
-	GetUserByAccount(context.Context, *GetUserByAccountRequest) (*User, error)
+	GetUserByAccount(context.Context, *GetUserByAccountRequest) (*GetUserByAccountResponse, error)
 	// 关键词搜索用户（全文检索），分页
 	SearchUsers(context.Context, *SearchUsersRequest) (*SearchUsersResponse, error)
 	// 更新当前用户资料（昵称、头像、签名等）
-	UpdateProfile(context.Context, *UpdateProfileRequest) (*User, error)
+	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileResponse, error)
 	// 仅内部使用：按 user_id 查用户（含 password_hash），供 auth 登录校验
 	GetUserForAuth(context.Context, *GetUserForAuthRequest) (*UserForAuth, error)
 	mustEmbedUnimplementedUserServiceServer()
@@ -143,19 +143,19 @@ type UserServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserServiceServer struct{}
 
-func (UnimplementedUserServiceServer) GetUser(context.Context, *GetUserRequest) (*User, error) {
+func (UnimplementedUserServiceServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedUserServiceServer) GetUserBatch(context.Context, *GetUserBatchRequest) (*GetUserBatchResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserBatch not implemented")
 }
-func (UnimplementedUserServiceServer) GetUserByAccount(context.Context, *GetUserByAccountRequest) (*User, error) {
+func (UnimplementedUserServiceServer) GetUserByAccount(context.Context, *GetUserByAccountRequest) (*GetUserByAccountResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserByAccount not implemented")
 }
 func (UnimplementedUserServiceServer) SearchUsers(context.Context, *SearchUsersRequest) (*SearchUsersResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SearchUsers not implemented")
 }
-func (UnimplementedUserServiceServer) UpdateProfile(context.Context, *UpdateProfileRequest) (*User, error) {
+func (UnimplementedUserServiceServer) UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateProfile not implemented")
 }
 func (UnimplementedUserServiceServer) GetUserForAuth(context.Context, *GetUserForAuthRequest) (*UserForAuth, error) {

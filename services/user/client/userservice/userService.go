@@ -14,28 +14,31 @@ import (
 )
 
 type (
-	GetUserBatchRequest     = pb.GetUserBatchRequest
-	GetUserBatchResponse    = pb.GetUserBatchResponse
-	GetUserByAccountRequest = pb.GetUserByAccountRequest
-	GetUserForAuthRequest   = pb.GetUserForAuthRequest
-	GetUserRequest          = pb.GetUserRequest
-	SearchUsersRequest      = pb.SearchUsersRequest
-	SearchUsersResponse     = pb.SearchUsersResponse
-	UpdateProfileRequest    = pb.UpdateProfileRequest
-	User                    = pb.User
-	UserForAuth             = pb.UserForAuth
+	GetUserBatchRequest      = pb.GetUserBatchRequest
+	GetUserBatchResponse     = pb.GetUserBatchResponse
+	GetUserByAccountRequest  = pb.GetUserByAccountRequest
+	GetUserByAccountResponse = pb.GetUserByAccountResponse
+	GetUserForAuthRequest    = pb.GetUserForAuthRequest
+	GetUserRequest           = pb.GetUserRequest
+	GetUserResponse          = pb.GetUserResponse
+	SearchUsersRequest       = pb.SearchUsersRequest
+	SearchUsersResponse      = pb.SearchUsersResponse
+	UpdateProfileRequest     = pb.UpdateProfileRequest
+	UpdateProfileResponse    = pb.UpdateProfileResponse
+	User                     = pb.User
+	UserForAuth              = pb.UserForAuth
 
 	UserService interface {
 		// 按 user_id 查单个用户（会话头、资料页等）
-		GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error)
+		GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 		// 批量按 user_id 查（会话列表、群成员列表等）
 		GetUserBatch(ctx context.Context, in *GetUserBatchRequest, opts ...grpc.CallOption) (*GetUserBatchResponse, error)
 		// 按账号查（登录、搜索用）
-		GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*User, error)
+		GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*GetUserByAccountResponse, error)
 		// 关键词搜索用户（全文检索），分页
 		SearchUsers(ctx context.Context, in *SearchUsersRequest, opts ...grpc.CallOption) (*SearchUsersResponse, error)
 		// 更新当前用户资料（昵称、头像、签名等）
-		UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*User, error)
+		UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error)
 		// 仅内部使用：按 user_id 查用户（含 password_hash），供 auth 登录校验
 		GetUserForAuth(ctx context.Context, in *GetUserForAuthRequest, opts ...grpc.CallOption) (*UserForAuth, error)
 	}
@@ -52,7 +55,7 @@ func NewUserService(cli zrpc.Client) UserService {
 }
 
 // 按 user_id 查单个用户（会话头、资料页等）
-func (m *defaultUserService) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*User, error) {
+func (m *defaultUserService) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GetUser(ctx, in, opts...)
 }
@@ -64,7 +67,7 @@ func (m *defaultUserService) GetUserBatch(ctx context.Context, in *GetUserBatchR
 }
 
 // 按账号查（登录、搜索用）
-func (m *defaultUserService) GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*User, error) {
+func (m *defaultUserService) GetUserByAccount(ctx context.Context, in *GetUserByAccountRequest, opts ...grpc.CallOption) (*GetUserByAccountResponse, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.GetUserByAccount(ctx, in, opts...)
 }
@@ -76,7 +79,7 @@ func (m *defaultUserService) SearchUsers(ctx context.Context, in *SearchUsersReq
 }
 
 // 更新当前用户资料（昵称、头像、签名等）
-func (m *defaultUserService) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*User, error) {
+func (m *defaultUserService) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error) {
 	client := pb.NewUserServiceClient(m.cli.Conn())
 	return client.UpdateProfile(ctx, in, opts...)
 }

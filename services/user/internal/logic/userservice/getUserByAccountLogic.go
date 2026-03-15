@@ -24,8 +24,8 @@ func NewGetUserByAccountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 // 按账号查（登录、搜索用）
-func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest) (*pb.User, error) {
+func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest) (*pb.GetUserByAccountResponse, error) {
 	// todo: add your logic here and delete this line
 
-	return &pb.User{}, nil
+	return &pb.GetUserByAccountResponse{}, nil
 }

@@ -7,15 +7,15 @@ option go_package = "services/user/pb";
 // UserService 供 WS Gateway / 其他微服务调用的用户 RPC
 service UserService {
   // 按 user_id 查单个用户（会话头、资料页等）
-  rpc GetUser(GetUserRequest) returns (User);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
   // 批量按 user_id 查（会话列表、群成员列表等）
   rpc GetUserBatch(GetUserBatchRequest) returns (GetUserBatchResponse);
   // 按账号查（登录、搜索用）
-  rpc GetUserByAccount(GetUserByAccountRequest) returns (User);
+  rpc GetUserByAccount(GetUserByAccountRequest) returns (GetUserByAccountResponse);
   // 关键词搜索用户（全文检索），分页
   rpc SearchUsers(SearchUsersRequest) returns (SearchUsersResponse);
   // 更新当前用户资料（昵称、头像、签名等）
-  rpc UpdateProfile(UpdateProfileRequest) returns (User);
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
   // 仅内部使用：按 user_id 查用户（含 password_hash），供 auth 登录校验
   rpc GetUserForAuth(GetUserForAuthRequest) returns (UserForAuth);
 }
@@ -59,6 +59,10 @@ message GetUserRequest {
   int64 user_id = 1;
 }
 
+message GetUserResponse {
+  User user = 1;
+}
+
 // ----------------------------------------
 // GetUserBatch
 // ----------------------------------------
@@ -77,6 +81,10 @@ message GetUserBatchResponse {
 
 message GetUserByAccountRequest {
   string account = 1;
+}
+
+message GetUserByAccountResponse {
+  User user = 1;
 }
 
 // ----------------------------------------
@@ -107,6 +115,10 @@ message UpdateProfileRequest {
   optional string birthday = 6;
   optional string phone = 7;
   optional string email = 8;
+}
+
+message UpdateProfileResponse {
+  User user = 1;
 }
 
 // ----------------------------------------

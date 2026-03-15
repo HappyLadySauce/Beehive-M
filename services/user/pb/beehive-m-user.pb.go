@@ -291,6 +291,50 @@ func (x *GetUserRequest) GetUserId() int64 {
 	return 0
 }
 
+type GetUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserResponse) Reset() {
+	*x = GetUserResponse{}
+	mi := &file_beehive_m_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserResponse) ProtoMessage() {}
+
+func (x *GetUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_beehive_m_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserResponse.ProtoReflect.Descriptor instead.
+func (*GetUserResponse) Descriptor() ([]byte, []int) {
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetUserResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 type GetUserBatchRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserIds       []int64                `protobuf:"varint,1,rep,packed,name=user_ids,json=userIds,proto3" json:"user_ids,omitempty"`
@@ -300,7 +344,7 @@ type GetUserBatchRequest struct {
 
 func (x *GetUserBatchRequest) Reset() {
 	*x = GetUserBatchRequest{}
-	mi := &file_beehive_m_user_proto_msgTypes[3]
+	mi := &file_beehive_m_user_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -312,7 +356,7 @@ func (x *GetUserBatchRequest) String() string {
 func (*GetUserBatchRequest) ProtoMessage() {}
 
 func (x *GetUserBatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[3]
+	mi := &file_beehive_m_user_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -325,7 +369,7 @@ func (x *GetUserBatchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserBatchRequest.ProtoReflect.Descriptor instead.
 func (*GetUserBatchRequest) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{3}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetUserBatchRequest) GetUserIds() []int64 {
@@ -344,7 +388,7 @@ type GetUserBatchResponse struct {
 
 func (x *GetUserBatchResponse) Reset() {
 	*x = GetUserBatchResponse{}
-	mi := &file_beehive_m_user_proto_msgTypes[4]
+	mi := &file_beehive_m_user_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -356,7 +400,7 @@ func (x *GetUserBatchResponse) String() string {
 func (*GetUserBatchResponse) ProtoMessage() {}
 
 func (x *GetUserBatchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[4]
+	mi := &file_beehive_m_user_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -369,7 +413,7 @@ func (x *GetUserBatchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserBatchResponse.ProtoReflect.Descriptor instead.
 func (*GetUserBatchResponse) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{4}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetUserBatchResponse) GetUsers() []*User {
@@ -388,7 +432,7 @@ type GetUserByAccountRequest struct {
 
 func (x *GetUserByAccountRequest) Reset() {
 	*x = GetUserByAccountRequest{}
-	mi := &file_beehive_m_user_proto_msgTypes[5]
+	mi := &file_beehive_m_user_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -400,7 +444,7 @@ func (x *GetUserByAccountRequest) String() string {
 func (*GetUserByAccountRequest) ProtoMessage() {}
 
 func (x *GetUserByAccountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[5]
+	mi := &file_beehive_m_user_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -413,7 +457,7 @@ func (x *GetUserByAccountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserByAccountRequest.ProtoReflect.Descriptor instead.
 func (*GetUserByAccountRequest) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{5}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetUserByAccountRequest) GetAccount() string {
@@ -421,6 +465,50 @@ func (x *GetUserByAccountRequest) GetAccount() string {
 		return x.Account
 	}
 	return ""
+}
+
+type GetUserByAccountResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserByAccountResponse) Reset() {
+	*x = GetUserByAccountResponse{}
+	mi := &file_beehive_m_user_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserByAccountResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserByAccountResponse) ProtoMessage() {}
+
+func (x *GetUserByAccountResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_beehive_m_user_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserByAccountResponse.ProtoReflect.Descriptor instead.
+func (*GetUserByAccountResponse) Descriptor() ([]byte, []int) {
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetUserByAccountResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
 }
 
 type SearchUsersRequest struct {
@@ -434,7 +522,7 @@ type SearchUsersRequest struct {
 
 func (x *SearchUsersRequest) Reset() {
 	*x = SearchUsersRequest{}
-	mi := &file_beehive_m_user_proto_msgTypes[6]
+	mi := &file_beehive_m_user_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -446,7 +534,7 @@ func (x *SearchUsersRequest) String() string {
 func (*SearchUsersRequest) ProtoMessage() {}
 
 func (x *SearchUsersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[6]
+	mi := &file_beehive_m_user_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -459,7 +547,7 @@ func (x *SearchUsersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchUsersRequest.ProtoReflect.Descriptor instead.
 func (*SearchUsersRequest) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{6}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *SearchUsersRequest) GetKeyword() string {
@@ -493,7 +581,7 @@ type SearchUsersResponse struct {
 
 func (x *SearchUsersResponse) Reset() {
 	*x = SearchUsersResponse{}
-	mi := &file_beehive_m_user_proto_msgTypes[7]
+	mi := &file_beehive_m_user_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -505,7 +593,7 @@ func (x *SearchUsersResponse) String() string {
 func (*SearchUsersResponse) ProtoMessage() {}
 
 func (x *SearchUsersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[7]
+	mi := &file_beehive_m_user_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -518,7 +606,7 @@ func (x *SearchUsersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchUsersResponse.ProtoReflect.Descriptor instead.
 func (*SearchUsersResponse) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{7}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *SearchUsersResponse) GetUsers() []*User {
@@ -551,7 +639,7 @@ type UpdateProfileRequest struct {
 
 func (x *UpdateProfileRequest) Reset() {
 	*x = UpdateProfileRequest{}
-	mi := &file_beehive_m_user_proto_msgTypes[8]
+	mi := &file_beehive_m_user_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -563,7 +651,7 @@ func (x *UpdateProfileRequest) String() string {
 func (*UpdateProfileRequest) ProtoMessage() {}
 
 func (x *UpdateProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[8]
+	mi := &file_beehive_m_user_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -576,7 +664,7 @@ func (x *UpdateProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateProfileRequest.ProtoReflect.Descriptor instead.
 func (*UpdateProfileRequest) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{8}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateProfileRequest) GetUserId() int64 {
@@ -635,6 +723,50 @@ func (x *UpdateProfileRequest) GetEmail() string {
 	return ""
 }
 
+type UpdateProfileResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateProfileResponse) Reset() {
+	*x = UpdateProfileResponse{}
+	mi := &file_beehive_m_user_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateProfileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateProfileResponse) ProtoMessage() {}
+
+func (x *UpdateProfileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_beehive_m_user_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateProfileResponse.ProtoReflect.Descriptor instead.
+func (*UpdateProfileResponse) Descriptor() ([]byte, []int) {
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UpdateProfileResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 type GetUserForAuthRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to By:
@@ -649,7 +781,7 @@ type GetUserForAuthRequest struct {
 
 func (x *GetUserForAuthRequest) Reset() {
 	*x = GetUserForAuthRequest{}
-	mi := &file_beehive_m_user_proto_msgTypes[9]
+	mi := &file_beehive_m_user_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -661,7 +793,7 @@ func (x *GetUserForAuthRequest) String() string {
 func (*GetUserForAuthRequest) ProtoMessage() {}
 
 func (x *GetUserForAuthRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_beehive_m_user_proto_msgTypes[9]
+	mi := &file_beehive_m_user_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -674,7 +806,7 @@ func (x *GetUserForAuthRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserForAuthRequest.ProtoReflect.Descriptor instead.
 func (*GetUserForAuthRequest) Descriptor() ([]byte, []int) {
-	return file_beehive_m_user_proto_rawDescGZIP(), []int{9}
+	return file_beehive_m_user_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetUserForAuthRequest) GetBy() isGetUserForAuthRequest_By {
@@ -763,14 +895,20 @@ const file_beehive_m_user_proto_rawDesc = "" +
 	"\x05email\x18\x05 \x01(\tR\x05email\x12\x16\n" +
 	"\x06status\x18\x06 \x01(\x05R\x06status\")\n" +
 	"\x0eGetUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"0\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"1\n" +
+	"\x0fGetUserResponse\x12\x1e\n" +
+	"\x04user\x18\x01 \x01(\v2\n" +
+	".user.UserR\x04user\"0\n" +
 	"\x13GetUserBatchRequest\x12\x19\n" +
 	"\buser_ids\x18\x01 \x03(\x03R\auserIds\"8\n" +
 	"\x14GetUserBatchResponse\x12 \n" +
 	"\x05users\x18\x01 \x03(\v2\n" +
 	".user.UserR\x05users\"3\n" +
 	"\x17GetUserByAccountRequest\x12\x18\n" +
-	"\aaccount\x18\x01 \x01(\tR\aaccount\"V\n" +
+	"\aaccount\x18\x01 \x01(\tR\aaccount\":\n" +
+	"\x18GetUserByAccountResponse\x12\x1e\n" +
+	"\x04user\x18\x01 \x01(\v2\n" +
+	".user.UserR\x04user\"V\n" +
 	"\x12SearchUsersRequest\x12\x18\n" +
 	"\akeyword\x18\x01 \x01(\tR\akeyword\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x12\n" +
@@ -795,21 +933,21 @@ const file_beehive_m_user_proto_rawDesc = "" +
 	"\a_genderB\v\n" +
 	"\t_birthdayB\b\n" +
 	"\x06_phoneB\b\n" +
-	"\x06_email\"i\n" +
+	"\x06_email\"7\n" +
+	"\x15UpdateProfileResponse\x12\x1e\n" +
+	"\x04user\x18\x01 \x01(\v2\n" +
+	".user.UserR\x04user\"i\n" +
 	"\x15GetUserForAuthRequest\x12\x1a\n" +
 	"\aaccount\x18\x01 \x01(\tH\x00R\aaccount\x12\x16\n" +
 	"\x05phone\x18\x02 \x01(\tH\x00R\x05phone\x12\x16\n" +
 	"\x05email\x18\x03 \x01(\tH\x00R\x05emailB\x04\n" +
-	"\x02by2\xff\x02\n" +
-	"\vUserService\x12+\n" +
-	"\aGetUser\x12\x14.user.GetUserRequest\x1a\n" +
-	".user.User\x12E\n" +
-	"\fGetUserBatch\x12\x19.user.GetUserBatchRequest\x1a\x1a.user.GetUserBatchResponse\x12=\n" +
-	"\x10GetUserByAccount\x12\x1d.user.GetUserByAccountRequest\x1a\n" +
-	".user.User\x12B\n" +
-	"\vSearchUsers\x12\x18.user.SearchUsersRequest\x1a\x19.user.SearchUsersResponse\x127\n" +
-	"\rUpdateProfile\x12\x1a.user.UpdateProfileRequest\x1a\n" +
-	".user.User\x12@\n" +
+	"\x02by2\xaf\x03\n" +
+	"\vUserService\x126\n" +
+	"\aGetUser\x12\x14.user.GetUserRequest\x1a\x15.user.GetUserResponse\x12E\n" +
+	"\fGetUserBatch\x12\x19.user.GetUserBatchRequest\x1a\x1a.user.GetUserBatchResponse\x12Q\n" +
+	"\x10GetUserByAccount\x12\x1d.user.GetUserByAccountRequest\x1a\x1e.user.GetUserByAccountResponse\x12B\n" +
+	"\vSearchUsers\x12\x18.user.SearchUsersRequest\x1a\x19.user.SearchUsersResponse\x12H\n" +
+	"\rUpdateProfile\x12\x1a.user.UpdateProfileRequest\x1a\x1b.user.UpdateProfileResponse\x12@\n" +
 	"\x0eGetUserForAuth\x12\x1b.user.GetUserForAuthRequest\x1a\x11.user.UserForAuthB\x12Z\x10services/user/pbb\x06proto3"
 
 var (
@@ -824,39 +962,45 @@ func file_beehive_m_user_proto_rawDescGZIP() []byte {
 	return file_beehive_m_user_proto_rawDescData
 }
 
-var file_beehive_m_user_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_beehive_m_user_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_beehive_m_user_proto_goTypes = []any{
-	(*User)(nil),                    // 0: user.User
-	(*UserForAuth)(nil),             // 1: user.UserForAuth
-	(*GetUserRequest)(nil),          // 2: user.GetUserRequest
-	(*GetUserBatchRequest)(nil),     // 3: user.GetUserBatchRequest
-	(*GetUserBatchResponse)(nil),    // 4: user.GetUserBatchResponse
-	(*GetUserByAccountRequest)(nil), // 5: user.GetUserByAccountRequest
-	(*SearchUsersRequest)(nil),      // 6: user.SearchUsersRequest
-	(*SearchUsersResponse)(nil),     // 7: user.SearchUsersResponse
-	(*UpdateProfileRequest)(nil),    // 8: user.UpdateProfileRequest
-	(*GetUserForAuthRequest)(nil),   // 9: user.GetUserForAuthRequest
+	(*User)(nil),                     // 0: user.User
+	(*UserForAuth)(nil),              // 1: user.UserForAuth
+	(*GetUserRequest)(nil),           // 2: user.GetUserRequest
+	(*GetUserResponse)(nil),          // 3: user.GetUserResponse
+	(*GetUserBatchRequest)(nil),      // 4: user.GetUserBatchRequest
+	(*GetUserBatchResponse)(nil),     // 5: user.GetUserBatchResponse
+	(*GetUserByAccountRequest)(nil),  // 6: user.GetUserByAccountRequest
+	(*GetUserByAccountResponse)(nil), // 7: user.GetUserByAccountResponse
+	(*SearchUsersRequest)(nil),       // 8: user.SearchUsersRequest
+	(*SearchUsersResponse)(nil),      // 9: user.SearchUsersResponse
+	(*UpdateProfileRequest)(nil),     // 10: user.UpdateProfileRequest
+	(*UpdateProfileResponse)(nil),    // 11: user.UpdateProfileResponse
+	(*GetUserForAuthRequest)(nil),    // 12: user.GetUserForAuthRequest
 }
 var file_beehive_m_user_proto_depIdxs = []int32{
-	0, // 0: user.GetUserBatchResponse.users:type_name -> user.User
-	0, // 1: user.SearchUsersResponse.users:type_name -> user.User
-	2, // 2: user.UserService.GetUser:input_type -> user.GetUserRequest
-	3, // 3: user.UserService.GetUserBatch:input_type -> user.GetUserBatchRequest
-	5, // 4: user.UserService.GetUserByAccount:input_type -> user.GetUserByAccountRequest
-	6, // 5: user.UserService.SearchUsers:input_type -> user.SearchUsersRequest
-	8, // 6: user.UserService.UpdateProfile:input_type -> user.UpdateProfileRequest
-	9, // 7: user.UserService.GetUserForAuth:input_type -> user.GetUserForAuthRequest
-	0, // 8: user.UserService.GetUser:output_type -> user.User
-	4, // 9: user.UserService.GetUserBatch:output_type -> user.GetUserBatchResponse
-	0, // 10: user.UserService.GetUserByAccount:output_type -> user.User
-	7, // 11: user.UserService.SearchUsers:output_type -> user.SearchUsersResponse
-	0, // 12: user.UserService.UpdateProfile:output_type -> user.User
-	1, // 13: user.UserService.GetUserForAuth:output_type -> user.UserForAuth
-	8, // [8:14] is the sub-list for method output_type
-	2, // [2:8] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0,  // 0: user.GetUserResponse.user:type_name -> user.User
+	0,  // 1: user.GetUserBatchResponse.users:type_name -> user.User
+	0,  // 2: user.GetUserByAccountResponse.user:type_name -> user.User
+	0,  // 3: user.SearchUsersResponse.users:type_name -> user.User
+	0,  // 4: user.UpdateProfileResponse.user:type_name -> user.User
+	2,  // 5: user.UserService.GetUser:input_type -> user.GetUserRequest
+	4,  // 6: user.UserService.GetUserBatch:input_type -> user.GetUserBatchRequest
+	6,  // 7: user.UserService.GetUserByAccount:input_type -> user.GetUserByAccountRequest
+	8,  // 8: user.UserService.SearchUsers:input_type -> user.SearchUsersRequest
+	10, // 9: user.UserService.UpdateProfile:input_type -> user.UpdateProfileRequest
+	12, // 10: user.UserService.GetUserForAuth:input_type -> user.GetUserForAuthRequest
+	3,  // 11: user.UserService.GetUser:output_type -> user.GetUserResponse
+	5,  // 12: user.UserService.GetUserBatch:output_type -> user.GetUserBatchResponse
+	7,  // 13: user.UserService.GetUserByAccount:output_type -> user.GetUserByAccountResponse
+	9,  // 14: user.UserService.SearchUsers:output_type -> user.SearchUsersResponse
+	11, // 15: user.UserService.UpdateProfile:output_type -> user.UpdateProfileResponse
+	1,  // 16: user.UserService.GetUserForAuth:output_type -> user.UserForAuth
+	11, // [11:17] is the sub-list for method output_type
+	5,  // [5:11] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_beehive_m_user_proto_init() }
@@ -864,8 +1008,8 @@ func file_beehive_m_user_proto_init() {
 	if File_beehive_m_user_proto != nil {
 		return
 	}
-	file_beehive_m_user_proto_msgTypes[8].OneofWrappers = []any{}
-	file_beehive_m_user_proto_msgTypes[9].OneofWrappers = []any{
+	file_beehive_m_user_proto_msgTypes[10].OneofWrappers = []any{}
+	file_beehive_m_user_proto_msgTypes[12].OneofWrappers = []any{
 		(*GetUserForAuthRequest_Account)(nil),
 		(*GetUserForAuthRequest_Phone)(nil),
 		(*GetUserForAuthRequest_Email)(nil),
@@ -876,7 +1020,7 @@ func file_beehive_m_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_beehive_m_user_proto_rawDesc), len(file_beehive_m_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

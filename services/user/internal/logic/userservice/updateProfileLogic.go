@@ -24,8 +24,8 @@ func NewUpdateProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upd
 }
 
 // 更新当前用户资料（昵称、头像、签名等）
-func (l *UpdateProfileLogic) UpdateProfile(in *pb.UpdateProfileRequest) (*pb.User, error) {
+func (l *UpdateProfileLogic) UpdateProfile(in *pb.UpdateProfileRequest) (*pb.UpdateProfileResponse, error) {
 	// todo: add your logic here and delete this line
 
-	return &pb.User{}, nil
+	return &pb.UpdateProfileResponse{}, nil
 }

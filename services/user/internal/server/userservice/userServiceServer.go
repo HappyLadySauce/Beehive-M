@@ -24,7 +24,7 @@ func NewUserServiceServer(svcCtx *svc.ServiceContext) *UserServiceServer {
 }
 
 // 按 user_id 查单个用户（会话头、资料页等）
-func (s *UserServiceServer) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.User, error) {
+func (s *UserServiceServer) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUserResponse, error) {
 	l := userservicelogic.NewGetUserLogic(ctx, s.svcCtx)
 	return l.GetUser(in)
 }
@@ -36,7 +36,7 @@ func (s *UserServiceServer) GetUserBatch(ctx context.Context, in *pb.GetUserBatc
 }
 
 // 按账号查（登录、搜索用）
-func (s *UserServiceServer) GetUserByAccount(ctx context.Context, in *pb.GetUserByAccountRequest) (*pb.User, error) {
+func (s *UserServiceServer) GetUserByAccount(ctx context.Context, in *pb.GetUserByAccountRequest) (*pb.GetUserByAccountResponse, error) {
 	l := userservicelogic.NewGetUserByAccountLogic(ctx, s.svcCtx)
 	return l.GetUserByAccount(in)
 }
@@ -48,7 +48,7 @@ func (s *UserServiceServer) SearchUsers(ctx context.Context, in *pb.SearchUsersR
 }
 
 // 更新当前用户资料（昵称、头像、签名等）
-func (s *UserServiceServer) UpdateProfile(ctx context.Context, in *pb.UpdateProfileRequest) (*pb.User, error) {
+func (s *UserServiceServer) UpdateProfile(ctx context.Context, in *pb.UpdateProfileRequest) (*pb.UpdateProfileResponse, error) {
 	l := userservicelogic.NewUpdateProfileLogic(ctx, s.svcCtx)
 	return l.UpdateProfile(in)
 }
