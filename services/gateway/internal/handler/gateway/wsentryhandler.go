@@ -1,0 +1,24 @@
+// Code scaffolded by goctl. Safe to edit.
+// goctl 1.9.2
+
+package gateway
+
+import (
+	"net/http"
+
+	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/logic/gateway"
+	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/svc"
+	"github.com/zeromicro/go-zero/rest/httpx"
+)
+
+func WsEntryHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		l := gateway.NewWsEntryLogic(r.Context(), svcCtx)
+		err := l.WsEntry()
+		if err != nil {
+			httpx.ErrorCtx(r.Context(), w, err)
+		} else {
+			httpx.Ok(w)
+		}
+	}
+}
