@@ -7,6 +7,12 @@ const (
 	CodeSuccess = 200
 	// 请求/参数错误
 	CodeInvalidParam = 300
+	// 解析失败
+	CodeUnmarshalFailed = 301
+	// 数据库错误
+	CodeDBQueryFailed = 302
+	// 缓存错误
+	CodeCacheSetFailed = 303
 	// 服务端错误
 	CodeInternal = 500
 )

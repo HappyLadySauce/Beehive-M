@@ -1,3 +1,5 @@
+github.com/HappyLadySauce/errors v0.0.0-20251208053748-926a88042146 h1:WBhxn/Z1ODo3hJCJAa0MifMTprrnmztJQnZ1YXM5XU8=
+github.com/HappyLadySauce/errors v0.0.0-20251208053748-926a88042146/go.mod h1:QmM2Bb3l231XSNyE5p94jxvAhokVFBa+TlWffu9mkRU=
 github.com/alicebob/miniredis/v2 v2.36.1 h1:Dvc5oAnNOr7BIfPn7tF269U8DvRW1dBG2D5n0WrfYMI=
 github.com/alicebob/miniredis/v2 v2.36.1/go.mod h1:TcL7YfarKPGDAthEtl5NBeHZfeUQj6OXMm/+iu5cLMM=
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
