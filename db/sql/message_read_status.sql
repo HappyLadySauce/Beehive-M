@@ -7,5 +7,6 @@ CREATE TABLE message_read_status (
     read_time DATETIME COMMENT '已读时间',
     UNIQUE KEY uk_msg_user_type(msg_id, user_id, msg_type),
     INDEX idx_user_msg_type(user_id, msg_type),
+    INDEX idx_user_type_read(user_id, msg_type, is_read),
     INDEX idx_msg_type(msg_type, msg_id)
 ) COMMENT '消息已读状态表';

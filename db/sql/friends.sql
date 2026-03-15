@@ -10,7 +10,6 @@ CREATE TABLE friends (
     add_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
     last_interact_time DATETIME COMMENT '最后互动时间',
     UNIQUE KEY uk_user_friend(user_id, friend_id),
-    INDEX idx_user_id(user_id),
     INDEX idx_friend_id(friend_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (friend_id) REFERENCES users(user_id)

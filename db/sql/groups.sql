@@ -13,6 +13,5 @@ CREATE TABLE groups (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_owner(owner_id),
-    INDEX idx_group_number(group_number),
     FOREIGN KEY (owner_id) REFERENCES users(user_id)
 ) COMMENT '群组表';

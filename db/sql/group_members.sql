@@ -9,7 +9,6 @@ CREATE TABLE group_members (
     is_muted TINYINT DEFAULT 0 COMMENT '是否禁言: 0-否 1-是',
     is_special TINYINT DEFAULT 0 COMMENT '特别关注: 0-否 1-是',
     UNIQUE KEY uk_group_user(group_id, user_id),
-    INDEX idx_group_id(group_id),
     INDEX idx_user_id(user_id),
     FOREIGN KEY (group_id) REFERENCES groups(group_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)

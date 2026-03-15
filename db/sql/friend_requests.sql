@@ -8,6 +8,7 @@ CREATE TABLE friend_requests (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_applicant(applicant_id),
     INDEX idx_target(target_id),
+    INDEX idx_target_status(target_id, status),
     INDEX idx_status(status),
     FOREIGN KEY (applicant_id) REFERENCES users(user_id),
     FOREIGN KEY (target_id) REFERENCES users(user_id)

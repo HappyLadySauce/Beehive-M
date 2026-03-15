@@ -14,7 +14,6 @@ CREATE TABLE users (
     last_login_ip VARCHAR(50) COMMENT '最后登录IP',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_account(account),
     INDEX idx_phone(phone),
     INDEX idx_email(email)
 ) COMMENT '用户表';

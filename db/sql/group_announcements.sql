@@ -11,7 +11,7 @@ CREATE TABLE group_announcements (
     read_count INT DEFAULT 0 COMMENT '阅读数',
     status TINYINT DEFAULT 1 COMMENT '1-正常 2-删除',
     INDEX idx_group_time(group_id, publish_time),
-    INDEX idx_pinned(publish_time DESC),
+    INDEX idx_group_pinned_time(group_id, is_pinned DESC, publish_time DESC),
     FOREIGN KEY (group_id) REFERENCES groups(group_id),
     FOREIGN KEY (author_id) REFERENCES users(user_id)
 ) COMMENT '群公告表';

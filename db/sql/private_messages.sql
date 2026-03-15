@@ -14,6 +14,7 @@ CREATE TABLE private_messages (
     recall_time DATETIME COMMENT '撤回时间',
     INDEX idx_sender_receiver(sender_id, receiver_id),
     INDEX idx_receiver_send_time(receiver_id, send_time),
+    INDEX idx_receiver_unread(receiver_id, is_read, send_time),
     INDEX idx_pair_time(sender_id, receiver_id, send_time),
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
     FOREIGN KEY (receiver_id) REFERENCES users(user_id)

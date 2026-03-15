@@ -7,7 +7,6 @@ CREATE TABLE blacklists (
     block_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     expire_time DATETIME COMMENT '过期时间(空为永久)',
     UNIQUE KEY uk_user_blocked(user_id, blocked_user_id),
-    INDEX idx_user_id(user_id),
     INDEX idx_expire_time(expire_time),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (blocked_user_id) REFERENCES users(user_id)
