@@ -32,6 +32,13 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	_, err = redis.Ping(context.Background()).Result()
 	if err != nil {
+		// 关闭 DB 连接
+		sqlDB, err := db.DB()
+		if err == nil && sqlDB != nil {
+			_ = sqlDB.Close()
+		}
+		// 关闭 Redis 连接
+		redis.Close()
 		panic("failed to connect to Redis: " + err.Error())
 	}
 
@@ -40,4 +47,22 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		DB:     db,
 		Redis:  redis,
 	}
+}
+
+// Close 释放 DB 与 Redis 连接，应在服务退出时调用（如 main 中 defer）
+func (s *ServiceContext) Close() error {
+	var err error
+	if s.DB != nil {
+		var sqlDB interface{ Close() error }
+		sqlDB, err = s.DB.DB()
+		if err == nil && sqlDB != nil {
+			err = sqlDB.Close()
+		}
+	}
+	if s.Redis != nil {
+		if closeErr := s.Redis.Close(); closeErr != nil && err == nil {
+			err = closeErr
+		}
+	}
+	return err
 }
