@@ -1,0 +1,70 @@
+name: beehive-m
+
+services:
+  postgres:
+    # 基于官方 PG16，内置 zhparser 扩展，支持中文全文分词
+    image: zhparser/zhparser:bookworm-16
+    container_name: beehive-m-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: beehive-m
+      POSTGRES_USER: beehive-m
+      POSTGRES_PASSWORD: beehive-m
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../data/postgresql:/var/lib/postgresql/data
+      # 首次启动（空数据目录）时自动创建 zhparser 扩展与 chinese 全文配置
+      - ./init-pg-zhparser.sql:/docker-entrypoint-initdb.d/01-zhparser.sql:ro
+    networks:
+      - beehive-m-net
+
+  redis:
+    image: redis:8-alpine
+    container_name: beehive-m-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../data/redis:/data
+    networks:
+      - beehive-m-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: beehive-m-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ../data/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - beehive-m-net
+
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.15
+    container_name: beehive-m-etcd
+    restart: unless-stopped
+    environment:
+      ETCD_NAME: beehive-m-etcd
+      ETCD_DATA_DIR: /etcd-data
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      # 宿主机用 127.0.0.1:2379 连接时，advertise 也设为 127.0.0.1，避免 Auto sync 拿到 beehive-etcd 导致 "no such host"
+      ETCD_ADVERTISE_CLIENT_URLS: http://127.0.0.1:2379
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://beehive-m-etcd:2380
+      ETCD_INITIAL_CLUSTER: beehive-m-etcd=http://beehive-m-etcd:2380
+      ETCD_INITIAL_CLUSTER_STATE: new
+      ETCD_INITIAL_CLUSTER_TOKEN: beehive-m-etcd-token
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    volumes:
+      - ../data/etcd:/etcd-data
+    networks:
+      - beehive-m-net
+
+networks:
+  beehive-m-net:
+    driver: bridge
