@@ -4,9 +4,3 @@ Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: user.rpc
-
-PostgresDSN: postgres://beehive:beehive@127.0.0.1:5432/beehive?sslmode=disable
-
-RedisAddr: 127.0.0.1:6379
-RedisPassword: ""
-RedisDB: 0

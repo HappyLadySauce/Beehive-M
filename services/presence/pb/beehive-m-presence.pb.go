@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.19.4
-// source: presence.proto
+// source: beehive-m-presence.proto
 
 package pb
 
@@ -36,7 +36,7 @@ type OnlineStatus struct {
 
 func (x *OnlineStatus) Reset() {
 	*x = OnlineStatus{}
-	mi := &file_presence_proto_msgTypes[0]
+	mi := &file_beehive_m_presence_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -48,7 +48,7 @@ func (x *OnlineStatus) String() string {
 func (*OnlineStatus) ProtoMessage() {}
 
 func (x *OnlineStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[0]
+	mi := &file_beehive_m_presence_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -61,7 +61,7 @@ func (x *OnlineStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OnlineStatus.ProtoReflect.Descriptor instead.
 func (*OnlineStatus) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{0}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *OnlineStatus) GetUserId() int64 {
@@ -125,7 +125,7 @@ type ReportHeartbeatRequest struct {
 
 func (x *ReportHeartbeatRequest) Reset() {
 	*x = ReportHeartbeatRequest{}
-	mi := &file_presence_proto_msgTypes[1]
+	mi := &file_beehive_m_presence_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -137,7 +137,7 @@ func (x *ReportHeartbeatRequest) String() string {
 func (*ReportHeartbeatRequest) ProtoMessage() {}
 
 func (x *ReportHeartbeatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[1]
+	mi := &file_beehive_m_presence_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -150,7 +150,7 @@ func (x *ReportHeartbeatRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReportHeartbeatRequest.ProtoReflect.Descriptor instead.
 func (*ReportHeartbeatRequest) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{1}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ReportHeartbeatRequest) GetUserId() int64 {
@@ -189,7 +189,7 @@ type ReportHeartbeatResponse struct {
 
 func (x *ReportHeartbeatResponse) Reset() {
 	*x = ReportHeartbeatResponse{}
-	mi := &file_presence_proto_msgTypes[2]
+	mi := &file_beehive_m_presence_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -201,7 +201,7 @@ func (x *ReportHeartbeatResponse) String() string {
 func (*ReportHeartbeatResponse) ProtoMessage() {}
 
 func (x *ReportHeartbeatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[2]
+	mi := &file_beehive_m_presence_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -214,7 +214,7 @@ func (x *ReportHeartbeatResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReportHeartbeatResponse.ProtoReflect.Descriptor instead.
 func (*ReportHeartbeatResponse) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{2}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{2}
 }
 
 type GetOnlineStatusRequest struct {
@@ -227,7 +227,7 @@ type GetOnlineStatusRequest struct {
 
 func (x *GetOnlineStatusRequest) Reset() {
 	*x = GetOnlineStatusRequest{}
-	mi := &file_presence_proto_msgTypes[3]
+	mi := &file_beehive_m_presence_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -239,7 +239,7 @@ func (x *GetOnlineStatusRequest) String() string {
 func (*GetOnlineStatusRequest) ProtoMessage() {}
 
 func (x *GetOnlineStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[3]
+	mi := &file_beehive_m_presence_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -252,7 +252,7 @@ func (x *GetOnlineStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOnlineStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetOnlineStatusRequest) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{3}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetOnlineStatusRequest) GetUserId() int64 {
@@ -278,7 +278,7 @@ type GetOnlineStatusResponse struct {
 
 func (x *GetOnlineStatusResponse) Reset() {
 	*x = GetOnlineStatusResponse{}
-	mi := &file_presence_proto_msgTypes[4]
+	mi := &file_beehive_m_presence_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -290,7 +290,7 @@ func (x *GetOnlineStatusResponse) String() string {
 func (*GetOnlineStatusResponse) ProtoMessage() {}
 
 func (x *GetOnlineStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[4]
+	mi := &file_beehive_m_presence_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -303,7 +303,7 @@ func (x *GetOnlineStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOnlineStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetOnlineStatusResponse) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{4}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetOnlineStatusResponse) GetStatuses() []*OnlineStatus {
@@ -322,7 +322,7 @@ type BatchGetOnlineStatusRequest struct {
 
 func (x *BatchGetOnlineStatusRequest) Reset() {
 	*x = BatchGetOnlineStatusRequest{}
-	mi := &file_presence_proto_msgTypes[5]
+	mi := &file_beehive_m_presence_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -334,7 +334,7 @@ func (x *BatchGetOnlineStatusRequest) String() string {
 func (*BatchGetOnlineStatusRequest) ProtoMessage() {}
 
 func (x *BatchGetOnlineStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[5]
+	mi := &file_beehive_m_presence_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -347,7 +347,7 @@ func (x *BatchGetOnlineStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchGetOnlineStatusRequest.ProtoReflect.Descriptor instead.
 func (*BatchGetOnlineStatusRequest) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{5}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BatchGetOnlineStatusRequest) GetUserIds() []int64 {
@@ -366,7 +366,7 @@ type BatchGetOnlineStatusResponse struct {
 
 func (x *BatchGetOnlineStatusResponse) Reset() {
 	*x = BatchGetOnlineStatusResponse{}
-	mi := &file_presence_proto_msgTypes[6]
+	mi := &file_beehive_m_presence_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -378,7 +378,7 @@ func (x *BatchGetOnlineStatusResponse) String() string {
 func (*BatchGetOnlineStatusResponse) ProtoMessage() {}
 
 func (x *BatchGetOnlineStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[6]
+	mi := &file_beehive_m_presence_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -391,7 +391,7 @@ func (x *BatchGetOnlineStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchGetOnlineStatusResponse.ProtoReflect.Descriptor instead.
 func (*BatchGetOnlineStatusResponse) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{6}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *BatchGetOnlineStatusResponse) GetStatuses() []*OnlineStatus {
@@ -411,7 +411,7 @@ type KickDeviceRequest struct {
 
 func (x *KickDeviceRequest) Reset() {
 	*x = KickDeviceRequest{}
-	mi := &file_presence_proto_msgTypes[7]
+	mi := &file_beehive_m_presence_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -423,7 +423,7 @@ func (x *KickDeviceRequest) String() string {
 func (*KickDeviceRequest) ProtoMessage() {}
 
 func (x *KickDeviceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[7]
+	mi := &file_beehive_m_presence_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -436,7 +436,7 @@ func (x *KickDeviceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KickDeviceRequest.ProtoReflect.Descriptor instead.
 func (*KickDeviceRequest) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{7}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *KickDeviceRequest) GetUserId() int64 {
@@ -461,7 +461,7 @@ type KickDeviceResponse struct {
 
 func (x *KickDeviceResponse) Reset() {
 	*x = KickDeviceResponse{}
-	mi := &file_presence_proto_msgTypes[8]
+	mi := &file_beehive_m_presence_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -473,7 +473,7 @@ func (x *KickDeviceResponse) String() string {
 func (*KickDeviceResponse) ProtoMessage() {}
 
 func (x *KickDeviceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_presence_proto_msgTypes[8]
+	mi := &file_beehive_m_presence_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -486,14 +486,14 @@ func (x *KickDeviceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KickDeviceResponse.ProtoReflect.Descriptor instead.
 func (*KickDeviceResponse) Descriptor() ([]byte, []int) {
-	return file_presence_proto_rawDescGZIP(), []int{8}
+	return file_beehive_m_presence_proto_rawDescGZIP(), []int{8}
 }
 
-var File_presence_proto protoreflect.FileDescriptor
+var File_beehive_m_presence_proto protoreflect.FileDescriptor
 
-const file_presence_proto_rawDesc = "" +
+const file_beehive_m_presence_proto_rawDesc = "" +
 	"\n" +
-	"\x0epresence.proto\x12\bpresence\"\xe7\x01\n" +
+	"\x18beehive-m-presence.proto\x12\bpresence\"\xe7\x01\n" +
 	"\fOnlineStatus\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1b\n" +
 	"\tdevice_id\x18\x02 \x01(\tR\bdeviceId\x12\x16\n" +
@@ -532,19 +532,19 @@ const file_presence_proto_rawDesc = "" +
 	"KickDevice\x12\x1b.presence.KickDeviceRequest\x1a\x1c.presence.KickDeviceResponseB\x16Z\x14services/presence/pbb\x06proto3"
 
 var (
-	file_presence_proto_rawDescOnce sync.Once
-	file_presence_proto_rawDescData []byte
+	file_beehive_m_presence_proto_rawDescOnce sync.Once
+	file_beehive_m_presence_proto_rawDescData []byte
 )
 
-func file_presence_proto_rawDescGZIP() []byte {
-	file_presence_proto_rawDescOnce.Do(func() {
-		file_presence_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_presence_proto_rawDesc), len(file_presence_proto_rawDesc)))
+func file_beehive_m_presence_proto_rawDescGZIP() []byte {
+	file_beehive_m_presence_proto_rawDescOnce.Do(func() {
+		file_beehive_m_presence_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_beehive_m_presence_proto_rawDesc), len(file_beehive_m_presence_proto_rawDesc)))
 	})
-	return file_presence_proto_rawDescData
+	return file_beehive_m_presence_proto_rawDescData
 }
 
-var file_presence_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_presence_proto_goTypes = []any{
+var file_beehive_m_presence_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_beehive_m_presence_proto_goTypes = []any{
 	(*OnlineStatus)(nil),                 // 0: presence.OnlineStatus
 	(*ReportHeartbeatRequest)(nil),       // 1: presence.ReportHeartbeatRequest
 	(*ReportHeartbeatResponse)(nil),      // 2: presence.ReportHeartbeatResponse
@@ -555,7 +555,7 @@ var file_presence_proto_goTypes = []any{
 	(*KickDeviceRequest)(nil),            // 7: presence.KickDeviceRequest
 	(*KickDeviceResponse)(nil),           // 8: presence.KickDeviceResponse
 }
-var file_presence_proto_depIdxs = []int32{
+var file_beehive_m_presence_proto_depIdxs = []int32{
 	0, // 0: presence.GetOnlineStatusResponse.statuses:type_name -> presence.OnlineStatus
 	0, // 1: presence.BatchGetOnlineStatusResponse.statuses:type_name -> presence.OnlineStatus
 	1, // 2: presence.PresenceService.ReportHeartbeat:input_type -> presence.ReportHeartbeatRequest
@@ -573,26 +573,26 @@ var file_presence_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_presence_proto_init() }
-func file_presence_proto_init() {
-	if File_presence_proto != nil {
+func init() { file_beehive_m_presence_proto_init() }
+func file_beehive_m_presence_proto_init() {
+	if File_beehive_m_presence_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_presence_proto_rawDesc), len(file_presence_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_beehive_m_presence_proto_rawDesc), len(file_beehive_m_presence_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_presence_proto_goTypes,
-		DependencyIndexes: file_presence_proto_depIdxs,
-		MessageInfos:      file_presence_proto_msgTypes,
+		GoTypes:           file_beehive_m_presence_proto_goTypes,
+		DependencyIndexes: file_beehive_m_presence_proto_depIdxs,
+		MessageInfos:      file_beehive_m_presence_proto_msgTypes,
 	}.Build()
-	File_presence_proto = out.File
-	file_presence_proto_goTypes = nil
-	file_presence_proto_depIdxs = nil
+	File_beehive_m_presence_proto = out.File
+	file_beehive_m_presence_proto_goTypes = nil
+	file_beehive_m_presence_proto_depIdxs = nil
 }

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.19.4
-// source: friend.proto
+// source: beehive-m-friend.proto
 
 package pb
 
@@ -38,7 +38,7 @@ type FriendItem struct {
 
 func (x *FriendItem) Reset() {
 	*x = FriendItem{}
-	mi := &file_friend_proto_msgTypes[0]
+	mi := &file_beehive_m_friend_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -50,7 +50,7 @@ func (x *FriendItem) String() string {
 func (*FriendItem) ProtoMessage() {}
 
 func (x *FriendItem) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[0]
+	mi := &file_beehive_m_friend_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +63,7 @@ func (x *FriendItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendItem.ProtoReflect.Descriptor instead.
 func (*FriendItem) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{0}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *FriendItem) GetFriendId() int64 {
@@ -138,7 +138,7 @@ type FriendRequestItem struct {
 
 func (x *FriendRequestItem) Reset() {
 	*x = FriendRequestItem{}
-	mi := &file_friend_proto_msgTypes[1]
+	mi := &file_beehive_m_friend_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -150,7 +150,7 @@ func (x *FriendRequestItem) String() string {
 func (*FriendRequestItem) ProtoMessage() {}
 
 func (x *FriendRequestItem) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[1]
+	mi := &file_beehive_m_friend_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -163,7 +163,7 @@ func (x *FriendRequestItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendRequestItem.ProtoReflect.Descriptor instead.
 func (*FriendRequestItem) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{1}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *FriendRequestItem) GetRequestId() int64 {
@@ -230,7 +230,7 @@ type BlacklistItem struct {
 
 func (x *BlacklistItem) Reset() {
 	*x = BlacklistItem{}
-	mi := &file_friend_proto_msgTypes[2]
+	mi := &file_beehive_m_friend_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -242,7 +242,7 @@ func (x *BlacklistItem) String() string {
 func (*BlacklistItem) ProtoMessage() {}
 
 func (x *BlacklistItem) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[2]
+	mi := &file_beehive_m_friend_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -255,7 +255,7 @@ func (x *BlacklistItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlacklistItem.ProtoReflect.Descriptor instead.
 func (*BlacklistItem) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{2}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *BlacklistItem) GetId() int64 {
@@ -316,7 +316,7 @@ type RecommendationItem struct {
 
 func (x *RecommendationItem) Reset() {
 	*x = RecommendationItem{}
-	mi := &file_friend_proto_msgTypes[3]
+	mi := &file_beehive_m_friend_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -328,7 +328,7 @@ func (x *RecommendationItem) String() string {
 func (*RecommendationItem) ProtoMessage() {}
 
 func (x *RecommendationItem) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[3]
+	mi := &file_beehive_m_friend_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -341,7 +341,7 @@ func (x *RecommendationItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecommendationItem.ProtoReflect.Descriptor instead.
 func (*RecommendationItem) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{3}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RecommendationItem) GetId() int64 {
@@ -404,7 +404,7 @@ type ListFriendsRequest struct {
 
 func (x *ListFriendsRequest) Reset() {
 	*x = ListFriendsRequest{}
-	mi := &file_friend_proto_msgTypes[4]
+	mi := &file_beehive_m_friend_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -416,7 +416,7 @@ func (x *ListFriendsRequest) String() string {
 func (*ListFriendsRequest) ProtoMessage() {}
 
 func (x *ListFriendsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[4]
+	mi := &file_beehive_m_friend_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -429,7 +429,7 @@ func (x *ListFriendsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListFriendsRequest.ProtoReflect.Descriptor instead.
 func (*ListFriendsRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{4}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListFriendsRequest) GetUserId() int64 {
@@ -463,7 +463,7 @@ type ListFriendsResponse struct {
 
 func (x *ListFriendsResponse) Reset() {
 	*x = ListFriendsResponse{}
-	mi := &file_friend_proto_msgTypes[5]
+	mi := &file_beehive_m_friend_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -475,7 +475,7 @@ func (x *ListFriendsResponse) String() string {
 func (*ListFriendsResponse) ProtoMessage() {}
 
 func (x *ListFriendsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[5]
+	mi := &file_beehive_m_friend_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -488,7 +488,7 @@ func (x *ListFriendsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListFriendsResponse.ProtoReflect.Descriptor instead.
 func (*ListFriendsResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{5}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListFriendsResponse) GetFriends() []*FriendItem {
@@ -515,7 +515,7 @@ type DeleteFriendRequest struct {
 
 func (x *DeleteFriendRequest) Reset() {
 	*x = DeleteFriendRequest{}
-	mi := &file_friend_proto_msgTypes[6]
+	mi := &file_beehive_m_friend_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -527,7 +527,7 @@ func (x *DeleteFriendRequest) String() string {
 func (*DeleteFriendRequest) ProtoMessage() {}
 
 func (x *DeleteFriendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[6]
+	mi := &file_beehive_m_friend_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -540,7 +540,7 @@ func (x *DeleteFriendRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFriendRequest.ProtoReflect.Descriptor instead.
 func (*DeleteFriendRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{6}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DeleteFriendRequest) GetUserId() int64 {
@@ -565,7 +565,7 @@ type DeleteFriendResponse struct {
 
 func (x *DeleteFriendResponse) Reset() {
 	*x = DeleteFriendResponse{}
-	mi := &file_friend_proto_msgTypes[7]
+	mi := &file_beehive_m_friend_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -577,7 +577,7 @@ func (x *DeleteFriendResponse) String() string {
 func (*DeleteFriendResponse) ProtoMessage() {}
 
 func (x *DeleteFriendResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[7]
+	mi := &file_beehive_m_friend_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -590,7 +590,7 @@ func (x *DeleteFriendResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFriendResponse.ProtoReflect.Descriptor instead.
 func (*DeleteFriendResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{7}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{7}
 }
 
 type UpdateRemarkRequest struct {
@@ -604,7 +604,7 @@ type UpdateRemarkRequest struct {
 
 func (x *UpdateRemarkRequest) Reset() {
 	*x = UpdateRemarkRequest{}
-	mi := &file_friend_proto_msgTypes[8]
+	mi := &file_beehive_m_friend_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -616,7 +616,7 @@ func (x *UpdateRemarkRequest) String() string {
 func (*UpdateRemarkRequest) ProtoMessage() {}
 
 func (x *UpdateRemarkRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[8]
+	mi := &file_beehive_m_friend_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -629,7 +629,7 @@ func (x *UpdateRemarkRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRemarkRequest.ProtoReflect.Descriptor instead.
 func (*UpdateRemarkRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{8}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateRemarkRequest) GetUserId() int64 {
@@ -661,7 +661,7 @@ type UpdateRemarkResponse struct {
 
 func (x *UpdateRemarkResponse) Reset() {
 	*x = UpdateRemarkResponse{}
-	mi := &file_friend_proto_msgTypes[9]
+	mi := &file_beehive_m_friend_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -673,7 +673,7 @@ func (x *UpdateRemarkResponse) String() string {
 func (*UpdateRemarkResponse) ProtoMessage() {}
 
 func (x *UpdateRemarkResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[9]
+	mi := &file_beehive_m_friend_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -686,7 +686,7 @@ func (x *UpdateRemarkResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRemarkResponse.ProtoReflect.Descriptor instead.
 func (*UpdateRemarkResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{9}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{9}
 }
 
 type SetFriendMutedRequest struct {
@@ -700,7 +700,7 @@ type SetFriendMutedRequest struct {
 
 func (x *SetFriendMutedRequest) Reset() {
 	*x = SetFriendMutedRequest{}
-	mi := &file_friend_proto_msgTypes[10]
+	mi := &file_beehive_m_friend_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -712,7 +712,7 @@ func (x *SetFriendMutedRequest) String() string {
 func (*SetFriendMutedRequest) ProtoMessage() {}
 
 func (x *SetFriendMutedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[10]
+	mi := &file_beehive_m_friend_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -725,7 +725,7 @@ func (x *SetFriendMutedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetFriendMutedRequest.ProtoReflect.Descriptor instead.
 func (*SetFriendMutedRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{10}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *SetFriendMutedRequest) GetUserId() int64 {
@@ -757,7 +757,7 @@ type SetFriendMutedResponse struct {
 
 func (x *SetFriendMutedResponse) Reset() {
 	*x = SetFriendMutedResponse{}
-	mi := &file_friend_proto_msgTypes[11]
+	mi := &file_beehive_m_friend_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -769,7 +769,7 @@ func (x *SetFriendMutedResponse) String() string {
 func (*SetFriendMutedResponse) ProtoMessage() {}
 
 func (x *SetFriendMutedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[11]
+	mi := &file_beehive_m_friend_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -782,7 +782,7 @@ func (x *SetFriendMutedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetFriendMutedResponse.ProtoReflect.Descriptor instead.
 func (*SetFriendMutedResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{11}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{11}
 }
 
 type SetFriendSpecialRequest struct {
@@ -796,7 +796,7 @@ type SetFriendSpecialRequest struct {
 
 func (x *SetFriendSpecialRequest) Reset() {
 	*x = SetFriendSpecialRequest{}
-	mi := &file_friend_proto_msgTypes[12]
+	mi := &file_beehive_m_friend_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -808,7 +808,7 @@ func (x *SetFriendSpecialRequest) String() string {
 func (*SetFriendSpecialRequest) ProtoMessage() {}
 
 func (x *SetFriendSpecialRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[12]
+	mi := &file_beehive_m_friend_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -821,7 +821,7 @@ func (x *SetFriendSpecialRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetFriendSpecialRequest.ProtoReflect.Descriptor instead.
 func (*SetFriendSpecialRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{12}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SetFriendSpecialRequest) GetUserId() int64 {
@@ -853,7 +853,7 @@ type SetFriendSpecialResponse struct {
 
 func (x *SetFriendSpecialResponse) Reset() {
 	*x = SetFriendSpecialResponse{}
-	mi := &file_friend_proto_msgTypes[13]
+	mi := &file_beehive_m_friend_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -865,7 +865,7 @@ func (x *SetFriendSpecialResponse) String() string {
 func (*SetFriendSpecialResponse) ProtoMessage() {}
 
 func (x *SetFriendSpecialResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[13]
+	mi := &file_beehive_m_friend_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -878,7 +878,7 @@ func (x *SetFriendSpecialResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetFriendSpecialResponse.ProtoReflect.Descriptor instead.
 func (*SetFriendSpecialResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{13}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{13}
 }
 
 type SendFriendRequestRequest struct {
@@ -892,7 +892,7 @@ type SendFriendRequestRequest struct {
 
 func (x *SendFriendRequestRequest) Reset() {
 	*x = SendFriendRequestRequest{}
-	mi := &file_friend_proto_msgTypes[14]
+	mi := &file_beehive_m_friend_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -904,7 +904,7 @@ func (x *SendFriendRequestRequest) String() string {
 func (*SendFriendRequestRequest) ProtoMessage() {}
 
 func (x *SendFriendRequestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[14]
+	mi := &file_beehive_m_friend_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -917,7 +917,7 @@ func (x *SendFriendRequestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendFriendRequestRequest.ProtoReflect.Descriptor instead.
 func (*SendFriendRequestRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{14}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *SendFriendRequestRequest) GetApplicantId() int64 {
@@ -950,7 +950,7 @@ type SendFriendRequestResponse struct {
 
 func (x *SendFriendRequestResponse) Reset() {
 	*x = SendFriendRequestResponse{}
-	mi := &file_friend_proto_msgTypes[15]
+	mi := &file_beehive_m_friend_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -962,7 +962,7 @@ func (x *SendFriendRequestResponse) String() string {
 func (*SendFriendRequestResponse) ProtoMessage() {}
 
 func (x *SendFriendRequestResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[15]
+	mi := &file_beehive_m_friend_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -975,7 +975,7 @@ func (x *SendFriendRequestResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendFriendRequestResponse.ProtoReflect.Descriptor instead.
 func (*SendFriendRequestResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{15}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *SendFriendRequestResponse) GetRequestId() int64 {
@@ -996,7 +996,7 @@ type ListReceivedRequestsRequest struct {
 
 func (x *ListReceivedRequestsRequest) Reset() {
 	*x = ListReceivedRequestsRequest{}
-	mi := &file_friend_proto_msgTypes[16]
+	mi := &file_beehive_m_friend_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1008,7 +1008,7 @@ func (x *ListReceivedRequestsRequest) String() string {
 func (*ListReceivedRequestsRequest) ProtoMessage() {}
 
 func (x *ListReceivedRequestsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[16]
+	mi := &file_beehive_m_friend_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1021,7 +1021,7 @@ func (x *ListReceivedRequestsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListReceivedRequestsRequest.ProtoReflect.Descriptor instead.
 func (*ListReceivedRequestsRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{16}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ListReceivedRequestsRequest) GetTargetId() int64 {
@@ -1055,7 +1055,7 @@ type ListReceivedRequestsResponse struct {
 
 func (x *ListReceivedRequestsResponse) Reset() {
 	*x = ListReceivedRequestsResponse{}
-	mi := &file_friend_proto_msgTypes[17]
+	mi := &file_beehive_m_friend_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1067,7 +1067,7 @@ func (x *ListReceivedRequestsResponse) String() string {
 func (*ListReceivedRequestsResponse) ProtoMessage() {}
 
 func (x *ListReceivedRequestsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[17]
+	mi := &file_beehive_m_friend_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1080,7 +1080,7 @@ func (x *ListReceivedRequestsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListReceivedRequestsResponse.ProtoReflect.Descriptor instead.
 func (*ListReceivedRequestsResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{17}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ListReceivedRequestsResponse) GetRequests() []*FriendRequestItem {
@@ -1108,7 +1108,7 @@ type ListSentRequestsRequest struct {
 
 func (x *ListSentRequestsRequest) Reset() {
 	*x = ListSentRequestsRequest{}
-	mi := &file_friend_proto_msgTypes[18]
+	mi := &file_beehive_m_friend_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1120,7 +1120,7 @@ func (x *ListSentRequestsRequest) String() string {
 func (*ListSentRequestsRequest) ProtoMessage() {}
 
 func (x *ListSentRequestsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[18]
+	mi := &file_beehive_m_friend_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1133,7 +1133,7 @@ func (x *ListSentRequestsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSentRequestsRequest.ProtoReflect.Descriptor instead.
 func (*ListSentRequestsRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{18}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ListSentRequestsRequest) GetApplicantId() int64 {
@@ -1167,7 +1167,7 @@ type ListSentRequestsResponse struct {
 
 func (x *ListSentRequestsResponse) Reset() {
 	*x = ListSentRequestsResponse{}
-	mi := &file_friend_proto_msgTypes[19]
+	mi := &file_beehive_m_friend_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1179,7 +1179,7 @@ func (x *ListSentRequestsResponse) String() string {
 func (*ListSentRequestsResponse) ProtoMessage() {}
 
 func (x *ListSentRequestsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[19]
+	mi := &file_beehive_m_friend_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1192,7 +1192,7 @@ func (x *ListSentRequestsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSentRequestsResponse.ProtoReflect.Descriptor instead.
 func (*ListSentRequestsResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{19}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ListSentRequestsResponse) GetRequests() []*FriendRequestItem {
@@ -1219,7 +1219,7 @@ type HandleFriendRequestRequest struct {
 
 func (x *HandleFriendRequestRequest) Reset() {
 	*x = HandleFriendRequestRequest{}
-	mi := &file_friend_proto_msgTypes[20]
+	mi := &file_beehive_m_friend_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1231,7 +1231,7 @@ func (x *HandleFriendRequestRequest) String() string {
 func (*HandleFriendRequestRequest) ProtoMessage() {}
 
 func (x *HandleFriendRequestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[20]
+	mi := &file_beehive_m_friend_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1244,7 +1244,7 @@ func (x *HandleFriendRequestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HandleFriendRequestRequest.ProtoReflect.Descriptor instead.
 func (*HandleFriendRequestRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{20}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *HandleFriendRequestRequest) GetRequestId() int64 {
@@ -1269,7 +1269,7 @@ type HandleFriendRequestResponse struct {
 
 func (x *HandleFriendRequestResponse) Reset() {
 	*x = HandleFriendRequestResponse{}
-	mi := &file_friend_proto_msgTypes[21]
+	mi := &file_beehive_m_friend_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1281,7 +1281,7 @@ func (x *HandleFriendRequestResponse) String() string {
 func (*HandleFriendRequestResponse) ProtoMessage() {}
 
 func (x *HandleFriendRequestResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[21]
+	mi := &file_beehive_m_friend_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1294,7 +1294,7 @@ func (x *HandleFriendRequestResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HandleFriendRequestResponse.ProtoReflect.Descriptor instead.
 func (*HandleFriendRequestResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{21}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{21}
 }
 
 type AddBlacklistRequest struct {
@@ -1310,7 +1310,7 @@ type AddBlacklistRequest struct {
 
 func (x *AddBlacklistRequest) Reset() {
 	*x = AddBlacklistRequest{}
-	mi := &file_friend_proto_msgTypes[22]
+	mi := &file_beehive_m_friend_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1322,7 +1322,7 @@ func (x *AddBlacklistRequest) String() string {
 func (*AddBlacklistRequest) ProtoMessage() {}
 
 func (x *AddBlacklistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[22]
+	mi := &file_beehive_m_friend_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1335,7 +1335,7 @@ func (x *AddBlacklistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddBlacklistRequest.ProtoReflect.Descriptor instead.
 func (*AddBlacklistRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{22}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *AddBlacklistRequest) GetUserId() int64 {
@@ -1381,7 +1381,7 @@ type AddBlacklistResponse struct {
 
 func (x *AddBlacklistResponse) Reset() {
 	*x = AddBlacklistResponse{}
-	mi := &file_friend_proto_msgTypes[23]
+	mi := &file_beehive_m_friend_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1393,7 +1393,7 @@ func (x *AddBlacklistResponse) String() string {
 func (*AddBlacklistResponse) ProtoMessage() {}
 
 func (x *AddBlacklistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[23]
+	mi := &file_beehive_m_friend_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1406,7 +1406,7 @@ func (x *AddBlacklistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddBlacklistResponse.ProtoReflect.Descriptor instead.
 func (*AddBlacklistResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{23}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{23}
 }
 
 type RemoveBlacklistRequest struct {
@@ -1419,7 +1419,7 @@ type RemoveBlacklistRequest struct {
 
 func (x *RemoveBlacklistRequest) Reset() {
 	*x = RemoveBlacklistRequest{}
-	mi := &file_friend_proto_msgTypes[24]
+	mi := &file_beehive_m_friend_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1431,7 +1431,7 @@ func (x *RemoveBlacklistRequest) String() string {
 func (*RemoveBlacklistRequest) ProtoMessage() {}
 
 func (x *RemoveBlacklistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[24]
+	mi := &file_beehive_m_friend_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1444,7 +1444,7 @@ func (x *RemoveBlacklistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveBlacklistRequest.ProtoReflect.Descriptor instead.
 func (*RemoveBlacklistRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{24}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *RemoveBlacklistRequest) GetUserId() int64 {
@@ -1469,7 +1469,7 @@ type RemoveBlacklistResponse struct {
 
 func (x *RemoveBlacklistResponse) Reset() {
 	*x = RemoveBlacklistResponse{}
-	mi := &file_friend_proto_msgTypes[25]
+	mi := &file_beehive_m_friend_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1481,7 +1481,7 @@ func (x *RemoveBlacklistResponse) String() string {
 func (*RemoveBlacklistResponse) ProtoMessage() {}
 
 func (x *RemoveBlacklistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[25]
+	mi := &file_beehive_m_friend_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1494,7 +1494,7 @@ func (x *RemoveBlacklistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveBlacklistResponse.ProtoReflect.Descriptor instead.
 func (*RemoveBlacklistResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{25}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{25}
 }
 
 type ListBlacklistRequest struct {
@@ -1508,7 +1508,7 @@ type ListBlacklistRequest struct {
 
 func (x *ListBlacklistRequest) Reset() {
 	*x = ListBlacklistRequest{}
-	mi := &file_friend_proto_msgTypes[26]
+	mi := &file_beehive_m_friend_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1520,7 +1520,7 @@ func (x *ListBlacklistRequest) String() string {
 func (*ListBlacklistRequest) ProtoMessage() {}
 
 func (x *ListBlacklistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[26]
+	mi := &file_beehive_m_friend_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1533,7 +1533,7 @@ func (x *ListBlacklistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBlacklistRequest.ProtoReflect.Descriptor instead.
 func (*ListBlacklistRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{26}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *ListBlacklistRequest) GetUserId() int64 {
@@ -1567,7 +1567,7 @@ type ListBlacklistResponse struct {
 
 func (x *ListBlacklistResponse) Reset() {
 	*x = ListBlacklistResponse{}
-	mi := &file_friend_proto_msgTypes[27]
+	mi := &file_beehive_m_friend_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1579,7 +1579,7 @@ func (x *ListBlacklistResponse) String() string {
 func (*ListBlacklistResponse) ProtoMessage() {}
 
 func (x *ListBlacklistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[27]
+	mi := &file_beehive_m_friend_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1592,7 +1592,7 @@ func (x *ListBlacklistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBlacklistResponse.ProtoReflect.Descriptor instead.
 func (*ListBlacklistResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{27}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ListBlacklistResponse) GetItems() []*BlacklistItem {
@@ -1619,7 +1619,7 @@ type CheckBlacklistRequest struct {
 
 func (x *CheckBlacklistRequest) Reset() {
 	*x = CheckBlacklistRequest{}
-	mi := &file_friend_proto_msgTypes[28]
+	mi := &file_beehive_m_friend_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1631,7 +1631,7 @@ func (x *CheckBlacklistRequest) String() string {
 func (*CheckBlacklistRequest) ProtoMessage() {}
 
 func (x *CheckBlacklistRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[28]
+	mi := &file_beehive_m_friend_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1644,7 +1644,7 @@ func (x *CheckBlacklistRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckBlacklistRequest.ProtoReflect.Descriptor instead.
 func (*CheckBlacklistRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{28}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *CheckBlacklistRequest) GetUserId() int64 {
@@ -1670,7 +1670,7 @@ type CheckBlacklistResponse struct {
 
 func (x *CheckBlacklistResponse) Reset() {
 	*x = CheckBlacklistResponse{}
-	mi := &file_friend_proto_msgTypes[29]
+	mi := &file_beehive_m_friend_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1682,7 +1682,7 @@ func (x *CheckBlacklistResponse) String() string {
 func (*CheckBlacklistResponse) ProtoMessage() {}
 
 func (x *CheckBlacklistResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[29]
+	mi := &file_beehive_m_friend_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1695,7 +1695,7 @@ func (x *CheckBlacklistResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckBlacklistResponse.ProtoReflect.Descriptor instead.
 func (*CheckBlacklistResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{29}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *CheckBlacklistResponse) GetIsBlocked() bool {
@@ -1716,7 +1716,7 @@ type ListRecommendationsRequest struct {
 
 func (x *ListRecommendationsRequest) Reset() {
 	*x = ListRecommendationsRequest{}
-	mi := &file_friend_proto_msgTypes[30]
+	mi := &file_beehive_m_friend_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1728,7 +1728,7 @@ func (x *ListRecommendationsRequest) String() string {
 func (*ListRecommendationsRequest) ProtoMessage() {}
 
 func (x *ListRecommendationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[30]
+	mi := &file_beehive_m_friend_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1741,7 +1741,7 @@ func (x *ListRecommendationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRecommendationsRequest.ProtoReflect.Descriptor instead.
 func (*ListRecommendationsRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{30}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ListRecommendationsRequest) GetUserId() int64 {
@@ -1775,7 +1775,7 @@ type ListRecommendationsResponse struct {
 
 func (x *ListRecommendationsResponse) Reset() {
 	*x = ListRecommendationsResponse{}
-	mi := &file_friend_proto_msgTypes[31]
+	mi := &file_beehive_m_friend_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1787,7 +1787,7 @@ func (x *ListRecommendationsResponse) String() string {
 func (*ListRecommendationsResponse) ProtoMessage() {}
 
 func (x *ListRecommendationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[31]
+	mi := &file_beehive_m_friend_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1800,7 +1800,7 @@ func (x *ListRecommendationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRecommendationsResponse.ProtoReflect.Descriptor instead.
 func (*ListRecommendationsResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{31}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *ListRecommendationsResponse) GetItems() []*RecommendationItem {
@@ -1827,7 +1827,7 @@ type IgnoreRecommendationRequest struct {
 
 func (x *IgnoreRecommendationRequest) Reset() {
 	*x = IgnoreRecommendationRequest{}
-	mi := &file_friend_proto_msgTypes[32]
+	mi := &file_beehive_m_friend_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1839,7 +1839,7 @@ func (x *IgnoreRecommendationRequest) String() string {
 func (*IgnoreRecommendationRequest) ProtoMessage() {}
 
 func (x *IgnoreRecommendationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[32]
+	mi := &file_beehive_m_friend_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1852,7 +1852,7 @@ func (x *IgnoreRecommendationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IgnoreRecommendationRequest.ProtoReflect.Descriptor instead.
 func (*IgnoreRecommendationRequest) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{32}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *IgnoreRecommendationRequest) GetUserId() int64 {
@@ -1877,7 +1877,7 @@ type IgnoreRecommendationResponse struct {
 
 func (x *IgnoreRecommendationResponse) Reset() {
 	*x = IgnoreRecommendationResponse{}
-	mi := &file_friend_proto_msgTypes[33]
+	mi := &file_beehive_m_friend_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1889,7 +1889,7 @@ func (x *IgnoreRecommendationResponse) String() string {
 func (*IgnoreRecommendationResponse) ProtoMessage() {}
 
 func (x *IgnoreRecommendationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_friend_proto_msgTypes[33]
+	mi := &file_beehive_m_friend_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1902,14 +1902,14 @@ func (x *IgnoreRecommendationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IgnoreRecommendationResponse.ProtoReflect.Descriptor instead.
 func (*IgnoreRecommendationResponse) Descriptor() ([]byte, []int) {
-	return file_friend_proto_rawDescGZIP(), []int{33}
+	return file_beehive_m_friend_proto_rawDescGZIP(), []int{33}
 }
 
-var File_friend_proto protoreflect.FileDescriptor
+var File_beehive_m_friend_proto protoreflect.FileDescriptor
 
-const file_friend_proto_rawDesc = "" +
+const file_beehive_m_friend_proto_rawDesc = "" +
 	"\n" +
-	"\ffriend.proto\x12\x06friend\"\xfb\x01\n" +
+	"\x16beehive-m-friend.proto\x12\x06friend\"\xfb\x01\n" +
 	"\n" +
 	"FriendItem\x12\x1b\n" +
 	"\tfriend_id\x18\x01 \x01(\x03R\bfriendId\x12\x16\n" +
@@ -2059,19 +2059,19 @@ const file_friend_proto_rawDesc = "" +
 	"\x14IgnoreRecommendation\x12#.friend.IgnoreRecommendationRequest\x1a$.friend.IgnoreRecommendationResponseB\x14Z\x12services/friend/pbb\x06proto3"
 
 var (
-	file_friend_proto_rawDescOnce sync.Once
-	file_friend_proto_rawDescData []byte
+	file_beehive_m_friend_proto_rawDescOnce sync.Once
+	file_beehive_m_friend_proto_rawDescData []byte
 )
 
-func file_friend_proto_rawDescGZIP() []byte {
-	file_friend_proto_rawDescOnce.Do(func() {
-		file_friend_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_friend_proto_rawDesc), len(file_friend_proto_rawDesc)))
+func file_beehive_m_friend_proto_rawDescGZIP() []byte {
+	file_beehive_m_friend_proto_rawDescOnce.Do(func() {
+		file_beehive_m_friend_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_beehive_m_friend_proto_rawDesc), len(file_beehive_m_friend_proto_rawDesc)))
 	})
-	return file_friend_proto_rawDescData
+	return file_beehive_m_friend_proto_rawDescData
 }
 
-var file_friend_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
-var file_friend_proto_goTypes = []any{
+var file_beehive_m_friend_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
+var file_beehive_m_friend_proto_goTypes = []any{
 	(*FriendItem)(nil),                   // 0: friend.FriendItem
 	(*FriendRequestItem)(nil),            // 1: friend.FriendRequestItem
 	(*BlacklistItem)(nil),                // 2: friend.BlacklistItem
@@ -2107,7 +2107,7 @@ var file_friend_proto_goTypes = []any{
 	(*IgnoreRecommendationRequest)(nil),  // 32: friend.IgnoreRecommendationRequest
 	(*IgnoreRecommendationResponse)(nil), // 33: friend.IgnoreRecommendationResponse
 }
-var file_friend_proto_depIdxs = []int32{
+var file_beehive_m_friend_proto_depIdxs = []int32{
 	0,  // 0: friend.ListFriendsResponse.friends:type_name -> friend.FriendItem
 	1,  // 1: friend.ListReceivedRequestsResponse.requests:type_name -> friend.FriendRequestItem
 	1,  // 2: friend.ListSentRequestsResponse.requests:type_name -> friend.FriendRequestItem
@@ -2150,26 +2150,26 @@ var file_friend_proto_depIdxs = []int32{
 	0,  // [0:5] is the sub-list for field type_name
 }
 
-func init() { file_friend_proto_init() }
-func file_friend_proto_init() {
-	if File_friend_proto != nil {
+func init() { file_beehive_m_friend_proto_init() }
+func file_beehive_m_friend_proto_init() {
+	if File_beehive_m_friend_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_friend_proto_rawDesc), len(file_friend_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_beehive_m_friend_proto_rawDesc), len(file_beehive_m_friend_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   34,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_friend_proto_goTypes,
-		DependencyIndexes: file_friend_proto_depIdxs,
-		MessageInfos:      file_friend_proto_msgTypes,
+		GoTypes:           file_beehive_m_friend_proto_goTypes,
+		DependencyIndexes: file_beehive_m_friend_proto_depIdxs,
+		MessageInfos:      file_beehive_m_friend_proto_msgTypes,
 	}.Build()
-	File_friend_proto = out.File
-	file_friend_proto_goTypes = nil
-	file_friend_proto_depIdxs = nil
+	File_beehive_m_friend_proto = out.File
+	file_beehive_m_friend_proto_goTypes = nil
+	file_beehive_m_friend_proto_depIdxs = nil
 }

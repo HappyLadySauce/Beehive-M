@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.19.4
-// source: resource.proto
+// source: beehive-m-resource.proto
 
 package pb
 
@@ -44,7 +44,7 @@ type Resource struct {
 
 func (x *Resource) Reset() {
 	*x = Resource{}
-	mi := &file_resource_proto_msgTypes[0]
+	mi := &file_beehive_m_resource_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -56,7 +56,7 @@ func (x *Resource) String() string {
 func (*Resource) ProtoMessage() {}
 
 func (x *Resource) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[0]
+	mi := &file_beehive_m_resource_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -69,7 +69,7 @@ func (x *Resource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Resource.ProtoReflect.Descriptor instead.
 func (*Resource) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{0}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Resource) GetResourceId() string {
@@ -186,7 +186,7 @@ type UploadRequest struct {
 
 func (x *UploadRequest) Reset() {
 	*x = UploadRequest{}
-	mi := &file_resource_proto_msgTypes[1]
+	mi := &file_beehive_m_resource_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -198,7 +198,7 @@ func (x *UploadRequest) String() string {
 func (*UploadRequest) ProtoMessage() {}
 
 func (x *UploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[1]
+	mi := &file_beehive_m_resource_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -211,7 +211,7 @@ func (x *UploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadRequest.ProtoReflect.Descriptor instead.
 func (*UploadRequest) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{1}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *UploadRequest) GetUploaderId() int64 {
@@ -284,7 +284,7 @@ type UploadResponse struct {
 
 func (x *UploadResponse) Reset() {
 	*x = UploadResponse{}
-	mi := &file_resource_proto_msgTypes[2]
+	mi := &file_beehive_m_resource_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -296,7 +296,7 @@ func (x *UploadResponse) String() string {
 func (*UploadResponse) ProtoMessage() {}
 
 func (x *UploadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[2]
+	mi := &file_beehive_m_resource_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -309,7 +309,7 @@ func (x *UploadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadResponse.ProtoReflect.Descriptor instead.
 func (*UploadResponse) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{2}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UploadResponse) GetResourceId() string {
@@ -363,7 +363,7 @@ type GetResourceRequest struct {
 
 func (x *GetResourceRequest) Reset() {
 	*x = GetResourceRequest{}
-	mi := &file_resource_proto_msgTypes[3]
+	mi := &file_beehive_m_resource_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -375,7 +375,7 @@ func (x *GetResourceRequest) String() string {
 func (*GetResourceRequest) ProtoMessage() {}
 
 func (x *GetResourceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[3]
+	mi := &file_beehive_m_resource_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -388,7 +388,7 @@ func (x *GetResourceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResourceRequest.ProtoReflect.Descriptor instead.
 func (*GetResourceRequest) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{3}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetResourceRequest) GetResourceId() string {
@@ -407,7 +407,7 @@ type GetResourceResponse struct {
 
 func (x *GetResourceResponse) Reset() {
 	*x = GetResourceResponse{}
-	mi := &file_resource_proto_msgTypes[4]
+	mi := &file_beehive_m_resource_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +419,7 @@ func (x *GetResourceResponse) String() string {
 func (*GetResourceResponse) ProtoMessage() {}
 
 func (x *GetResourceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[4]
+	mi := &file_beehive_m_resource_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +432,7 @@ func (x *GetResourceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResourceResponse.ProtoReflect.Descriptor instead.
 func (*GetResourceResponse) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{4}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetResourceResponse) GetResource() *Resource {
@@ -452,7 +452,7 @@ type DeleteResourceRequest struct {
 
 func (x *DeleteResourceRequest) Reset() {
 	*x = DeleteResourceRequest{}
-	mi := &file_resource_proto_msgTypes[5]
+	mi := &file_beehive_m_resource_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -464,7 +464,7 @@ func (x *DeleteResourceRequest) String() string {
 func (*DeleteResourceRequest) ProtoMessage() {}
 
 func (x *DeleteResourceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[5]
+	mi := &file_beehive_m_resource_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -477,7 +477,7 @@ func (x *DeleteResourceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteResourceRequest.ProtoReflect.Descriptor instead.
 func (*DeleteResourceRequest) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{5}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DeleteResourceRequest) GetResourceId() string {
@@ -502,7 +502,7 @@ type DeleteResourceResponse struct {
 
 func (x *DeleteResourceResponse) Reset() {
 	*x = DeleteResourceResponse{}
-	mi := &file_resource_proto_msgTypes[6]
+	mi := &file_beehive_m_resource_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -514,7 +514,7 @@ func (x *DeleteResourceResponse) String() string {
 func (*DeleteResourceResponse) ProtoMessage() {}
 
 func (x *DeleteResourceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[6]
+	mi := &file_beehive_m_resource_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -527,7 +527,7 @@ func (x *DeleteResourceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteResourceResponse.ProtoReflect.Descriptor instead.
 func (*DeleteResourceResponse) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{6}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{6}
 }
 
 type GetByHashRequest struct {
@@ -540,7 +540,7 @@ type GetByHashRequest struct {
 
 func (x *GetByHashRequest) Reset() {
 	*x = GetByHashRequest{}
-	mi := &file_resource_proto_msgTypes[7]
+	mi := &file_beehive_m_resource_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -552,7 +552,7 @@ func (x *GetByHashRequest) String() string {
 func (*GetByHashRequest) ProtoMessage() {}
 
 func (x *GetByHashRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[7]
+	mi := &file_beehive_m_resource_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -565,7 +565,7 @@ func (x *GetByHashRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetByHashRequest.ProtoReflect.Descriptor instead.
 func (*GetByHashRequest) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{7}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetByHashRequest) GetFileHash() string {
@@ -593,7 +593,7 @@ type GetByHashResponse struct {
 
 func (x *GetByHashResponse) Reset() {
 	*x = GetByHashResponse{}
-	mi := &file_resource_proto_msgTypes[8]
+	mi := &file_beehive_m_resource_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -605,7 +605,7 @@ func (x *GetByHashResponse) String() string {
 func (*GetByHashResponse) ProtoMessage() {}
 
 func (x *GetByHashResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[8]
+	mi := &file_beehive_m_resource_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -618,7 +618,7 @@ func (x *GetByHashResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetByHashResponse.ProtoReflect.Descriptor instead.
 func (*GetByHashResponse) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{8}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetByHashResponse) GetExists() bool {
@@ -650,7 +650,7 @@ type CleanExpiredTempRequest struct {
 
 func (x *CleanExpiredTempRequest) Reset() {
 	*x = CleanExpiredTempRequest{}
-	mi := &file_resource_proto_msgTypes[9]
+	mi := &file_beehive_m_resource_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -662,7 +662,7 @@ func (x *CleanExpiredTempRequest) String() string {
 func (*CleanExpiredTempRequest) ProtoMessage() {}
 
 func (x *CleanExpiredTempRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[9]
+	mi := &file_beehive_m_resource_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -675,7 +675,7 @@ func (x *CleanExpiredTempRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CleanExpiredTempRequest.ProtoReflect.Descriptor instead.
 func (*CleanExpiredTempRequest) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{9}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{9}
 }
 
 type CleanExpiredTempResponse struct {
@@ -687,7 +687,7 @@ type CleanExpiredTempResponse struct {
 
 func (x *CleanExpiredTempResponse) Reset() {
 	*x = CleanExpiredTempResponse{}
-	mi := &file_resource_proto_msgTypes[10]
+	mi := &file_beehive_m_resource_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -699,7 +699,7 @@ func (x *CleanExpiredTempResponse) String() string {
 func (*CleanExpiredTempResponse) ProtoMessage() {}
 
 func (x *CleanExpiredTempResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_proto_msgTypes[10]
+	mi := &file_beehive_m_resource_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -712,7 +712,7 @@ func (x *CleanExpiredTempResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CleanExpiredTempResponse.ProtoReflect.Descriptor instead.
 func (*CleanExpiredTempResponse) Descriptor() ([]byte, []int) {
-	return file_resource_proto_rawDescGZIP(), []int{10}
+	return file_beehive_m_resource_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CleanExpiredTempResponse) GetDeletedCount() int32 {
@@ -722,11 +722,11 @@ func (x *CleanExpiredTempResponse) GetDeletedCount() int32 {
 	return 0
 }
 
-var File_resource_proto protoreflect.FileDescriptor
+var File_beehive_m_resource_proto protoreflect.FileDescriptor
 
-const file_resource_proto_rawDesc = "" +
+const file_beehive_m_resource_proto_rawDesc = "" +
 	"\n" +
-	"\x0eresource.proto\x12\bresource\"\x96\x03\n" +
+	"\x18beehive-m-resource.proto\x12\bresource\"\x96\x03\n" +
 	"\bResource\x12\x1f\n" +
 	"\vresource_id\x18\x01 \x01(\tR\n" +
 	"resourceId\x12\x1f\n" +
@@ -797,19 +797,19 @@ const file_resource_proto_rawDesc = "" +
 	"\x10CleanExpiredTemp\x12!.resource.CleanExpiredTempRequest\x1a\".resource.CleanExpiredTempResponseB\x16Z\x14services/resource/pbb\x06proto3"
 
 var (
-	file_resource_proto_rawDescOnce sync.Once
-	file_resource_proto_rawDescData []byte
+	file_beehive_m_resource_proto_rawDescOnce sync.Once
+	file_beehive_m_resource_proto_rawDescData []byte
 )
 
-func file_resource_proto_rawDescGZIP() []byte {
-	file_resource_proto_rawDescOnce.Do(func() {
-		file_resource_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_resource_proto_rawDesc), len(file_resource_proto_rawDesc)))
+func file_beehive_m_resource_proto_rawDescGZIP() []byte {
+	file_beehive_m_resource_proto_rawDescOnce.Do(func() {
+		file_beehive_m_resource_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_beehive_m_resource_proto_rawDesc), len(file_beehive_m_resource_proto_rawDesc)))
 	})
-	return file_resource_proto_rawDescData
+	return file_beehive_m_resource_proto_rawDescData
 }
 
-var file_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
-var file_resource_proto_goTypes = []any{
+var file_beehive_m_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_beehive_m_resource_proto_goTypes = []any{
 	(*Resource)(nil),                 // 0: resource.Resource
 	(*UploadRequest)(nil),            // 1: resource.UploadRequest
 	(*UploadResponse)(nil),           // 2: resource.UploadResponse
@@ -822,7 +822,7 @@ var file_resource_proto_goTypes = []any{
 	(*CleanExpiredTempRequest)(nil),  // 9: resource.CleanExpiredTempRequest
 	(*CleanExpiredTempResponse)(nil), // 10: resource.CleanExpiredTempResponse
 }
-var file_resource_proto_depIdxs = []int32{
+var file_beehive_m_resource_proto_depIdxs = []int32{
 	0,  // 0: resource.GetResourceResponse.resource:type_name -> resource.Resource
 	1,  // 1: resource.ResourceService.Upload:input_type -> resource.UploadRequest
 	3,  // 2: resource.ResourceService.GetResource:input_type -> resource.GetResourceRequest
@@ -841,26 +841,26 @@ var file_resource_proto_depIdxs = []int32{
 	0,  // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_resource_proto_init() }
-func file_resource_proto_init() {
-	if File_resource_proto != nil {
+func init() { file_beehive_m_resource_proto_init() }
+func file_beehive_m_resource_proto_init() {
+	if File_beehive_m_resource_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_proto_rawDesc), len(file_resource_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_beehive_m_resource_proto_rawDesc), len(file_beehive_m_resource_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_resource_proto_goTypes,
-		DependencyIndexes: file_resource_proto_depIdxs,
-		MessageInfos:      file_resource_proto_msgTypes,
+		GoTypes:           file_beehive_m_resource_proto_goTypes,
+		DependencyIndexes: file_beehive_m_resource_proto_depIdxs,
+		MessageInfos:      file_beehive_m_resource_proto_msgTypes,
 	}.Build()
-	File_resource_proto = out.File
-	file_resource_proto_goTypes = nil
-	file_resource_proto_depIdxs = nil
+	File_beehive_m_resource_proto = out.File
+	file_beehive_m_resource_proto_goTypes = nil
+	file_beehive_m_resource_proto_depIdxs = nil
 }

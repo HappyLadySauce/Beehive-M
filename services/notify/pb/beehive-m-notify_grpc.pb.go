@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v3.19.4
-// source: notify.proto
+// source: beehive-m-notify.proto
 
 package pb
 
@@ -391,5 +391,5 @@ var NotifyService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "notify.proto",
+	Metadata: "beehive-m-notify.proto",
 }

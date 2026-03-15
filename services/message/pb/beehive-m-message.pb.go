@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.19.4
-// source: message.proto
+// source: beehive-m-message.proto
 
 package pb
 
@@ -44,7 +44,7 @@ type Message struct {
 
 func (x *Message) Reset() {
 	*x = Message{}
-	mi := &file_message_proto_msgTypes[0]
+	mi := &file_beehive_m_message_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -56,7 +56,7 @@ func (x *Message) String() string {
 func (*Message) ProtoMessage() {}
 
 func (x *Message) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[0]
+	mi := &file_beehive_m_message_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -69,7 +69,7 @@ func (x *Message) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Message.ProtoReflect.Descriptor instead.
 func (*Message) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{0}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Message) GetMsgId() int64 {
@@ -197,7 +197,7 @@ type Conversation struct {
 
 func (x *Conversation) Reset() {
 	*x = Conversation{}
-	mi := &file_message_proto_msgTypes[1]
+	mi := &file_beehive_m_message_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -209,7 +209,7 @@ func (x *Conversation) String() string {
 func (*Conversation) ProtoMessage() {}
 
 func (x *Conversation) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[1]
+	mi := &file_beehive_m_message_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +222,7 @@ func (x *Conversation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Conversation.ProtoReflect.Descriptor instead.
 func (*Conversation) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{1}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Conversation) GetConversationId() int64 {
@@ -319,7 +319,7 @@ type SendPrivateMessageRequest struct {
 
 func (x *SendPrivateMessageRequest) Reset() {
 	*x = SendPrivateMessageRequest{}
-	mi := &file_message_proto_msgTypes[2]
+	mi := &file_beehive_m_message_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -331,7 +331,7 @@ func (x *SendPrivateMessageRequest) String() string {
 func (*SendPrivateMessageRequest) ProtoMessage() {}
 
 func (x *SendPrivateMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[2]
+	mi := &file_beehive_m_message_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -344,7 +344,7 @@ func (x *SendPrivateMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendPrivateMessageRequest.ProtoReflect.Descriptor instead.
 func (*SendPrivateMessageRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{2}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SendPrivateMessageRequest) GetSenderId() int64 {
@@ -419,7 +419,7 @@ type SendPrivateMessageResponse struct {
 
 func (x *SendPrivateMessageResponse) Reset() {
 	*x = SendPrivateMessageResponse{}
-	mi := &file_message_proto_msgTypes[3]
+	mi := &file_beehive_m_message_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -431,7 +431,7 @@ func (x *SendPrivateMessageResponse) String() string {
 func (*SendPrivateMessageResponse) ProtoMessage() {}
 
 func (x *SendPrivateMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[3]
+	mi := &file_beehive_m_message_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -444,7 +444,7 @@ func (x *SendPrivateMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendPrivateMessageResponse.ProtoReflect.Descriptor instead.
 func (*SendPrivateMessageResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{3}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SendPrivateMessageResponse) GetMsgId() int64 {
@@ -466,7 +466,7 @@ type ListPrivateMessagesRequest struct {
 
 func (x *ListPrivateMessagesRequest) Reset() {
 	*x = ListPrivateMessagesRequest{}
-	mi := &file_message_proto_msgTypes[4]
+	mi := &file_beehive_m_message_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -478,7 +478,7 @@ func (x *ListPrivateMessagesRequest) String() string {
 func (*ListPrivateMessagesRequest) ProtoMessage() {}
 
 func (x *ListPrivateMessagesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[4]
+	mi := &file_beehive_m_message_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -491,7 +491,7 @@ func (x *ListPrivateMessagesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPrivateMessagesRequest.ProtoReflect.Descriptor instead.
 func (*ListPrivateMessagesRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{4}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListPrivateMessagesRequest) GetSenderId() int64 {
@@ -532,7 +532,7 @@ type ListPrivateMessagesResponse struct {
 
 func (x *ListPrivateMessagesResponse) Reset() {
 	*x = ListPrivateMessagesResponse{}
-	mi := &file_message_proto_msgTypes[5]
+	mi := &file_beehive_m_message_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -544,7 +544,7 @@ func (x *ListPrivateMessagesResponse) String() string {
 func (*ListPrivateMessagesResponse) ProtoMessage() {}
 
 func (x *ListPrivateMessagesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[5]
+	mi := &file_beehive_m_message_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -557,7 +557,7 @@ func (x *ListPrivateMessagesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPrivateMessagesResponse.ProtoReflect.Descriptor instead.
 func (*ListPrivateMessagesResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{5}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListPrivateMessagesResponse) GetMessages() []*Message {
@@ -584,7 +584,7 @@ type MarkPrivateReadRequest struct {
 
 func (x *MarkPrivateReadRequest) Reset() {
 	*x = MarkPrivateReadRequest{}
-	mi := &file_message_proto_msgTypes[6]
+	mi := &file_beehive_m_message_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -596,7 +596,7 @@ func (x *MarkPrivateReadRequest) String() string {
 func (*MarkPrivateReadRequest) ProtoMessage() {}
 
 func (x *MarkPrivateReadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[6]
+	mi := &file_beehive_m_message_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -609,7 +609,7 @@ func (x *MarkPrivateReadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkPrivateReadRequest.ProtoReflect.Descriptor instead.
 func (*MarkPrivateReadRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{6}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *MarkPrivateReadRequest) GetReceiverId() int64 {
@@ -634,7 +634,7 @@ type MarkPrivateReadResponse struct {
 
 func (x *MarkPrivateReadResponse) Reset() {
 	*x = MarkPrivateReadResponse{}
-	mi := &file_message_proto_msgTypes[7]
+	mi := &file_beehive_m_message_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -646,7 +646,7 @@ func (x *MarkPrivateReadResponse) String() string {
 func (*MarkPrivateReadResponse) ProtoMessage() {}
 
 func (x *MarkPrivateReadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[7]
+	mi := &file_beehive_m_message_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -659,7 +659,7 @@ func (x *MarkPrivateReadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkPrivateReadResponse.ProtoReflect.Descriptor instead.
 func (*MarkPrivateReadResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{7}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{7}
 }
 
 type GetPrivateUnreadCountRequest struct {
@@ -671,7 +671,7 @@ type GetPrivateUnreadCountRequest struct {
 
 func (x *GetPrivateUnreadCountRequest) Reset() {
 	*x = GetPrivateUnreadCountRequest{}
-	mi := &file_message_proto_msgTypes[8]
+	mi := &file_beehive_m_message_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -683,7 +683,7 @@ func (x *GetPrivateUnreadCountRequest) String() string {
 func (*GetPrivateUnreadCountRequest) ProtoMessage() {}
 
 func (x *GetPrivateUnreadCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[8]
+	mi := &file_beehive_m_message_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -696,7 +696,7 @@ func (x *GetPrivateUnreadCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPrivateUnreadCountRequest.ProtoReflect.Descriptor instead.
 func (*GetPrivateUnreadCountRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{8}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetPrivateUnreadCountRequest) GetReceiverId() int64 {
@@ -715,7 +715,7 @@ type GetPrivateUnreadCountResponse struct {
 
 func (x *GetPrivateUnreadCountResponse) Reset() {
 	*x = GetPrivateUnreadCountResponse{}
-	mi := &file_message_proto_msgTypes[9]
+	mi := &file_beehive_m_message_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -727,7 +727,7 @@ func (x *GetPrivateUnreadCountResponse) String() string {
 func (*GetPrivateUnreadCountResponse) ProtoMessage() {}
 
 func (x *GetPrivateUnreadCountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[9]
+	mi := &file_beehive_m_message_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -740,7 +740,7 @@ func (x *GetPrivateUnreadCountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPrivateUnreadCountResponse.ProtoReflect.Descriptor instead.
 func (*GetPrivateUnreadCountResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{9}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GetPrivateUnreadCountResponse) GetTotal() int32 {
@@ -768,7 +768,7 @@ type SendGroupMessageRequest struct {
 
 func (x *SendGroupMessageRequest) Reset() {
 	*x = SendGroupMessageRequest{}
-	mi := &file_message_proto_msgTypes[10]
+	mi := &file_beehive_m_message_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -780,7 +780,7 @@ func (x *SendGroupMessageRequest) String() string {
 func (*SendGroupMessageRequest) ProtoMessage() {}
 
 func (x *SendGroupMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[10]
+	mi := &file_beehive_m_message_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -793,7 +793,7 @@ func (x *SendGroupMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendGroupMessageRequest.ProtoReflect.Descriptor instead.
 func (*SendGroupMessageRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{10}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *SendGroupMessageRequest) GetGroupId() int64 {
@@ -875,7 +875,7 @@ type SendGroupMessageResponse struct {
 
 func (x *SendGroupMessageResponse) Reset() {
 	*x = SendGroupMessageResponse{}
-	mi := &file_message_proto_msgTypes[11]
+	mi := &file_beehive_m_message_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -887,7 +887,7 @@ func (x *SendGroupMessageResponse) String() string {
 func (*SendGroupMessageResponse) ProtoMessage() {}
 
 func (x *SendGroupMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[11]
+	mi := &file_beehive_m_message_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -900,7 +900,7 @@ func (x *SendGroupMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendGroupMessageResponse.ProtoReflect.Descriptor instead.
 func (*SendGroupMessageResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{11}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *SendGroupMessageResponse) GetMsgId() int64 {
@@ -921,7 +921,7 @@ type ListGroupMessagesRequest struct {
 
 func (x *ListGroupMessagesRequest) Reset() {
 	*x = ListGroupMessagesRequest{}
-	mi := &file_message_proto_msgTypes[12]
+	mi := &file_beehive_m_message_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -933,7 +933,7 @@ func (x *ListGroupMessagesRequest) String() string {
 func (*ListGroupMessagesRequest) ProtoMessage() {}
 
 func (x *ListGroupMessagesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[12]
+	mi := &file_beehive_m_message_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -946,7 +946,7 @@ func (x *ListGroupMessagesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListGroupMessagesRequest.ProtoReflect.Descriptor instead.
 func (*ListGroupMessagesRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{12}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListGroupMessagesRequest) GetGroupId() int64 {
@@ -980,7 +980,7 @@ type ListGroupMessagesResponse struct {
 
 func (x *ListGroupMessagesResponse) Reset() {
 	*x = ListGroupMessagesResponse{}
-	mi := &file_message_proto_msgTypes[13]
+	mi := &file_beehive_m_message_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -992,7 +992,7 @@ func (x *ListGroupMessagesResponse) String() string {
 func (*ListGroupMessagesResponse) ProtoMessage() {}
 
 func (x *ListGroupMessagesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[13]
+	mi := &file_beehive_m_message_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1005,7 +1005,7 @@ func (x *ListGroupMessagesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListGroupMessagesResponse.ProtoReflect.Descriptor instead.
 func (*ListGroupMessagesResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{13}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListGroupMessagesResponse) GetMessages() []*Message {
@@ -1033,7 +1033,7 @@ type MarkGroupReadRequest struct {
 
 func (x *MarkGroupReadRequest) Reset() {
 	*x = MarkGroupReadRequest{}
-	mi := &file_message_proto_msgTypes[14]
+	mi := &file_beehive_m_message_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1045,7 +1045,7 @@ func (x *MarkGroupReadRequest) String() string {
 func (*MarkGroupReadRequest) ProtoMessage() {}
 
 func (x *MarkGroupReadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[14]
+	mi := &file_beehive_m_message_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1058,7 +1058,7 @@ func (x *MarkGroupReadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkGroupReadRequest.ProtoReflect.Descriptor instead.
 func (*MarkGroupReadRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{14}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *MarkGroupReadRequest) GetUserId() int64 {
@@ -1090,7 +1090,7 @@ type MarkGroupReadResponse struct {
 
 func (x *MarkGroupReadResponse) Reset() {
 	*x = MarkGroupReadResponse{}
-	mi := &file_message_proto_msgTypes[15]
+	mi := &file_beehive_m_message_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1102,7 +1102,7 @@ func (x *MarkGroupReadResponse) String() string {
 func (*MarkGroupReadResponse) ProtoMessage() {}
 
 func (x *MarkGroupReadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[15]
+	mi := &file_beehive_m_message_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1115,7 +1115,7 @@ func (x *MarkGroupReadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkGroupReadResponse.ProtoReflect.Descriptor instead.
 func (*MarkGroupReadResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{15}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{15}
 }
 
 type GetGroupUnreadCountRequest struct {
@@ -1127,7 +1127,7 @@ type GetGroupUnreadCountRequest struct {
 
 func (x *GetGroupUnreadCountRequest) Reset() {
 	*x = GetGroupUnreadCountRequest{}
-	mi := &file_message_proto_msgTypes[16]
+	mi := &file_beehive_m_message_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1139,7 +1139,7 @@ func (x *GetGroupUnreadCountRequest) String() string {
 func (*GetGroupUnreadCountRequest) ProtoMessage() {}
 
 func (x *GetGroupUnreadCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[16]
+	mi := &file_beehive_m_message_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1152,7 +1152,7 @@ func (x *GetGroupUnreadCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGroupUnreadCountRequest.ProtoReflect.Descriptor instead.
 func (*GetGroupUnreadCountRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{16}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetGroupUnreadCountRequest) GetUserId() int64 {
@@ -1171,7 +1171,7 @@ type GetGroupUnreadCountResponse struct {
 
 func (x *GetGroupUnreadCountResponse) Reset() {
 	*x = GetGroupUnreadCountResponse{}
-	mi := &file_message_proto_msgTypes[17]
+	mi := &file_beehive_m_message_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1183,7 +1183,7 @@ func (x *GetGroupUnreadCountResponse) String() string {
 func (*GetGroupUnreadCountResponse) ProtoMessage() {}
 
 func (x *GetGroupUnreadCountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[17]
+	mi := &file_beehive_m_message_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1196,7 +1196,7 @@ func (x *GetGroupUnreadCountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGroupUnreadCountResponse.ProtoReflect.Descriptor instead.
 func (*GetGroupUnreadCountResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{17}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetGroupUnreadCountResponse) GetTotal() int32 {
@@ -1216,7 +1216,7 @@ type RecallMessageRequest struct {
 
 func (x *RecallMessageRequest) Reset() {
 	*x = RecallMessageRequest{}
-	mi := &file_message_proto_msgTypes[18]
+	mi := &file_beehive_m_message_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1228,7 +1228,7 @@ func (x *RecallMessageRequest) String() string {
 func (*RecallMessageRequest) ProtoMessage() {}
 
 func (x *RecallMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[18]
+	mi := &file_beehive_m_message_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1241,7 +1241,7 @@ func (x *RecallMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecallMessageRequest.ProtoReflect.Descriptor instead.
 func (*RecallMessageRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{18}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *RecallMessageRequest) GetMsgId() int64 {
@@ -1266,7 +1266,7 @@ type RecallMessageResponse struct {
 
 func (x *RecallMessageResponse) Reset() {
 	*x = RecallMessageResponse{}
-	mi := &file_message_proto_msgTypes[19]
+	mi := &file_beehive_m_message_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1278,7 +1278,7 @@ func (x *RecallMessageResponse) String() string {
 func (*RecallMessageResponse) ProtoMessage() {}
 
 func (x *RecallMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[19]
+	mi := &file_beehive_m_message_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1291,7 +1291,7 @@ func (x *RecallMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecallMessageResponse.ProtoReflect.Descriptor instead.
 func (*RecallMessageResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{19}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{19}
 }
 
 type GetMessageRequest struct {
@@ -1304,7 +1304,7 @@ type GetMessageRequest struct {
 
 func (x *GetMessageRequest) Reset() {
 	*x = GetMessageRequest{}
-	mi := &file_message_proto_msgTypes[20]
+	mi := &file_beehive_m_message_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1316,7 +1316,7 @@ func (x *GetMessageRequest) String() string {
 func (*GetMessageRequest) ProtoMessage() {}
 
 func (x *GetMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[20]
+	mi := &file_beehive_m_message_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1329,7 +1329,7 @@ func (x *GetMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMessageRequest.ProtoReflect.Descriptor instead.
 func (*GetMessageRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{20}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetMessageRequest) GetMsgId() int64 {
@@ -1355,7 +1355,7 @@ type GetMessageResponse struct {
 
 func (x *GetMessageResponse) Reset() {
 	*x = GetMessageResponse{}
-	mi := &file_message_proto_msgTypes[21]
+	mi := &file_beehive_m_message_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1367,7 +1367,7 @@ func (x *GetMessageResponse) String() string {
 func (*GetMessageResponse) ProtoMessage() {}
 
 func (x *GetMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[21]
+	mi := &file_beehive_m_message_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1380,7 +1380,7 @@ func (x *GetMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMessageResponse.ProtoReflect.Descriptor instead.
 func (*GetMessageResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{21}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *GetMessageResponse) GetMessage() *Message {
@@ -1406,7 +1406,7 @@ type MessageReference struct {
 
 func (x *MessageReference) Reset() {
 	*x = MessageReference{}
-	mi := &file_message_proto_msgTypes[22]
+	mi := &file_beehive_m_message_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1418,7 +1418,7 @@ func (x *MessageReference) String() string {
 func (*MessageReference) ProtoMessage() {}
 
 func (x *MessageReference) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[22]
+	mi := &file_beehive_m_message_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1431,7 +1431,7 @@ func (x *MessageReference) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MessageReference.ProtoReflect.Descriptor instead.
 func (*MessageReference) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{22}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *MessageReference) GetReferenceId() int64 {
@@ -1500,7 +1500,7 @@ type ListMessageReferencesRequest struct {
 
 func (x *ListMessageReferencesRequest) Reset() {
 	*x = ListMessageReferencesRequest{}
-	mi := &file_message_proto_msgTypes[23]
+	mi := &file_beehive_m_message_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1512,7 +1512,7 @@ func (x *ListMessageReferencesRequest) String() string {
 func (*ListMessageReferencesRequest) ProtoMessage() {}
 
 func (x *ListMessageReferencesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[23]
+	mi := &file_beehive_m_message_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1525,7 +1525,7 @@ func (x *ListMessageReferencesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMessageReferencesRequest.ProtoReflect.Descriptor instead.
 func (*ListMessageReferencesRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{23}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListMessageReferencesRequest) GetMsgId() int64 {
@@ -1551,7 +1551,7 @@ type ListMessageReferencesResponse struct {
 
 func (x *ListMessageReferencesResponse) Reset() {
 	*x = ListMessageReferencesResponse{}
-	mi := &file_message_proto_msgTypes[24]
+	mi := &file_beehive_m_message_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1563,7 +1563,7 @@ func (x *ListMessageReferencesResponse) String() string {
 func (*ListMessageReferencesResponse) ProtoMessage() {}
 
 func (x *ListMessageReferencesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[24]
+	mi := &file_beehive_m_message_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1576,7 +1576,7 @@ func (x *ListMessageReferencesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMessageReferencesResponse.ProtoReflect.Descriptor instead.
 func (*ListMessageReferencesResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{24}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *ListMessageReferencesResponse) GetReferences() []*MessageReference {
@@ -1597,7 +1597,7 @@ type ListConversationsRequest struct {
 
 func (x *ListConversationsRequest) Reset() {
 	*x = ListConversationsRequest{}
-	mi := &file_message_proto_msgTypes[25]
+	mi := &file_beehive_m_message_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1609,7 +1609,7 @@ func (x *ListConversationsRequest) String() string {
 func (*ListConversationsRequest) ProtoMessage() {}
 
 func (x *ListConversationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[25]
+	mi := &file_beehive_m_message_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1622,7 +1622,7 @@ func (x *ListConversationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListConversationsRequest.ProtoReflect.Descriptor instead.
 func (*ListConversationsRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{25}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ListConversationsRequest) GetUserId() int64 {
@@ -1656,7 +1656,7 @@ type ListConversationsResponse struct {
 
 func (x *ListConversationsResponse) Reset() {
 	*x = ListConversationsResponse{}
-	mi := &file_message_proto_msgTypes[26]
+	mi := &file_beehive_m_message_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1668,7 +1668,7 @@ func (x *ListConversationsResponse) String() string {
 func (*ListConversationsResponse) ProtoMessage() {}
 
 func (x *ListConversationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[26]
+	mi := &file_beehive_m_message_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1681,7 +1681,7 @@ func (x *ListConversationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListConversationsResponse.ProtoReflect.Descriptor instead.
 func (*ListConversationsResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{26}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *ListConversationsResponse) GetConversations() []*Conversation {
@@ -1710,7 +1710,7 @@ type SetConversationPinRequest struct {
 
 func (x *SetConversationPinRequest) Reset() {
 	*x = SetConversationPinRequest{}
-	mi := &file_message_proto_msgTypes[27]
+	mi := &file_beehive_m_message_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1722,7 +1722,7 @@ func (x *SetConversationPinRequest) String() string {
 func (*SetConversationPinRequest) ProtoMessage() {}
 
 func (x *SetConversationPinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[27]
+	mi := &file_beehive_m_message_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1735,7 +1735,7 @@ func (x *SetConversationPinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetConversationPinRequest.ProtoReflect.Descriptor instead.
 func (*SetConversationPinRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{27}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *SetConversationPinRequest) GetUserId() int64 {
@@ -1774,7 +1774,7 @@ type SetConversationPinResponse struct {
 
 func (x *SetConversationPinResponse) Reset() {
 	*x = SetConversationPinResponse{}
-	mi := &file_message_proto_msgTypes[28]
+	mi := &file_beehive_m_message_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1786,7 +1786,7 @@ func (x *SetConversationPinResponse) String() string {
 func (*SetConversationPinResponse) ProtoMessage() {}
 
 func (x *SetConversationPinResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[28]
+	mi := &file_beehive_m_message_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1799,7 +1799,7 @@ func (x *SetConversationPinResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetConversationPinResponse.ProtoReflect.Descriptor instead.
 func (*SetConversationPinResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{28}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{28}
 }
 
 type SetConversationMuteRequest struct {
@@ -1814,7 +1814,7 @@ type SetConversationMuteRequest struct {
 
 func (x *SetConversationMuteRequest) Reset() {
 	*x = SetConversationMuteRequest{}
-	mi := &file_message_proto_msgTypes[29]
+	mi := &file_beehive_m_message_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1826,7 +1826,7 @@ func (x *SetConversationMuteRequest) String() string {
 func (*SetConversationMuteRequest) ProtoMessage() {}
 
 func (x *SetConversationMuteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[29]
+	mi := &file_beehive_m_message_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1839,7 +1839,7 @@ func (x *SetConversationMuteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetConversationMuteRequest.ProtoReflect.Descriptor instead.
 func (*SetConversationMuteRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{29}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *SetConversationMuteRequest) GetUserId() int64 {
@@ -1878,7 +1878,7 @@ type SetConversationMuteResponse struct {
 
 func (x *SetConversationMuteResponse) Reset() {
 	*x = SetConversationMuteResponse{}
-	mi := &file_message_proto_msgTypes[30]
+	mi := &file_beehive_m_message_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1890,7 +1890,7 @@ func (x *SetConversationMuteResponse) String() string {
 func (*SetConversationMuteResponse) ProtoMessage() {}
 
 func (x *SetConversationMuteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[30]
+	mi := &file_beehive_m_message_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1903,7 +1903,7 @@ func (x *SetConversationMuteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetConversationMuteResponse.ProtoReflect.Descriptor instead.
 func (*SetConversationMuteResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{30}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{30}
 }
 
 type GetOrCreateConversationRequest struct {
@@ -1917,7 +1917,7 @@ type GetOrCreateConversationRequest struct {
 
 func (x *GetOrCreateConversationRequest) Reset() {
 	*x = GetOrCreateConversationRequest{}
-	mi := &file_message_proto_msgTypes[31]
+	mi := &file_beehive_m_message_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1929,7 +1929,7 @@ func (x *GetOrCreateConversationRequest) String() string {
 func (*GetOrCreateConversationRequest) ProtoMessage() {}
 
 func (x *GetOrCreateConversationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[31]
+	mi := &file_beehive_m_message_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1942,7 +1942,7 @@ func (x *GetOrCreateConversationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrCreateConversationRequest.ProtoReflect.Descriptor instead.
 func (*GetOrCreateConversationRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{31}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *GetOrCreateConversationRequest) GetUserId() int64 {
@@ -1975,7 +1975,7 @@ type GetOrCreateConversationResponse struct {
 
 func (x *GetOrCreateConversationResponse) Reset() {
 	*x = GetOrCreateConversationResponse{}
-	mi := &file_message_proto_msgTypes[32]
+	mi := &file_beehive_m_message_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1987,7 +1987,7 @@ func (x *GetOrCreateConversationResponse) String() string {
 func (*GetOrCreateConversationResponse) ProtoMessage() {}
 
 func (x *GetOrCreateConversationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[32]
+	mi := &file_beehive_m_message_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2000,7 +2000,7 @@ func (x *GetOrCreateConversationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrCreateConversationResponse.ProtoReflect.Descriptor instead.
 func (*GetOrCreateConversationResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{32}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *GetOrCreateConversationResponse) GetConversation() *Conversation {
@@ -2020,7 +2020,7 @@ type GetSyncCursorRequest struct {
 
 func (x *GetSyncCursorRequest) Reset() {
 	*x = GetSyncCursorRequest{}
-	mi := &file_message_proto_msgTypes[33]
+	mi := &file_beehive_m_message_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2032,7 +2032,7 @@ func (x *GetSyncCursorRequest) String() string {
 func (*GetSyncCursorRequest) ProtoMessage() {}
 
 func (x *GetSyncCursorRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[33]
+	mi := &file_beehive_m_message_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2045,7 +2045,7 @@ func (x *GetSyncCursorRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSyncCursorRequest.ProtoReflect.Descriptor instead.
 func (*GetSyncCursorRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{33}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *GetSyncCursorRequest) GetUserId() int64 {
@@ -2073,7 +2073,7 @@ type GetSyncCursorResponse struct {
 
 func (x *GetSyncCursorResponse) Reset() {
 	*x = GetSyncCursorResponse{}
-	mi := &file_message_proto_msgTypes[34]
+	mi := &file_beehive_m_message_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2085,7 +2085,7 @@ func (x *GetSyncCursorResponse) String() string {
 func (*GetSyncCursorResponse) ProtoMessage() {}
 
 func (x *GetSyncCursorResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[34]
+	mi := &file_beehive_m_message_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2098,7 +2098,7 @@ func (x *GetSyncCursorResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSyncCursorResponse.ProtoReflect.Descriptor instead.
 func (*GetSyncCursorResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{34}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *GetSyncCursorResponse) GetLastSyncMsgId() int64 {
@@ -2134,7 +2134,7 @@ type PullMessagesRequest struct {
 
 func (x *PullMessagesRequest) Reset() {
 	*x = PullMessagesRequest{}
-	mi := &file_message_proto_msgTypes[35]
+	mi := &file_beehive_m_message_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2146,7 +2146,7 @@ func (x *PullMessagesRequest) String() string {
 func (*PullMessagesRequest) ProtoMessage() {}
 
 func (x *PullMessagesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[35]
+	mi := &file_beehive_m_message_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2159,7 +2159,7 @@ func (x *PullMessagesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PullMessagesRequest.ProtoReflect.Descriptor instead.
 func (*PullMessagesRequest) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{35}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *PullMessagesRequest) GetUserId() int64 {
@@ -2201,7 +2201,7 @@ type PullMessagesResponse struct {
 
 func (x *PullMessagesResponse) Reset() {
 	*x = PullMessagesResponse{}
-	mi := &file_message_proto_msgTypes[36]
+	mi := &file_beehive_m_message_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2213,7 +2213,7 @@ func (x *PullMessagesResponse) String() string {
 func (*PullMessagesResponse) ProtoMessage() {}
 
 func (x *PullMessagesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_message_proto_msgTypes[36]
+	mi := &file_beehive_m_message_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2226,7 +2226,7 @@ func (x *PullMessagesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PullMessagesResponse.ProtoReflect.Descriptor instead.
 func (*PullMessagesResponse) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{36}
+	return file_beehive_m_message_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *PullMessagesResponse) GetMessages() []*Message {
@@ -2250,11 +2250,11 @@ func (x *PullMessagesResponse) GetNextOffset() int64 {
 	return 0
 }
 
-var File_message_proto protoreflect.FileDescriptor
+var File_beehive_m_message_proto protoreflect.FileDescriptor
 
-const file_message_proto_rawDesc = "" +
+const file_beehive_m_message_proto_rawDesc = "" +
 	"\n" +
-	"\rmessage.proto\x12\amessage\"\xcc\x03\n" +
+	"\x17beehive-m-message.proto\x12\amessage\"\xcc\x03\n" +
 	"\aMessage\x12\x15\n" +
 	"\x06msg_id\x18\x01 \x01(\x03R\x05msgId\x12\x1d\n" +
 	"\n" +
@@ -2454,19 +2454,19 @@ const file_message_proto_rawDesc = "" +
 	"\fPullMessages\x12\x1c.message.PullMessagesRequest\x1a\x1d.message.PullMessagesResponseB\x15Z\x13services/message/pbb\x06proto3"
 
 var (
-	file_message_proto_rawDescOnce sync.Once
-	file_message_proto_rawDescData []byte
+	file_beehive_m_message_proto_rawDescOnce sync.Once
+	file_beehive_m_message_proto_rawDescData []byte
 )
 
-func file_message_proto_rawDescGZIP() []byte {
-	file_message_proto_rawDescOnce.Do(func() {
-		file_message_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_message_proto_rawDesc), len(file_message_proto_rawDesc)))
+func file_beehive_m_message_proto_rawDescGZIP() []byte {
+	file_beehive_m_message_proto_rawDescOnce.Do(func() {
+		file_beehive_m_message_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_beehive_m_message_proto_rawDesc), len(file_beehive_m_message_proto_rawDesc)))
 	})
-	return file_message_proto_rawDescData
+	return file_beehive_m_message_proto_rawDescData
 }
 
-var file_message_proto_msgTypes = make([]protoimpl.MessageInfo, 37)
-var file_message_proto_goTypes = []any{
+var file_beehive_m_message_proto_msgTypes = make([]protoimpl.MessageInfo, 37)
+var file_beehive_m_message_proto_goTypes = []any{
 	(*Message)(nil),                         // 0: message.Message
 	(*Conversation)(nil),                    // 1: message.Conversation
 	(*SendPrivateMessageRequest)(nil),       // 2: message.SendPrivateMessageRequest
@@ -2505,7 +2505,7 @@ var file_message_proto_goTypes = []any{
 	(*PullMessagesRequest)(nil),             // 35: message.PullMessagesRequest
 	(*PullMessagesResponse)(nil),            // 36: message.PullMessagesResponse
 }
-var file_message_proto_depIdxs = []int32{
+var file_beehive_m_message_proto_depIdxs = []int32{
 	0,  // 0: message.ListPrivateMessagesResponse.messages:type_name -> message.Message
 	0,  // 1: message.ListGroupMessagesResponse.messages:type_name -> message.Message
 	0,  // 2: message.GetMessageResponse.message:type_name -> message.Message
@@ -2554,26 +2554,26 @@ var file_message_proto_depIdxs = []int32{
 	0,  // [0:7] is the sub-list for field type_name
 }
 
-func init() { file_message_proto_init() }
-func file_message_proto_init() {
-	if File_message_proto != nil {
+func init() { file_beehive_m_message_proto_init() }
+func file_beehive_m_message_proto_init() {
+	if File_beehive_m_message_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_message_proto_rawDesc), len(file_message_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_beehive_m_message_proto_rawDesc), len(file_beehive_m_message_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   37,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_message_proto_goTypes,
-		DependencyIndexes: file_message_proto_depIdxs,
-		MessageInfos:      file_message_proto_msgTypes,
+		GoTypes:           file_beehive_m_message_proto_goTypes,
+		DependencyIndexes: file_beehive_m_message_proto_depIdxs,
+		MessageInfos:      file_beehive_m_message_proto_msgTypes,
 	}.Build()
-	File_message_proto = out.File
-	file_message_proto_goTypes = nil
-	file_message_proto_depIdxs = nil
+	File_beehive_m_message_proto = out.File
+	file_beehive_m_message_proto_goTypes = nil
+	file_beehive_m_message_proto_depIdxs = nil
 }

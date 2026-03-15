@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v3.19.4
-// source: friend.proto
+// source: beehive-m-friend.proto
 
 package pb
 
@@ -661,5 +661,5 @@ var FriendService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "friend.proto",
+	Metadata: "beehive-m-friend.proto",
 }

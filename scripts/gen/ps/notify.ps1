@@ -2,7 +2,7 @@
 $ScriptDir = $PSScriptRoot
 $RootDir = (Resolve-Path (Join-Path $ScriptDir "..\..\..")).Path
 $ProtoDir = Join-Path $RootDir "proto"
-$RpcFile = Join-Path $ProtoDir "notify.proto"
+$RpcFile = Join-Path $ProtoDir "beehive-m-notify.proto"
 $OutDir = Join-Path $RootDir "services\notify"
 # pb 生成到 services\notify\pb：--go_out 为项目根，go_package 为 "services/notify/pb"
 $OutPbBase = $RootDir
@@ -15,10 +15,10 @@ if (-not (Test-Path $RpcFile)) {
 # 确保输出目录存在，否则 Push-Location 和 goctl 会失败
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
-# 在项目根目录执行，并用 -I proto 指定 proto_path，传相对路径 proto/notify.proto
+# 在项目根目录执行，并用 -I proto 指定 proto_path，传相对路径 proto/beehive-m-notify.proto
 Push-Location $RootDir
 try {
-    goctl rpc protoc proto/notify.proto -I proto --go_out=$OutPbBase --go-grpc_out=$OutPbBase --zrpc_out=$OutDir --style=goZero --client=true -m
+    goctl rpc protoc proto/beehive-m-notify.proto -I proto --go_out=$OutPbBase --go-grpc_out=$OutPbBase --zrpc_out=$OutDir --style=goZero --client=true -m
 } finally {
     Pop-Location
 }
