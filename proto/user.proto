@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user;
 
-option go_package = "./service/user/pb";
+option go_package = "services/user/pb";
 
 // UserService 供 WS Gateway / 其他微服务调用的用户 RPC
 service UserService {

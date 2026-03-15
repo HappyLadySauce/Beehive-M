@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package notify;
 
-option go_package = "./service/notify/pb";
+option go_package = "services/notify/pb";
 
 // NotifyService 系统通知的列表、已读、未读数；内部创建通知（供 Friend/Group 等调）
 service NotifyService {

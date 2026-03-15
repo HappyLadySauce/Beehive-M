@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package message;
 
-option go_package = "./service/message/pb";
+option go_package = "services/message/pb";
 
 // MessageService 私聊/群聊消息、已读、撤回、引用、会话列表、同步
 service MessageService {

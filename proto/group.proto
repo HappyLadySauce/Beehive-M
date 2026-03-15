@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package group;
 
-option go_package = "./service/group/pb";
+option go_package = "services/group/pb";
 
 // GroupService 群组、成员、申请/邀请、公告、管理员角色权限
 service GroupService {

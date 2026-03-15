@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "./service/auth/pb";
+option go_package = "services/auth/pb";
 
 // AuthService 登录、登出、Token 校验与刷新、注册
 service AuthService {

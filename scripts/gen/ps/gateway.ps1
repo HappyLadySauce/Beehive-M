@@ -10,7 +10,7 @@ if (-not (Test-Path $ApiFile)) {
 
 Push-Location $OutDir
 try {
-    goctl api go -api $ApiFile -dir .\services\gateway
+    goctl api go -api $ApiFile --style=goZero -dir .\services\gateway 
 } finally {
     Pop-Location
 }

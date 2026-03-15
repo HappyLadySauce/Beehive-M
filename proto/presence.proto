@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package presence;
 
-option go_package = "./service/presence/pb";
+option go_package = "services/presence/pb";
 
 // PresenceService 在线状态、心跳、踢下线
 service PresenceService {
