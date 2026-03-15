@@ -6,7 +6,7 @@ const (
 	// 成功
 	CodeSuccess = 200
 	// 请求/参数错误
-	CodeInvalidParam = 101
+	CodeInvalidParam = 300
 	// 服务端错误
-	CodeInternal = 501
+	CodeInternal = 500
 )
