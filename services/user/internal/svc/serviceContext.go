@@ -33,12 +33,12 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	_, err = redis.Ping(context.Background()).Result()
 	if err != nil {
 		// 关闭 DB 连接
-		sqlDB, err := db.DB()
-		if err == nil && sqlDB != nil {
+		sqlDB, dbErr := db.DB()
+		if dbErr == nil && sqlDB != nil {
 			_ = sqlDB.Close()
 		}
 		// 关闭 Redis 连接
-		redis.Close()
+		_ = redis.Close()
 		panic("failed to connect to Redis: " + err.Error())
 	}
 
