@@ -1,0 +1,340 @@
+syntax = "proto3";
+
+package group;
+
+option go_package = "./service/group/pb";
+
+// GroupService 群组、成员、申请/邀请、公告
+service GroupService {
+  // 群
+  rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse);
+  rpc GetGroup(GetGroupRequest) returns (GetGroupResponse);
+  rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse);
+  rpc DissolveGroup(DissolveGroupRequest) returns (DissolveGroupResponse);
+  rpc SearchGroups(SearchGroupsRequest) returns (SearchGroupsResponse);
+  rpc ListMyGroups(ListMyGroupsRequest) returns (ListMyGroupsResponse);
+  // 成员
+  rpc JoinGroup(JoinGroupRequest) returns (JoinGroupResponse);
+  rpc LeaveGroup(LeaveGroupRequest) returns (LeaveGroupResponse);
+  rpc KickMember(KickMemberRequest) returns (KickMemberResponse);
+  rpc ListMembers(ListMembersRequest) returns (ListMembersResponse);
+  rpc UpdateMyNickname(UpdateMyNicknameRequest) returns (UpdateMyNicknameResponse);
+  rpc SetMemberMuted(SetMemberMutedRequest) returns (SetMemberMutedResponse);
+  rpc SetMemberRole(SetMemberRoleRequest) returns (SetMemberRoleResponse);
+  // 申请/邀请
+  rpc ApplyJoin(ApplyJoinRequest) returns (ApplyJoinResponse);
+  rpc InviteJoin(InviteJoinRequest) returns (InviteJoinResponse);
+  rpc ListGroupRequests(ListGroupRequestsRequest) returns (ListGroupRequestsResponse);
+  rpc ListInvitations(ListInvitationsRequest) returns (ListInvitationsResponse);
+  rpc HandleGroupRequest(HandleGroupRequestRequest) returns (HandleGroupRequestResponse);
+  rpc HandleInvitation(HandleInvitationRequest) returns (HandleInvitationResponse);
+  // 公告
+  rpc CreateAnnouncement(CreateAnnouncementRequest) returns (CreateAnnouncementResponse);
+  rpc ListAnnouncements(ListAnnouncementsRequest) returns (ListAnnouncementsResponse);
+  rpc MarkAnnouncementRead(MarkAnnouncementReadRequest) returns (MarkAnnouncementReadResponse);
+}
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 群（与 groups 表对齐）
+message Group {
+  int64  group_id     = 1;
+  string group_number = 2;
+  string group_name   = 3;
+  string avatar       = 4;
+  int64  owner_id     = 5;
+  string announcement = 6;
+  string description  = 7;
+  int32  max_members  = 8;
+  int32  privacy      = 9;  // 0公开 1私密
+  int32  verification = 10; // 0自由 1验证 2禁止
+  int32  status       = 11; // 1正常 2解散
+  int64  create_time  = 12;
+  int64  update_time  = 13;
+}
+
+// 群成员（与 group_members 表对齐）
+message GroupMember {
+  int64  id               = 1;
+  int64  group_id         = 2;
+  int64  user_id          = 3;
+  int32  role             = 4; // 0普通 1管理员 2群主
+  string nickname_in_group = 5;
+  int64  join_time        = 6;
+  int64  last_read_msg_id = 7;
+  int32  is_muted         = 8; // 0否 1是
+  int32  is_special       = 9; // 0否 1是
+}
+
+// 入群申请项（与 group_requests 表对齐）
+message GroupRequestItem {
+  int64  request_id  = 1;
+  int64  applicant_id = 2;
+  int64  group_id    = 3;
+  string reason     = 4;
+  int32  status     = 5; // 0待处理 1同意 2拒绝 3忽略
+  int64  handler_id  = 6;
+  int64  handle_time = 7;
+  int64  create_time = 8;
+}
+
+// 邀请项（与 group_invitations 表对齐）
+message InvitationItem {
+  int64  invitation_id = 1;
+  int64  group_id      = 2;
+  int64  inviter_id    = 3;
+  int64  invitee_id    = 4;
+  int32  status        = 5; // 0待处理 1同意 2拒绝 3过期
+  int64  expire_time   = 6;
+  int64  create_time   = 7;
+  int64  handle_time   = 8;
+}
+
+// 公告（与 group_announcements 表对齐）
+message Announcement {
+  int64  announcement_id = 1;
+  int64  group_id        = 2;
+  int64  author_id       = 3;
+  string title           = 4;
+  string content         = 5;
+  int32  is_pinned       = 6; // 0否 1是
+  int32  is_important    = 7; // 0否 1是
+  int64  publish_time    = 8;
+  int64  expire_time     = 9;
+  int32  read_count      = 10;
+  int32  status          = 11; // 1正常 2删除
+}
+
+// ----------------------------------------
+// 群
+// ----------------------------------------
+
+message CreateGroupRequest {
+  int64  owner_id     = 1;
+  string group_name   = 2;
+  string avatar       = 3;
+  string description  = 4;
+  int32  max_members  = 5; // 默认 500
+  int32  privacy      = 6;
+  int32  verification = 7;
+}
+
+message CreateGroupResponse {
+  int64 group_id = 1;
+}
+
+message GetGroupRequest {
+  int64 group_id = 1;
+}
+
+message GetGroupResponse {
+  Group group = 1;
+}
+
+message UpdateGroupRequest {
+  int64  group_id     = 1;
+  string group_name   = 2;
+  string avatar       = 3;
+  string announcement = 4;
+  string description  = 5;
+  int32  max_members  = 6;
+  int32  privacy      = 7;
+  int32  verification = 8;
+}
+
+message UpdateGroupResponse {
+  Group group = 1;
+}
+
+message DissolveGroupRequest {
+  int64 group_id  = 1;
+  int64 owner_id  = 2; // 仅群主可解散
+}
+
+message DissolveGroupResponse {}
+
+message SearchGroupsRequest {
+  string keyword = 1;
+  int32  page    = 2;
+  int32  size    = 3;
+}
+
+message SearchGroupsResponse {
+  repeated Group groups = 1;
+  int32          total  = 2;
+}
+
+message ListMyGroupsRequest {
+  int64 user_id = 1;
+  int32 page    = 2;
+  int32 size    = 3;
+}
+
+message ListMyGroupsResponse {
+  repeated Group groups = 1;
+  int32          total  = 2;
+}
+
+// ----------------------------------------
+// 成员
+// ----------------------------------------
+
+message JoinGroupRequest {
+  int64  user_id      = 1;
+  int64  group_id     = 2; // 或通过 group_number 查
+  string group_number = 3;
+  string reason       = 4; // 验证时必填
+}
+
+message JoinGroupResponse {}
+
+message LeaveGroupRequest {
+  int64 user_id  = 1;
+  int64 group_id = 2;
+}
+
+message LeaveGroupResponse {}
+
+message KickMemberRequest {
+  int64 operator_id = 1;
+  int64 group_id   = 2;
+  int64 user_id    = 3; // 被踢用户
+}
+
+message KickMemberResponse {}
+
+message ListMembersRequest {
+  int64 group_id = 1;
+  int32 page     = 2;
+  int32 size     = 3;
+}
+
+message ListMembersResponse {
+  repeated GroupMember members = 1;
+  int32                total   = 2;
+}
+
+message UpdateMyNicknameRequest {
+  int64  user_id  = 1;
+  int64  group_id = 2;
+  string nickname_in_group = 3;
+}
+
+message UpdateMyNicknameResponse {}
+
+message SetMemberMutedRequest {
+  int64 operator_id = 1;
+  int64 group_id   = 2;
+  int64 user_id    = 3;
+  int32 is_muted   = 4; // 0否 1是
+}
+
+message SetMemberMutedResponse {}
+
+message SetMemberRoleRequest {
+  int64 operator_id = 1;
+  int64 group_id   = 2;
+  int64 user_id    = 3;
+  int32 role       = 4; // 0普通 1管理员 2群主
+}
+
+message SetMemberRoleResponse {}
+
+// ----------------------------------------
+// 申请/邀请
+// ----------------------------------------
+
+message ApplyJoinRequest {
+  int64  applicant_id = 1;
+  int64  group_id     = 2;
+  string reason       = 3;
+}
+
+message ApplyJoinResponse {
+  int64 request_id = 1;
+}
+
+message InviteJoinRequest {
+  int64  inviter_id   = 1;
+  int64  group_id     = 2;
+  repeated int64 invitee_ids = 3;
+}
+
+message InviteJoinResponse {}
+
+message ListGroupRequestsRequest {
+  int64 group_id = 1; // 群主/管理员查该群待处理
+  int32 status   = 2; // 0待处理
+  int32 page     = 3;
+  int32 size     = 4;
+}
+
+message ListGroupRequestsResponse {
+  repeated GroupRequestItem requests = 1;
+  int32                     total   = 2;
+}
+
+message ListInvitationsRequest {
+  int64 invitee_id = 1; // 当前用户
+  int32 status     = 2; // 0待处理
+  int32 page       = 3;
+  int32 size       = 4;
+}
+
+message ListInvitationsResponse {
+  repeated InvitationItem invitations = 1;
+  int32                   total       = 2;
+}
+
+message HandleGroupRequestRequest {
+  int64 request_id  = 1;
+  int32 status      = 2; // 1同意 2拒绝 3忽略
+  int64 handler_id  = 3;
+}
+
+message HandleGroupRequestResponse {}
+
+message HandleInvitationRequest {
+  int64 invitation_id = 1;
+  int32 status        = 2; // 1同意 2拒绝
+}
+
+message HandleInvitationResponse {}
+
+// ----------------------------------------
+// 公告
+// ----------------------------------------
+
+message CreateAnnouncementRequest {
+  int64  group_id    = 1;
+  int64  author_id   = 2;
+  string title       = 3;
+  string content     = 4;
+  int32  is_pinned   = 5;
+  int32  is_important = 6;
+  int64  expire_time = 7;
+}
+
+message CreateAnnouncementResponse {
+  int64 announcement_id = 1;
+}
+
+message ListAnnouncementsRequest {
+  int64 group_id = 1;
+  int32 page     = 2;
+  int32 size     = 3;
+}
+
+message ListAnnouncementsResponse {
+  repeated Announcement announcements = 1;
+  int32                 total        = 2;
+}
+
+message MarkAnnouncementReadRequest {
+  int64 announcement_id = 1;
+  int64 user_id         = 2;
+}
+
+message MarkAnnouncementReadResponse {}

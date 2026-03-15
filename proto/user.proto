@@ -4,14 +4,119 @@ package user;
 
 option go_package = "./service/user/pb";
 
+// UserService 供 WS Gateway / 其他微服务调用的用户 RPC
 service UserService {
-    rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  // 按 user_id 查单个用户（会话头、资料页等）
+  rpc GetUser(GetUserRequest) returns (User);
+  // 批量按 user_id 查（会话列表、群成员列表等）
+  rpc GetUserBatch(GetUserBatchRequest) returns (GetUserBatchResponse);
+  // 按账号查（登录、搜索用）
+  rpc GetUserByAccount(GetUserByAccountRequest) returns (User);
+  // 关键词搜索用户（全文检索），分页
+  rpc SearchUsers(SearchUsersRequest) returns (SearchUsersResponse);
+  // 更新当前用户资料（昵称、头像、签名等）
+  rpc UpdateProfile(UpdateProfileRequest) returns (User);
+  // 仅内部使用：按 user_id 查用户（含 password_hash），供 auth 登录校验
+  rpc GetUserForAuth(GetUserForAuthRequest) returns (UserForAuth);
 }
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 用户信息（脱敏，不含密码）
+message User {
+  int64  user_id       = 1;
+  string account       = 2;
+  string nickname      = 3;
+  string avatar        = 4;
+  string phone         = 5;  // 可脱敏
+  string email         = 6;  // 可脱敏
+  int32  gender        = 7;  // 0未知 1男 2女
+  string birthday      = 8;  // YYYY-MM-DD
+  string signature     = 9;
+  int32  status        = 10; // 1正常 2冻结
+  int64  last_login_at = 11; // 时间戳
+  int64  created_at    = 12;
+  int64  updated_at    = 13;
+}
+
+// 供 auth 内部使用，含密码哈希
+message UserForAuth {
+  int64  user_id       = 1;
+  string account       = 2;
+  string password_hash = 3;
+  string phone         = 4;
+  string email         = 5;
+  int32  status        = 6;
+}
+
+// ----------------------------------------
+// GetUser
+// ----------------------------------------
 
 message GetUserRequest {
-    
+  int64 user_id = 1;
 }
 
-message GetUserResponse {
-    
+// ----------------------------------------
+// GetUserBatch
+// ----------------------------------------
+
+message GetUserBatchRequest {
+  repeated int64 user_ids = 1;
+}
+
+message GetUserBatchResponse {
+  repeated User users = 1; // 未查到的 id 不返回，不保证顺序
+}
+
+// ----------------------------------------
+// GetUserByAccount
+// ----------------------------------------
+
+message GetUserByAccountRequest {
+  string account = 1;
+}
+
+// ----------------------------------------
+// SearchUsers
+// ----------------------------------------
+
+message SearchUsersRequest {
+  string keyword = 1;
+  int32  page   = 2; // 从 1 开始
+  int32  size   = 3; // 每页条数，建议 1–50
+}
+
+message SearchUsersResponse {
+  repeated User users = 1;
+  int32 total        = 2; // 总条数，便于前端分页
+}
+
+// ----------------------------------------
+// UpdateProfile
+// ----------------------------------------
+
+message UpdateProfileRequest {
+  int64  user_id   = 1;
+  string nickname  = 2; // 空表示不更新
+  string avatar    = 3;
+  string signature = 4;
+  int32  gender    = 5;
+  string birthday  = 6;
+  string phone     = 7;
+  string email     = 8;
+}
+
+// ----------------------------------------
+// GetUserForAuth（仅 auth 服务调用）
+// ----------------------------------------
+
+message GetUserForAuthRequest {
+  oneof by {
+    string account = 1;
+    string phone   = 2;
+    string email   = 3;
+  }
 }

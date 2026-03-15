@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package notify;
+
+option go_package = "./service/notify/pb";
+
+// NotifyService 系统通知的列表、已读、未读数；内部创建通知（供 Friend/Group 等调）
+service NotifyService {
+  // 对客户端
+  rpc ListNotifications(ListNotificationsRequest) returns (ListNotificationsResponse);
+  rpc MarkRead(MarkReadRequest) returns (MarkReadResponse);
+  rpc MarkAllRead(MarkAllReadRequest) returns (MarkAllReadResponse);
+  rpc GetUnreadCount(GetUnreadCountRequest) returns (GetUnreadCountResponse);
+  // 内部创建（供 Friend/Group 等调）
+  rpc NotifyFriendRequest(NotifyFriendRequestRequest) returns (NotifyFriendRequestResponse);
+  rpc NotifyGroupRequest(NotifyGroupRequestRequest) returns (NotifyGroupRequestResponse);
+  rpc NotifyInvite(NotifyInviteRequest) returns (NotifyInviteResponse);
+  rpc NotifySystem(NotifySystemRequest) returns (NotifySystemResponse);
+}
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 通知类型：1好友申请 2群申请 3入群邀请 4系统公告
+
+message Notification {
+  int64  notification_id = 1;
+  int64  user_id        = 2;
+  int32  type           = 3; // 1好友申请 2群申请 3入群邀请 4系统公告
+  string title          = 4;
+  string content        = 5;
+  int64  related_id     = 6; // 申请ID/群ID等
+  int32  is_read        = 7; // 0未读 1已读
+  string extra_data     = 8; // JSON
+  int64  create_time    = 9;
+  int64  read_time      = 10;
+}
+
+// ----------------------------------------
+// 对客户端
+// ----------------------------------------
+
+message ListNotificationsRequest {
+  int64 user_id = 1;
+  int32 type    = 2; // 可选，0 表示全部
+  int32 is_read = 3; // 可选，-1 表示全部 0未读 1已读
+  int32 page    = 4;
+  int32 size    = 5;
+}
+
+message ListNotificationsResponse {
+  repeated Notification notifications = 1;
+  int32                  total        = 2;
+}
+
+message MarkReadRequest {
+  int64 notification_id = 1;
+}
+
+message MarkReadResponse {}
+
+message MarkAllReadRequest {
+  int64 user_id = 1;
+  int32 type    = 2; // 可选，0 表示全部类型
+}
+
+message MarkAllReadResponse {}
+
+message GetUnreadCountRequest {
+  int64 user_id = 1;
+  int32 type    = 2; // 可选，0 表示全部
+}
+
+message GetUnreadCountResponse {
+  int32 count = 1;
+}
+
+// ----------------------------------------
+// 内部创建
+// ----------------------------------------
+
+message NotifyFriendRequestRequest {
+  int64  target_id    = 1; // 接收人
+  int64  applicant_id = 2;
+  string reason       = 3;
+  int64  request_id   = 4;
+}
+
+message NotifyFriendRequestResponse {
+  int64 notification_id = 1;
+}
+
+message NotifyGroupRequestRequest {
+  int64  user_id     = 1; // 接收人（群主/管理员）
+  int64  applicant_id = 2;
+  int64  group_id    = 3;
+  string reason      = 4;
+  int64  request_id  = 5;
+}
+
+message NotifyGroupRequestResponse {
+  int64 notification_id = 1;
+}
+
+message NotifyInviteRequest {
+  int64  invitee_id   = 1;
+  int64  inviter_id   = 2;
+  int64  group_id     = 3;
+  int64  invitation_id = 4;
+  string title        = 5;
+  string content      = 6;
+}
+
+message NotifyInviteResponse {
+  int64 notification_id = 1;
+}
+
+message NotifySystemRequest {
+  int64  user_id     = 1;
+  string title       = 2;
+  string content     = 3;
+  int64  related_id  = 4;
+  string extra_data  = 5; // JSON
+}
+
+message NotifySystemResponse {
+  int64 notification_id = 1;
+}

@@ -1,0 +1,228 @@
+syntax = "proto3";
+
+package friend;
+
+option go_package = "./service/friend/pb";
+
+// FriendService 好友关系、好友申请、黑名单、好友推荐
+service FriendService {
+  // 好友
+  rpc ListFriends(ListFriendsRequest) returns (ListFriendsResponse);
+  rpc DeleteFriend(DeleteFriendRequest) returns (DeleteFriendResponse);
+  rpc UpdateRemark(UpdateRemarkRequest) returns (UpdateRemarkResponse);
+  rpc SetFriendMuted(SetFriendMutedRequest) returns (SetFriendMutedResponse);
+  rpc SetFriendSpecial(SetFriendSpecialRequest) returns (SetFriendSpecialResponse);
+  // 申请
+  rpc SendFriendRequest(SendFriendRequestRequest) returns (SendFriendRequestResponse);
+  rpc ListReceivedRequests(ListReceivedRequestsRequest) returns (ListReceivedRequestsResponse);
+  rpc ListSentRequests(ListSentRequestsRequest) returns (ListSentRequestsResponse);
+  rpc HandleFriendRequest(HandleFriendRequestRequest) returns (HandleFriendRequestResponse);
+  // 黑名单
+  rpc AddBlacklist(AddBlacklistRequest) returns (AddBlacklistResponse);
+  rpc RemoveBlacklist(RemoveBlacklistRequest) returns (RemoveBlacklistResponse);
+  rpc ListBlacklist(ListBlacklistRequest) returns (ListBlacklistResponse);
+  rpc CheckBlacklist(CheckBlacklistRequest) returns (CheckBlacklistResponse);
+  // 推荐
+  rpc ListRecommendations(ListRecommendationsRequest) returns (ListRecommendationsResponse);
+  rpc IgnoreRecommendation(IgnoreRecommendationRequest) returns (IgnoreRecommendationResponse);
+}
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 好友项（与 friends 表对齐）
+message FriendItem {
+  int64  friend_id          = 1;
+  string remark             = 2;
+  string source             = 3;  // 来源
+  int32  is_blocked         = 4;  // 0否 1是
+  int32  is_special         = 5;  // 0否 1是
+  int32  is_muted           = 6;  // 0否 1是
+  int64  add_time           = 7;
+  int64  last_interact_time = 8;
+}
+
+// 好友申请项（与 friend_requests 表对齐）
+message FriendRequestItem {
+  int64  request_id   = 1;
+  int64  applicant_id = 2;
+  int64  target_id    = 3;
+  string reason       = 4;
+  int32  status       = 5; // 0待处理 1同意 2拒绝 3忽略
+  int64  handle_time  = 6;
+  int64  create_time  = 7;
+}
+
+// 黑名单项（与 blacklists 表对齐）
+message BlacklistItem {
+  int64  id               = 1;
+  int64  blocked_user_id  = 2;
+  int32  blocked_type     = 3; // 1私聊 2群聊 3全部
+  string remark           = 4;
+  int64  block_time      = 5;
+  int64  expire_time     = 6; // 0 表示永久
+}
+
+// 推荐项（与 friend_recommendations 表对齐）
+message RecommendationItem {
+  int64   id                  = 1;
+  int64   recommended_user_id = 2;
+  string  reason              = 3;
+  double  score               = 4;
+  string  source              = 5;
+  int32   status              = 6; // 0未处理 1已添加 2忽略
+  int64   create_time         = 7;
+}
+
+// ----------------------------------------
+// 好友
+// ----------------------------------------
+
+message ListFriendsRequest {
+  int64 user_id = 1;
+  int32 page    = 2; // 从 1 开始，0 表示不分页
+  int32 size    = 3; // 每页条数
+}
+
+message ListFriendsResponse {
+  repeated FriendItem friends = 1;
+  int32               total  = 2;
+}
+
+message DeleteFriendRequest {
+  int64 user_id   = 1;
+  int64 friend_id = 2;
+}
+
+message DeleteFriendResponse {}
+
+message UpdateRemarkRequest {
+  int64  user_id   = 1;
+  int64  friend_id = 2;
+  string remark    = 3;
+}
+
+message UpdateRemarkResponse {}
+
+message SetFriendMutedRequest {
+  int64 user_id   = 1;
+  int64 friend_id = 2;
+  int32 is_muted  = 3; // 0否 1是
+}
+
+message SetFriendMutedResponse {}
+
+message SetFriendSpecialRequest {
+  int64  user_id   = 1;
+  int64  friend_id = 2;
+  int32  is_special = 3; // 0否 1是
+}
+
+message SetFriendSpecialResponse {}
+
+// ----------------------------------------
+// 申请
+// ----------------------------------------
+
+message SendFriendRequestRequest {
+  int64  applicant_id = 1;
+  int64  target_id    = 2;
+  string reason       = 3;
+}
+
+message SendFriendRequestResponse {
+  int64 request_id = 1;
+}
+
+message ListReceivedRequestsRequest {
+  int64 target_id = 1; // 当前用户
+  int32 page     = 2;
+  int32 size     = 3;
+}
+
+message ListReceivedRequestsResponse {
+  repeated FriendRequestItem requests = 1;
+  int32                      total   = 2;
+}
+
+message ListSentRequestsRequest {
+  int64 applicant_id = 1; // 当前用户
+  int32 page         = 2;
+  int32 size         = 3;
+}
+
+message ListSentRequestsResponse {
+  repeated FriendRequestItem requests = 1;
+  int32                      total   = 2;
+}
+
+message HandleFriendRequestRequest {
+  int64 request_id = 1;
+  int32 status     = 2; // 1同意 2拒绝 3忽略
+}
+
+message HandleFriendRequestResponse {}
+
+// ----------------------------------------
+// 黑名单
+// ----------------------------------------
+
+message AddBlacklistRequest {
+  int64  user_id         = 1;
+  int64  blocked_user_id = 2;
+  int32  blocked_type    = 3; // 1私聊 2群聊 3全部
+  string remark          = 4;
+  int64  expire_time     = 5; // 0 或未传表示永久
+}
+
+message AddBlacklistResponse {}
+
+message RemoveBlacklistRequest {
+  int64 user_id         = 1;
+  int64 blocked_user_id = 2;
+}
+
+message RemoveBlacklistResponse {}
+
+message ListBlacklistRequest {
+  int64 user_id = 1;
+  int32 page    = 2;
+  int32 size    = 3;
+}
+
+message ListBlacklistResponse {
+  repeated BlacklistItem items = 1;
+  int32                  total = 2;
+}
+
+message CheckBlacklistRequest {
+  int64 user_id         = 1;
+  int64 blocked_user_id = 2;
+}
+
+message CheckBlacklistResponse {
+  bool is_blocked = 1;
+}
+
+// ----------------------------------------
+// 推荐
+// ----------------------------------------
+
+message ListRecommendationsRequest {
+  int64 user_id = 1;
+  int32 page   = 2;
+  int32 size   = 3;
+}
+
+message ListRecommendationsResponse {
+  repeated RecommendationItem items = 1;
+  int32                       total = 2;
+}
+
+message IgnoreRecommendationRequest {
+  int64 user_id = 1;
+  int64 id      = 2; // recommendation id
+}
+
+message IgnoreRecommendationResponse {}

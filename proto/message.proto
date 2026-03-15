@@ -1,0 +1,252 @@
+syntax = "proto3";
+
+package message;
+
+option go_package = "./service/message/pb";
+
+// MessageService 私聊/群聊消息、已读、撤回、会话列表、同步
+service MessageService {
+  // 私聊
+  rpc SendPrivateMessage(SendPrivateMessageRequest) returns (SendPrivateMessageResponse);
+  rpc ListPrivateMessages(ListPrivateMessagesRequest) returns (ListPrivateMessagesResponse);
+  rpc MarkPrivateRead(MarkPrivateReadRequest) returns (MarkPrivateReadResponse);
+  rpc GetPrivateUnreadCount(GetPrivateUnreadCountRequest) returns (GetPrivateUnreadCountResponse);
+  // 群聊
+  rpc SendGroupMessage(SendGroupMessageRequest) returns (SendGroupMessageResponse);
+  rpc ListGroupMessages(ListGroupMessagesRequest) returns (ListGroupMessagesResponse);
+  rpc MarkGroupRead(MarkGroupReadRequest) returns (MarkGroupReadResponse);
+  rpc GetGroupUnreadCount(GetGroupUnreadCountRequest) returns (GetGroupUnreadCountResponse);
+  // 通用
+  rpc RecallMessage(RecallMessageRequest) returns (RecallMessageResponse);
+  rpc GetMessage(GetMessageRequest) returns (GetMessageResponse);
+  // 会话
+  rpc ListConversations(ListConversationsRequest) returns (ListConversationsResponse);
+  rpc SetConversationPin(SetConversationPinRequest) returns (SetConversationPinResponse);
+  rpc SetConversationMute(SetConversationMuteRequest) returns (SetConversationMuteResponse);
+  rpc GetOrCreateConversation(GetOrCreateConversationRequest) returns (GetOrCreateConversationResponse);
+  // 同步
+  rpc GetSyncCursor(GetSyncCursorRequest) returns (GetSyncCursorResponse);
+  rpc PullMessages(PullMessagesRequest) returns (PullMessagesResponse);
+}
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 消息类型：1文本 2图片 3文件 4表情
+// 会话目标类型：1用户 2群组
+// 消息来源类型：1私聊 2群聊
+
+message Message {
+  int64  msg_id     = 1;
+  int32  msg_type   = 2; // 1私聊 2群聊
+  int64  sender_id  = 3;
+  string content    = 4;
+  string file_url   = 5;
+  string file_name  = 6;
+  int64  file_size  = 7;
+  int64  send_time  = 8;
+  int32  is_recalled = 9; // 0否 1是
+  // 私聊
+  int64 receiver_id = 10;
+  // 群聊
+  int64  group_id     = 11;
+  string at_user_ids  = 12; // JSON 数组，@ 的用户 ID 列表
+}
+
+// 会话（与 conversations 表对齐）
+message Conversation {
+  int64  conversation_id   = 1;
+  int64  user_id          = 2;
+  int32  target_type      = 3; // 1用户 2群组
+  int64  target_id        = 4;
+  int64  last_msg_id      = 5;
+  string last_msg_preview = 6;
+  int32  unread_count     = 7;
+  int32  is_pinned        = 8; // 0否 1是
+  int32  is_muted         = 9; // 0否 1是
+  int64  last_interact_time = 10;
+  int64  create_time      = 11;
+}
+
+// ----------------------------------------
+// 私聊
+// ----------------------------------------
+
+message SendPrivateMessageRequest {
+  int64  sender_id   = 1;
+  int64  receiver_id = 2;
+  int32  msg_type    = 3; // 1文本 2图片 3文件 4表情
+  string content     = 4;
+  string file_url    = 5;
+  string file_name   = 6;
+  int64  file_size   = 7;
+}
+
+message SendPrivateMessageResponse {
+  int64 msg_id = 1;
+}
+
+message ListPrivateMessagesRequest {
+  int64 sender_id   = 1;
+  int64 receiver_id = 2;
+  int64 before_msg_id = 3; // 取此 msg_id 之前的消息，0 表示最新
+  int32 limit      = 4; // 条数
+}
+
+message ListPrivateMessagesResponse {
+  repeated Message messages = 1;
+  bool             has_more = 2;
+}
+
+message MarkPrivateReadRequest {
+  int64 receiver_id = 1; // 当前用户
+  int64 msg_id      = 2; // 已读到该 msg_id（含）
+}
+
+message MarkPrivateReadResponse {}
+
+message GetPrivateUnreadCountRequest {
+  int64 receiver_id = 1; // 当前用户
+}
+
+message GetPrivateUnreadCountResponse {
+  int32 total = 1;
+}
+
+// ----------------------------------------
+// 群聊
+// ----------------------------------------
+
+message SendGroupMessageRequest {
+  int64  group_id   = 1;
+  int64  sender_id  = 2;
+  int32  msg_type   = 3; // 1文本 2图片 3文件 4表情
+  string content    = 4;
+  string file_url   = 5;
+  string file_name  = 6;
+  int64  file_size  = 7;
+  string at_user_ids = 8; // JSON 数组
+}
+
+message SendGroupMessageResponse {
+  int64 msg_id = 1;
+}
+
+message ListGroupMessagesRequest {
+  int64 group_id      = 1;
+  int64 before_msg_id = 2; // 0 表示最新
+  int32 limit         = 3;
+}
+
+message ListGroupMessagesResponse {
+  repeated Message messages = 1;
+  bool             has_more = 2;
+}
+
+message MarkGroupReadRequest {
+  int64 user_id  = 1;
+  int64 group_id = 2;
+  int64 last_read_msg_id = 3;
+}
+
+message MarkGroupReadResponse {}
+
+message GetGroupUnreadCountRequest {
+  int64 user_id = 1;
+}
+
+message GetGroupUnreadCountResponse {
+  int32 total = 1;
+}
+
+// ----------------------------------------
+// 通用
+// ----------------------------------------
+
+message RecallMessageRequest {
+  int64 msg_id   = 1;
+  int32 msg_type = 2; // 1私聊 2群聊
+}
+
+message RecallMessageResponse {}
+
+message GetMessageRequest {
+  int64 msg_id   = 1;
+  int32 msg_type = 2; // 1私聊 2群聊
+}
+
+message GetMessageResponse {
+  Message message = 1;
+}
+
+// ----------------------------------------
+// 会话
+// ----------------------------------------
+
+message ListConversationsRequest {
+  int64 user_id = 1;
+  int32 page    = 2;
+  int32 size    = 3;
+}
+
+message ListConversationsResponse {
+  repeated Conversation conversations = 1;
+  int32                  total         = 2;
+}
+
+message SetConversationPinRequest {
+  int64 user_id          = 1;
+  int32 target_type      = 2;
+  int64 target_id        = 3;
+  int32 is_pinned        = 4; // 0否 1是
+}
+
+message SetConversationPinResponse {}
+
+message SetConversationMuteRequest {
+  int64 user_id     = 1;
+  int32 target_type = 2;
+  int64 target_id   = 3;
+  int32 is_muted    = 4; // 0否 1是
+}
+
+message SetConversationMuteResponse {}
+
+message GetOrCreateConversationRequest {
+  int64 user_id     = 1;
+  int32 target_type = 2; // 1用户 2群组
+  int64 target_id   = 3;
+}
+
+message GetOrCreateConversationResponse {
+  Conversation conversation = 1;
+}
+
+// ----------------------------------------
+// 同步
+// ----------------------------------------
+
+message GetSyncCursorRequest {
+  int64 user_id   = 1;
+  string device_id = 2;
+}
+
+message GetSyncCursorResponse {
+  int64 last_sync_msg_id = 1;
+  int64 sync_offset      = 2;
+  int64 last_sync_time   = 3;
+}
+
+message PullMessagesRequest {
+  int64  user_id          = 1;
+  string device_id        = 2;
+  int64  last_sync_msg_id = 3; // 客户端已有最新消息 id，拉取此之后的增量
+  int32  limit            = 4;
+}
+
+message PullMessagesResponse {
+  repeated Message messages   = 1;
+  int64            next_cursor = 2; // 更新后的 last_sync_msg_id
+  int64            next_offset = 3;
+}

@@ -3,3 +3,87 @@ syntax = "proto3";
 package auth;
 
 option go_package = "./service/auth/pb";
+
+// AuthService 登录、登出、Token 校验与刷新、注册
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+}
+
+// ----------------------------------------
+// Login
+// ----------------------------------------
+
+message LoginRequest {
+  oneof by {
+    string account = 1;
+    string phone   = 2;
+    string email   = 3;
+  }
+  string password = 4;
+}
+
+message LoginResponse {
+  int64  user_id        = 1;
+  string access_token   = 2;
+  string refresh_token  = 3;
+  int64  expires_at     = 4; // access_token 过期时间戳
+}
+
+// ----------------------------------------
+// Logout
+// ----------------------------------------
+
+message LogoutRequest {
+  string token = 1; // access_token 或 refresh_token，作废该 token
+}
+
+message LogoutResponse {}
+
+// ----------------------------------------
+// RefreshToken
+// ----------------------------------------
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+  string access_token  = 1;
+  int64  expires_at    = 2;
+}
+
+// ----------------------------------------
+// ValidateToken（Gateway 鉴权用）
+// ----------------------------------------
+
+message ValidateTokenRequest {
+  string access_token = 1;
+}
+
+message ValidateTokenResponse {
+  bool   valid   = 1;
+  int64  user_id = 2; // 仅当 valid 为 true 时有效
+}
+
+// ----------------------------------------
+// Register
+// ----------------------------------------
+
+message RegisterRequest {
+  string account  = 1;
+  string password = 2;
+  string nickname = 3;
+  string phone    = 4; // 可选
+  string email    = 5; // 可选
+}
+
+message RegisterResponse {
+  int64  user_id        = 1;
+  string access_token   = 2; // 可选：注册后直接登录
+  string refresh_token  = 3;
+  int64  expires_at     = 4;
+}

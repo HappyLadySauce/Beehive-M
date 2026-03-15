@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package presence;
+
+option go_package = "./service/presence/pb";
+
+// PresenceService 在线状态、心跳、踢下线
+service PresenceService {
+  rpc ReportHeartbeat(ReportHeartbeatRequest) returns (ReportHeartbeatResponse);
+  rpc GetOnlineStatus(GetOnlineStatusRequest) returns (GetOnlineStatusResponse);
+  rpc BatchGetOnlineStatus(BatchGetOnlineStatusRequest) returns (BatchGetOnlineStatusResponse);
+  rpc KickDevice(KickDeviceRequest) returns (KickDeviceResponse);
+}
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 在线状态：0离线 1在线 2忙碌 3离开
+
+message OnlineStatus {
+  int64  user_id           = 1;
+  int32  status            = 2; // 0离线 1在线 2忙碌 3离开
+  int64  last_heartbeat_at = 3;
+  string device_type       = 4; // web/android/ios
+  string device_id         = 5;
+}
+
+// ----------------------------------------
+// ReportHeartbeat
+// ----------------------------------------
+
+message ReportHeartbeatRequest {
+  int64  user_id    = 1;
+  string device_id  = 2; // 可选，多端时区分
+  string device_type = 3; // web/android/ios
+  string client_ip  = 4; // 可选
+}
+
+message ReportHeartbeatResponse {}
+
+// ----------------------------------------
+// GetOnlineStatus
+// ----------------------------------------
+
+message GetOnlineStatusRequest {
+  int64 user_id = 1;
+}
+
+message GetOnlineStatusResponse {
+  OnlineStatus status = 1;
+}
+
+// ----------------------------------------
+// BatchGetOnlineStatus
+// ----------------------------------------
+
+message BatchGetOnlineStatusRequest {
+  repeated int64 user_ids = 1;
+}
+
+message BatchGetOnlineStatusResponse {
+  repeated OnlineStatus statuses = 1; // 未在线的可不返回或 status=0
+}
+
+// ----------------------------------------
+// KickDevice
+// ----------------------------------------
+
+message KickDeviceRequest {
+  int64  user_id   = 1;
+  string device_id = 2;
+}
+
+message KickDeviceResponse {}

@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package resource;
+
+option go_package = "./service/resource/pb";
+
+// ResourceService 文件上传、元信息、秒传、删除
+service ResourceService {
+  rpc Upload(UploadRequest) returns (UploadResponse);
+  rpc GetResource(GetResourceRequest) returns (GetResourceResponse);
+  rpc DeleteResource(DeleteResourceRequest) returns (DeleteResourceResponse);
+  rpc GetByHash(GetByHashRequest) returns (GetByHashResponse);
+  rpc CleanExpiredTemp(CleanExpiredTempRequest) returns (CleanExpiredTempResponse);
+}
+
+// ----------------------------------------
+// 通用模型
+// ----------------------------------------
+
+// 资源（与 resources 表对齐）
+message Resource {
+  string resource_id   = 1;
+  int64  uploader_id   = 2;
+  string file_name     = 3;
+  string file_type     = 4; // image/jpeg 等
+  int64  file_size     = 5;
+  string file_hash     = 6;
+  string storage_path  = 7;
+  string url           = 8; // 访问 URL
+  int32  width         = 9;
+  int32  height        = 10;
+  int64  upload_time   = 11;
+  int32  status       = 12; // 1正常 2已删除
+  int32  is_temp      = 13; // 0否 1是
+  int64  expire_time   = 14;
+}
+
+// ----------------------------------------
+// Upload
+// ----------------------------------------
+
+message UploadRequest {
+  int64  uploader_id = 1;
+  string file_name   = 2;
+  string file_type   = 3;
+  int64  file_size   = 4;
+  string file_hash   = 5; // 可选，用于秒传
+  string content     = 6; // 小文件 base64；或由实现改为 stream/url
+  int32  is_temp    = 7; // 0否 1是
+  int64  expire_time = 8; // 临时文件过期时间戳
+}
+
+message UploadResponse {
+  string resource_id  = 1;
+  string storage_path = 2;
+  string url          = 3;
+  int32  width        = 4;
+  int32  height       = 5;
+  bool   from_hash    = 6; // 是否秒传命中
+}
+
+// ----------------------------------------
+// GetResource
+// ----------------------------------------
+
+message GetResourceRequest {
+  string resource_id = 1;
+}
+
+message GetResourceResponse {
+  Resource resource = 1;
+}
+
+// ----------------------------------------
+// DeleteResource
+// ----------------------------------------
+
+message DeleteResourceRequest {
+  string resource_id = 1;
+  int64  uploader_id = 2; // 可选，校验归属
+}
+
+message DeleteResourceResponse {}
+
+// ----------------------------------------
+// GetByHash（秒传）
+// ----------------------------------------
+
+message GetByHashRequest {
+  string file_hash   = 1;
+  int64  uploader_id = 2;
+}
+
+message GetByHashResponse {
+  bool   exists      = 1;
+  string resource_id = 2;
+  string url         = 3;
+}
+
+// ----------------------------------------
+// CleanExpiredTemp（内部定时）
+// ----------------------------------------
+
+message CleanExpiredTempRequest {}
+
+message CleanExpiredTempResponse {
+  int32 deleted_count = 1;
+}
