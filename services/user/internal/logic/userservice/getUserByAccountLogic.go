@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/HappyLadySauce/Beehive-M/pkg/code"
 	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
-	"github.com/HappyLadySauce/Beehive-M/pkg/code"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/HappyLadySauce/errors"
-	"gorm.io/gorm"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/redis/go-redis/v9"
 )
 
 type GetUserByAccountLogic struct {
@@ -45,37 +45,35 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 	if err != nil {
 		return nil, err
 	}
-	// 2.2 如果用户ID为0，则返回用户不存在
-	if userId == 0 {
-		l.Logger.Errorf("user not found in database: %v", err)
-		return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
-	}
 
 	// 3.1 先查询缓存中是否存在用户
 	// key: user:profile:{id}
 	// value: user json
 	userBytes, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:profile:%d", userId)).Bytes()
-	// 3.2 如果缓存命中，则直接返回
-	if err == nil && len(userBytes) > 0 {
+	// 3.2 如果 Redis 返回其他错误（非 key 不存在），记日志，继续走数据库
+	if err != nil && !errors.Is(err, redis.Nil) {
+		l.Logger.Infof("get user profile from redis failed: %v", err)
+	} else if err == nil && len(userBytes) > 0 {
+		// 3.3 如果缓存命中，则直接返回
 		if err := json.Unmarshal(userBytes, &user); err == nil {
 			return &pb.GetUserByAccountResponse{User: &user}, nil
 		} else {
-			// 3.3 如果解析失败，则返回解析失败
+			// 3.4 如果解析失败，则返回解析失败
 			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
 			return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
 		}
 	}
 
 	// 4.1 如果缓存未命中，则查询数据库
-	err = l.svcCtx.DB.Where("user_id = ?", userId).First(&user).Error
-	if err != nil {
+	tx := l.svcCtx.DB.Where("user_id = ?", userId).First(&user)
+	if tx.Error != nil {
 		// 4.2 如果查询失败，并且是记录不存在，则返回用户不存在
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			l.Logger.Errorf("user not found in database: %v", err)
+		if tx.RowsAffected == 0 {
+			l.Logger.Errorf("user not found in database: %v", tx.Error)
 			return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
 		}
 		// 4.3 如果查询失败，并且不是记录不存在，则返回数据库错误
-		l.Logger.Errorf("query user in database failed: %v", err)
+		l.Logger.Errorf("query user in database failed: %v", tx.Error)
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
 	}
 
@@ -108,22 +106,26 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 	// key: user:account:{account}
 	// value: user_id
 	userId, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:account:%s", account)).Int64()
-	// 1.2 如果缓存命中，则直接返回
-	if err == nil && userId != 0 {
+	// 1.2 如果 Redis 返回其他错误（非 key 不存在），记日志，继续走数据库
+	if err != nil && !errors.Is(err, redis.Nil) {
+		l.Logger.Errorf("get user id from redis failed: %v", err)
+	} else if err == nil && userId != 0 {
+		// 如果缓存命中并且 userId 合法，则直接返回
 		return userId, nil
 	}
 
 	// 2.1 如果缓存未命中，则查询数据库，仅查询 user_id 字段
-	err = l.svcCtx.DB.Model(&pb.User{}).Where("account = ?", account).Pluck("user_id", &userId).Error
-	if err != nil {
-		// 2.2 如果查询失败，并且是记录不存在，则返回用户不存在
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			l.Logger.Errorf("user not found in database: %v", err)
-			return 0, errors.WithCode(code.CodeUserNotFound, "user not found in database")
-		}
-		// 2.3 如果查询失败，并且不是记录不存在，则返回数据库错误
-		l.Logger.Errorf("query user in database failed: %v", err)
+	tx := l.svcCtx.DB.Model(&pb.User{}).Where("account = ?", account).Pluck("user_id", &userId)
+	if tx.Error != nil {
+		// 2.2 如果查询失败，则返回数据库错误
+		l.Logger.Errorf("query user in database failed: %v", tx.Error)
 		return 0, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
+	}
+
+	// 2.3 如果没有任何记录，则返回用户不存在
+	if tx.RowsAffected == 0 || userId == 0 {
+		l.Logger.Errorf("user not found in database by account: %s", account)
+		return 0, errors.WithCode(code.CodeUserNotFound, "user not found in database")
 	}
 
 	// 3.1 回写缓存
