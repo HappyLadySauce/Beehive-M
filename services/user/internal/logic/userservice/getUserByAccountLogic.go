@@ -61,13 +61,12 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
 			return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
 		}
-	} else if err != nil && errors.Is(err, redis.Nil) {
+	} else if errors.Is(err, redis.Nil) {
 		// 3.5 如果 Redis 返回 key 不存在，记日志，继续走数据库
-		l.Logger.Infof("get user profile from redis failed: %v", err)
-	} else if err != nil {
-		// 3.6 如果 Redis 返回其他错误，记日志，返回缓存获取失败
+		l.Logger.Infof("get user profile from redis not found: %v", err)
+	} else {
+		// 3.6 如果 Redis 返回其他错误，记日志，继续走数据库
 		l.Logger.Errorf("get user profile from redis failed: %v", err)
-		return nil, errors.WithCode(code.CodeCacheGetFailed, "get user profile from redis failed")
 	}
 
 	// 4.1 如果缓存未命中，则查询数据库
@@ -82,21 +81,19 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
 	}
 
-	// 5. 回写缓存（传指针避免复制含 sync.Mutex 的 pb.User）
+	// 5. 回写缓存
 	userBytes, err = json.Marshal(&user)
 	if err != nil {
-		// 5.1 如果序列化失败，则返回序列化失败
+		// 5.1 如果序列化失败，则记录日志
 		l.Logger.Errorf("marshal user profile to json failed: %v", err)
-		return nil, errors.WithCode(code.CodeUnmarshalFailed, "marshal failed")
 	}
 	// 5.2 如果序列化成功，则回写缓存
 	// key: user:profile:{id}
 	// value: user json
 	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
 	if err != nil {
-		// 5.3 如果回写缓存失败，则返回缓存错误
+		// 5.3 如果回写缓存失败，则记录日志
 		l.Logger.Errorf("set user profile to redis failed: %v", err)
-		return nil, errors.WithCode(code.CodeCacheSetFailed, "set user profile to cache failed")
 	}
 
 	// 6. 返回用户信息
@@ -115,13 +112,12 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 	if err == nil && userId != 0 {
 		// 如果缓存命中并且 userId 合法，则直接返回
 		return userId, nil
-	} else if err != nil && errors.Is(err, redis.Nil) {
+	} else if errors.Is(err, redis.Nil) {
 		// 1.3 如果 Redis 返回 key 不存在，记日志，继续走数据库
-		l.Logger.Infof("get user id from redis failed: %v", err)
-	} else if err != nil {
-		// 1.4 如果 Redis 返回其他错误，记日志，返回缓存获取失败
+		l.Logger.Infof("get user id from redis not found: %v", err)
+	} else {
+		// 1.4 如果 Redis 返回其他错误，记日志，继续走数据库
 		l.Logger.Errorf("get user id from redis failed: %v", err)
-		return 0, errors.WithCode(code.CodeCacheGetFailed, "get user id from redis failed")
 	}
 
 	// 2.1 如果缓存未命中，则查询数据库，仅查询 user_id 字段
@@ -143,9 +139,8 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 	// value: user_id
 	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:account:%s", account), userId, 0).Err()
 	if err != nil {
-		// 3.2 如果回写缓存失败，则返回缓存错误
+		// 3.2 如果回写缓存失败，则记录日志
 		l.Logger.Errorf("set user id to redis failed: %v", err)
-		return 0, errors.WithCode(code.CodeCacheSetFailed, "set user id to cache failed")
 	}
 
 	// 4. 返回用户ID

@@ -132,9 +132,8 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		// 7.4 序列化用户
 		userBytes, err := json.Marshal(u)
 		if err != nil {
-			// 7.5 如果序列化失败，则返回序列化失败
+			// 7.5 如果序列化失败，则记录日志
 			l.Logger.Errorf("marshal user profile to json failed: %v", err)
-			return nil, errors.WithCode(code.CodeUnmarshalFailed, "marshal failed")
 		}
 
 		// 7.6 回写缓存
@@ -142,9 +141,8 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		// value: user json
 		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", id), userBytes, 0).Err()
 		if err != nil {
-			// 7.7 如果回写缓存失败，则返回缓存错误
+			// 7.7 如果回写缓存失败，则记录日志
 			l.Logger.Errorf("set user profile to redis failed: %v", err)
-			return nil, errors.WithCode(code.CodeCacheSetFailed, "set user profile to cache failed")
 		}
 	}
 
