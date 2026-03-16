@@ -84,16 +84,17 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 	// 5. 回写缓存
 	userBytes, err = json.Marshal(&user)
 	if err != nil {
-		// 5.1 如果序列化失败，则记录日志
+		// 5.1 如果序列化失败，则记录日志并跳过回写缓存
 		l.Logger.Errorf("marshal user profile to json failed: %v", err)
-	}
-	// 5.2 如果序列化成功，则回写缓存
-	// key: user:profile:{id}
-	// value: user json
-	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
-	if err != nil {
-		// 5.3 如果回写缓存失败，则记录日志
-		l.Logger.Errorf("set user profile to redis failed: %v", err)
+	} else {
+		// 5.2 如果序列化成功，则回写缓存
+		// key: user:profile:{id}
+		// value: user json
+		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
+		if err != nil {
+			// 5.3 如果回写缓存失败，则记录日志
+			l.Logger.Errorf("set user profile to redis failed: %v", err)
+		}
 	}
 
 	// 6. 返回用户信息

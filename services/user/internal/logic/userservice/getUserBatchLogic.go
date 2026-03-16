@@ -132,8 +132,9 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		// 7.4 序列化用户
 		userBytes, err := json.Marshal(u)
 		if err != nil {
-			// 7.5 如果序列化失败，则记录日志
+			// 7.5 如果序列化失败，则记录日志并跳过回写缓存
 			l.Logger.Errorf("marshal user profile to json failed: %v", err)
+			continue
 		}
 
 		// 7.6 回写缓存
