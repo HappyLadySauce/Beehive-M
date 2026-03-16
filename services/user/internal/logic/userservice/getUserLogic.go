@@ -8,10 +8,10 @@ import (
 	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 	"github.com/HappyLadySauce/Beehive-M/pkg/code"
-	"gorm.io/gorm"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/HappyLadySauce/errors"
+	"gorm.io/gorm"
 )
 
 type GetUserLogic struct {
@@ -31,8 +31,8 @@ func NewGetUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserLo
 // 按 user_id 查单个用户（会话头、资料页等）
 func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, error) {
 	// 1.1 参数校验: user_id 不能为空
-	id := in.GetUserId()
-	if id == 0 {
+	userId := in.GetUserId()
+	if userId == 0 {
 		// 1.2 如果 user_id 为空，则返回参数错误
 		l.Logger.Errorf("user_id is required")
 		return nil, errors.WithCode(code.CodeInvalidParam, "user_id is required")
@@ -43,7 +43,7 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 	// 2.1 先查询缓存中是否存在用户
 	// key: user:profile:{id}
 	// value: user json
-	userBytes, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:profile:%d", id)).Bytes()
+	userBytes, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:profile:%d", userId)).Bytes()
 	// 2.2 如果缓存命中，则直接返回
 	if err == nil && len(userBytes) > 0 {
 		if err := json.Unmarshal(userBytes, &user); err == nil {
@@ -56,7 +56,7 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 	}
 
 	// 3.1 如果缓存未命中，则查询数据库
-	err = l.svcCtx.DB.Where("user_id = ?", id).First(&user).Error
+	err = l.svcCtx.DB.Where("user_id = ?", userId).First(&user).Error
 	if err != nil {
 		// 3.2 如果查询失败，并且是记录不存在，则返回用户不存在
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -78,7 +78,7 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 	// 4.2 如果序列化成功，则回写缓存
 	// key: user:profile:{id}
 	// value: user json
-	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", id), userBytes, 0).Err()
+	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
 	if err != nil {
 		// 4.3 如果回写缓存失败，则返回缓存错误
 		l.Logger.Errorf("set user profile to redis failed: %v", err)

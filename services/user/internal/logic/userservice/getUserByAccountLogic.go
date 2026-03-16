@@ -2,11 +2,16 @@ package userservicelogic
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
+	"github.com/HappyLadySauce/Beehive-M/pkg/code"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/HappyLadySauce/errors"
+	"gorm.io/gorm"
 )
 
 type GetUserByAccountLogic struct {
@@ -25,7 +30,112 @@ func NewGetUserByAccountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 // 按账号查（登录、搜索用）
 func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest) (*pb.GetUserByAccountResponse, error) {
-	// todo: add your logic here and delete this line
+	// 1.1 参数校验: user_id 不能为空
+	account := in.GetAccount()
+	if account == "" {
+		// 1.2 如果 account 为空，则返回参数错误
+		l.Logger.Errorf("account is required")
+		return nil, errors.WithCode(code.CodeInvalidParam, "account is required")
+	}
 
-	return &pb.GetUserByAccountResponse{}, nil
+	var user pb.User
+
+	// 2.1 根据账号查询用户ID
+	userId, err := l.getUserIdByAccount(account)
+	if err != nil {
+		return nil, err
+	}
+	// 2.2 如果用户ID为0，则返回用户不存在
+	if userId == 0 {
+		l.Logger.Errorf("user not found in database: %v", err)
+		return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
+	}
+
+	// 3.1 先查询缓存中是否存在用户
+	// key: user:profile:{id}
+	// value: user json
+	userBytes, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:profile:%d", userId)).Bytes()
+	// 3.2 如果缓存命中，则直接返回
+	if err == nil && len(userBytes) > 0 {
+		if err := json.Unmarshal(userBytes, &user); err == nil {
+			return &pb.GetUserByAccountResponse{User: &user}, nil
+		} else {
+			// 3.3 如果解析失败，则返回解析失败
+			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
+			return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
+		}
+	}
+
+	// 4.1 如果缓存未命中，则查询数据库
+	err = l.svcCtx.DB.Where("user_id = ?", userId).First(&user).Error
+	if err != nil {
+		// 4.2 如果查询失败，并且是记录不存在，则返回用户不存在
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			l.Logger.Errorf("user not found in database: %v", err)
+			return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
+		}
+		// 4.3 如果查询失败，并且不是记录不存在，则返回数据库错误
+		l.Logger.Errorf("query user in database failed: %v", err)
+		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
+	}
+
+	// 5. 回写缓存（传指针避免复制含 sync.Mutex 的 pb.User）
+	userBytes, err = json.Marshal(&user)
+	if err != nil {
+		// 5.1 如果序列化失败，则返回序列化失败
+		l.Logger.Errorf("marshal user profile to json failed: %v", err)
+		return nil, errors.WithCode(code.CodeUnmarshalFailed, "marshal failed")
+	}
+	// 5.2 如果序列化成功，则回写缓存
+	// key: user:profile:{id}
+	// value: user json
+	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
+	if err != nil {
+		// 5.3 如果回写缓存失败，则返回缓存错误
+		l.Logger.Errorf("set user profile to redis failed: %v", err)
+		return nil, errors.WithCode(code.CodeCacheSetFailed, "set user profile to cache failed")
+	}
+
+	// 6. 返回用户信息
+	return &pb.GetUserByAccountResponse{User: &user}, nil
+}
+
+// 根据账号查询用户ID
+func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error) {
+	var userId int64
+
+	// 1.1 先查询缓存中是否存在用户 id
+	// key: user:account:{account}
+	// value: user_id
+	userId, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:account:%s", account)).Int64()
+	// 1.2 如果缓存命中，则直接返回
+	if err == nil && userId != 0 {
+		return userId, nil
+	}
+
+	// 2.1 如果缓存未命中，则查询数据库
+	err = l.svcCtx.DB.Where("account = ?", account).Select("user_id").First(&userId).Error
+	if err != nil {
+		// 2.2 如果查询失败，并且是记录不存在，则返回用户不存在
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			l.Logger.Errorf("user not found in database: %v", err)
+			return 0, errors.WithCode(code.CodeUserNotFound, "user not found in database")
+		}
+		// 2.3 如果查询失败，并且不是记录不存在，则返回数据库错误
+		l.Logger.Errorf("query user in database failed: %v", err)
+		return 0, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
+	}
+
+	// 3.1 回写缓存
+	// key: user:account:{account}
+	// value: user_id
+	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:account:%s", account), userId, 0).Err()
+	if err != nil {
+		// 3.2 如果回写缓存失败，则返回缓存错误
+		l.Logger.Errorf("set user id to redis failed: %v", err)
+		return 0, errors.WithCode(code.CodeCacheSetFailed, "set user id to cache failed")
+	}
+
+	// 4. 返回用户ID
+	return userId, nil
 }
