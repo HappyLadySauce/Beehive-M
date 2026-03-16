@@ -7,6 +7,7 @@ import (
 
 	"github.com/HappyLadySauce/Beehive-M/pkg/code"
 	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
+	"github.com/HappyLadySauce/Beehive-M/services/user/internal/model"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 
 	"github.com/HappyLadySauce/errors"
@@ -54,8 +55,8 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		keys[i] = fmt.Sprintf("user:profile:%d", userId)
 	}
 
-	// 3.2 user_id 到用户信息的映射，方便保持入参顺序
-	userMap := make(map[int64]*pb.User, len(userIds))
+	// 3.2 user_id 到用户信息的映射，方便保持入参顺序（使用指针，避免复制带锁结构）
+	userMap := make(map[int64]*model.User, len(userIds))
 	var missIds []int64
 
 	// 3.3 查询缓存（MGet 对不存在的 key 返回 nil，不会返回 redis.Nil 错误）
@@ -83,7 +84,7 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 			continue
 		}
 
-		var u pb.User
+		var u model.User
 		if err := json.Unmarshal([]byte(strVal), &u); err != nil {
 			// 4.4 与单查逻辑保持一致，解析失败直接报错
 			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
@@ -91,59 +92,53 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		}
 		userMap[id] = &u
 	}
+ 
+	if len(missIds) != 0 {
+		// 5.1 查询数据库中遗漏的用户
+		var dbUsers []*model.User
+		tx := l.svcCtx.DB.Where("user_id IN ?", missIds).Find(&dbUsers)
+		if tx.Error != nil && errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			// 5.2 所有遗漏的用户都不存在，继续返回已命中的部分
+			l.Logger.Infof("some users not found in database, user_ids: %v", missIds)
+		} else if tx.Error != nil {
+			// 5.3 如果查询失败，并且不是记录不存在，则返回数据库错误
+			l.Logger.Errorf("query users in database failed: %v", tx.Error)
+			return nil, errors.WithCode(code.CodeDBQueryFailed, "query users in database failed")
+		}
 
-	// 5.1 如果所有用户都在缓存中，则按入参顺序返回
-	if len(missIds) == 0 {
-		users := make([]*pb.User, 0, len(userIds))
-		for _, id := range userIds {
-			if u, ok := userMap[id]; ok {
-				users = append(users, u)
+		// 6.1 将数据库中查到的用户写入 map，并回写缓存
+		for _, u := range dbUsers {
+			// 7.2 如果用户为 nil，则跳过
+			if u == nil {
+				continue
 			}
-		}
-		return &pb.GetUserBatchResponse{Users: users}, nil
-	}
+			// 7.3 如果 user_id 为 0，则跳过
+			id := u.GetUserId()
+			if id == 0 {
+				continue
+			}
 
-	// 6.1 查询数据库中遗漏的用户
-	var dbUsers []*pb.User
-	tx := l.svcCtx.DB.Where("user_id IN ?", missIds).Find(&dbUsers)
-	if tx.Error != nil && errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-		// 6.2 所有遗漏的用户都不存在，继续返回已命中的部分
-		l.Logger.Infof("some users not found in database, user_ids: %v", missIds)
-	} else if tx.Error != nil {
-		// 6.3 如果查询失败，并且不是记录不存在，则返回数据库错误
-		l.Logger.Errorf("query users in database failed: %v", tx.Error)
-		return nil, errors.WithCode(code.CodeDBQueryFailed, "query users in database failed")
-	}
+			userMap[id] = u
 
-	// 7.1 将数据库中查到的用户写入 map，并回写缓存
-	for _, u := range dbUsers {
-		// 7.2 如果用户为 nil，则跳过
-		if u == nil {
-			continue
-		}
-		// 7.3 如果 user_id 为 0，则跳过
-		id := u.GetUserId()
-		if id == 0 {
-			continue
-		}
-
-		userMap[id] = u
-
-		// 7.4 序列化用户
-		userBytes, err := json.Marshal(u)
-		if err != nil {
-			// 7.5 如果序列化失败，则记录日志并跳过回写缓存
-			l.Logger.Errorf("marshal user profile to json failed: %v", err)
-			continue
-		}
-
-		// 7.6 回写缓存
-		// key: user:profile:{id}
-		// value: user json
-		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", id), userBytes, 0).Err()
-		if err != nil {
-			// 7.7 如果回写缓存失败，则记录日志
-			l.Logger.Errorf("set user profile to redis failed: %v", err)
+			// 7.4 异步回写缓存
+			go func(u *model.User, id int64) {
+				// 7.4 序列化用户
+				userBytes, err := json.Marshal(u)
+				if err != nil {
+					// 7.5 如果序列化失败，则记录日志并跳过回写缓存
+					l.Logger.Errorf("marshal user profile to json failed: %v", err)
+					return
+				}
+	
+				// 7.6 回写缓存
+				// key: user:profile:{id}
+				// value: user json
+				err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", id), userBytes, 0).Err()
+				if err != nil {
+					// 7.7 如果回写缓存失败，则记录日志
+					l.Logger.Errorf("set user profile to redis failed: %v", err)
+				}
+			}(u, id)
 		}
 	}
 
@@ -151,7 +146,7 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 	users := make([]*pb.User, 0, len(userIds))
 	for _, id := range userIds {
 		if u, ok := userMap[id]; ok {
-			users = append(users, u)
+			users = append(users, u.ModelToPB())
 		}
 	}
 

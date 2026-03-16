@@ -7,6 +7,7 @@ import (
 
 	"github.com/HappyLadySauce/Beehive-M/pkg/code"
 	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
+	"github.com/HappyLadySauce/Beehive-M/services/user/internal/model"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 
 	"github.com/HappyLadySauce/errors"
@@ -39,7 +40,7 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 		return nil, errors.WithCode(code.CodeInvalidParam, "user_id is required")
 	}
 
-	var user pb.User
+	var user model.User
 
 	// 2.1 先查询缓存中是否存在用户
 	// key: user:profile:{id}
@@ -49,7 +50,7 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 	if err == nil && len(userBytes) > 0 {
 		// 2.3 如果缓存命中，则直接返回
 		if err := json.Unmarshal(userBytes, &user); err == nil {
-			return &pb.GetUserResponse{User: &user}, nil
+			return &pb.GetUserResponse{User: user.ModelToPB()}, nil
 		} else {
 			// 2.4 如果解析失败，则返回解析失败
 			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
@@ -75,22 +76,24 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
 	}
 
-	// 4.1 回写缓存（传指针避免复制含 sync.Mutex 的 pb.User）
-	userBytes, err = json.Marshal(&user)
-	if err == nil && len(userBytes) > 0 {
-		// 4.2 如果序列化成功，则回写缓存
+	// 4.1 异步回写缓存
+	go func(user *model.User, userId int64) {
+		userBytes, err := json.Marshal(user)
+		if err != nil {
+			// 4.2 如果序列化失败，则记录日志
+			l.Logger.Errorf("marshal user profile to json failed: %v", err)
+			return
+		}
+		// 4.3 回写缓存
 		// key: user:profile:{id}
 		// value: user json
 		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
 		if err != nil {
-			// 4.3 如果回写缓存失败，则记录日志
+			// 4.4 如果回写缓存失败，则记录日志
 			l.Logger.Errorf("set user profile to redis failed: %v", err)
 		}
-	} else if err != nil {
-		// 4.4 如果序列化失败，则记录日志
-		l.Logger.Errorf("marshal user profile to json failed: %v", err)
-	}
+	}(&user, userId)
 
 	// 5. 返回用户信息
-	return &pb.GetUserResponse{User: &user}, nil
+	return &pb.GetUserResponse{User: user.ModelToPB()}, nil
 }

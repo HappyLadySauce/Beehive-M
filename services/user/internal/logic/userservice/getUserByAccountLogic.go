@@ -7,6 +7,7 @@ import (
 
 	"github.com/HappyLadySauce/Beehive-M/pkg/code"
 	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
+	"github.com/HappyLadySauce/Beehive-M/services/user/internal/model"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 
 	"github.com/HappyLadySauce/errors"
@@ -39,7 +40,7 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 		return nil, errors.WithCode(code.CodeInvalidParam, "account is required")
 	}
 
-	var user pb.User
+	var user model.User
 
 	// 2.1 根据账号查询用户ID
 	userId, err := l.getUserIdByAccount(account)
@@ -55,7 +56,7 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 	if err == nil && len(userBytes) > 0 {
 		// 3.3 如果缓存命中，则直接返回
 		if err := json.Unmarshal(userBytes, &user); err == nil {
-			return &pb.GetUserByAccountResponse{User: &user}, nil
+			return &pb.GetUserByAccountResponse{User: user.ModelToPB()}, nil
 		} else {
 			// 3.4 如果解析失败，则返回解析失败
 			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
@@ -81,24 +82,26 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
 	}
 
-	// 5. 回写缓存
-	userBytes, err = json.Marshal(&user)
-	if err != nil {
-		// 5.1 如果序列化失败，则记录日志并跳过回写缓存
-		l.Logger.Errorf("marshal user profile to json failed: %v", err)
-	} else {
-		// 5.2 如果序列化成功，则回写缓存
-		// key: user:profile:{id}
-		// value: user json
-		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
+	// 5. 异步回写缓存
+	go func(user *model.User, userId int64) {
+		userBytes, err := json.Marshal(user)
 		if err != nil {
-			// 5.3 如果回写缓存失败，则记录日志
-			l.Logger.Errorf("set user profile to redis failed: %v", err)
+			// 5.1 如果序列化失败，则记录日志并跳过回写缓存
+			l.Logger.Errorf("marshal user profile to json failed: %v", err)
+		} else {
+			// 5.2 如果序列化成功，则回写缓存
+			// key: user:profile:{id}
+			// value: user json
+			err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
+			if err != nil {
+				// 5.3 如果回写缓存失败，则记录日志
+				l.Logger.Errorf("set user profile to redis failed: %v", err)
+			}
 		}
-	}
+	}(&user, userId)
 
 	// 6. 返回用户信息
-	return &pb.GetUserByAccountResponse{User: &user}, nil
+	return &pb.GetUserByAccountResponse{User: user.ModelToPB()}, nil
 }
 
 // 根据账号查询用户ID
@@ -135,14 +138,16 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 		return 0, errors.WithCode(code.CodeUserNotFound, "user not found in database")
 	}
 
-	// 3.1 回写缓存
+	// 3.1 异步回写缓存
 	// key: user:account:{account}
 	// value: user_id
-	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:account:%s", account), userId, 0).Err()
-	if err != nil {
-		// 3.2 如果回写缓存失败，则记录日志
-		l.Logger.Errorf("set user id to redis failed: %v", err)
-	}
+	go func(userId int64, account string) {
+		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:account:%s", account), userId, 0).Err()
+		if err != nil {
+			// 3.2 如果回写缓存失败，则记录日志
+			l.Logger.Errorf("set user id to redis failed: %v", err)
+		}
+	}(userId, account)
 
 	// 4. 返回用户ID
 	return userId, nil
