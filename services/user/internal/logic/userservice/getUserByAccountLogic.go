@@ -92,8 +92,7 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 			// 5.2 如果序列化成功，则回写缓存
 			// key: user:profile:{id}
 			// value: user json
-			err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
-			if err != nil {
+			if err := l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err(); err != nil {
 				// 5.3 如果回写缓存失败，则记录日志
 				l.Logger.Errorf("set user profile to redis failed: %v", err)
 			}
@@ -142,8 +141,7 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 	// key: user:account:{account}
 	// value: user_id
 	go func(userId int64, account string) {
-		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:account:%s", account), userId, 0).Err()
-		if err != nil {
+		if err := l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:account:%s", account), userId, 0).Err(); err != nil {
 			// 3.2 如果回写缓存失败，则记录日志
 			l.Logger.Errorf("set user id to redis failed: %v", err)
 		}
