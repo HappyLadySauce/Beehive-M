@@ -10,7 +10,6 @@ import (
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 
 	"github.com/HappyLadySauce/errors"
-	"github.com/redis/go-redis/v9"
 	"github.com/samber/lo"
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
@@ -61,13 +60,11 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 
 	// 3.3 查询缓存（MGet 对不存在的 key 返回 nil，不会返回 redis.Nil 错误）
 	values, err := l.svcCtx.Redis.MGet(l.ctx, keys...).Result()
-	if err != nil && errors.Is(err, redis.Nil) {
-		// 3.4 如果 Redis 返回 key 不存在，记日志，继续走数据库
-		l.Logger.Infof("get user profile from redis failed: %v", err)
-	} else if err != nil {
-		// 3.5 如果 Redis 返回错误，记日志，返回缓存获取失败
-		l.Logger.Errorf("get user profile from redis failed: %v", err)
-		return nil, errors.WithCode(code.CodeCacheGetFailed, "get user profile from redis failed")
+	if err != nil {
+		// 3.4 如果 Redis 返回错误（包括连接异常等），记日志并全部回退到数据库查询
+		l.Logger.Errorf("get user profile from redis failed, fallback to db only, err: %v", err)
+		values = nil
+		missIds = append(missIds, userIds...)
 	}
 
 	// 4.1 解析缓存命中的用户，记录遗漏的 user_id
