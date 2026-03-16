@@ -40,6 +40,12 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		return nil, errors.WithCode(code.CodeInvalidParam, "user_ids is required")
 	}
 
+	// 1.3 防御性限制: 单次最多允许查询 500 个 user_id
+	if len(userIds) > 500 {
+		l.Logger.Errorf("too many user_ids, max allowed is 500, got: %d", len(userIds))
+		return nil, errors.WithCode(code.CodeInvalidParam, "too many user_ids, max allowed is 500")
+	}
+
 	// 2.1 去重，避免重复查询
 	userIds = lo.Uniq(userIds)
 

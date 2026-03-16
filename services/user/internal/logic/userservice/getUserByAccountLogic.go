@@ -126,14 +126,16 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 
 	// 2.1 如果缓存未命中，则查询数据库，仅查询 user_id 字段
 	tx := l.svcCtx.DB.Model(&pb.User{}).Where("account = ?", account).Pluck("user_id", &userId)
-	if tx.Error != nil && errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-		// 2.2 如果查询失败，并且是记录不存在，则返回用户不存在
-		l.Logger.Errorf("user not found in database by account: %s", account)
-		return 0, errors.WithCode(code.CodeUserNotFound, "user not found in database")
-	} else if tx.Error != nil {
-		// 2.3 如果查询失败，并且不是记录不存在，则返回数据库错误
+	if tx.Error != nil {
+		// 2.2 如果查询失败，则返回数据库错误
 		l.Logger.Errorf("query user in database failed: %v", tx.Error)
 		return 0, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
+	}
+
+	// 2.3 如果没有任何记录，或者 userId 仍为 0，则认为用户不存在
+	if tx.RowsAffected == 0 || userId == 0 {
+		l.Logger.Errorf("user not found in database by account: %s", account)
+		return 0, errors.WithCode(code.CodeUserNotFound, "user not found in database")
 	}
 
 	// 3.1 回写缓存
