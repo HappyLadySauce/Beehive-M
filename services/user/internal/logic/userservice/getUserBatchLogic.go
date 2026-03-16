@@ -61,68 +61,70 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 
 	// 3.3 查询缓存（MGet 对不存在的 key 返回 nil，不会返回 redis.Nil 错误）
 	values, err := l.svcCtx.Redis.MGet(l.ctx, keys...).Result()
-	if err != nil && errors.Is(err, redis.Nil) {
-		// 3.4 如果 Redis 返回 key 不存在，记日志，继续走数据库
+	if err == nil {
+		// 3.4 解析缓存命中的用户，记录遗漏的 user_id
+		for i, val := range values {
+			id := userIds[i]
+			if val == nil {
+				// 未命中缓存
+				missIds = append(missIds, id)
+				continue
+			}
+
+			strVal, ok := val.(string)
+			if !ok || strVal == "" {
+				// 类型异常或空字符串，当作未命中
+				missIds = append(missIds, id)
+				continue
+			}
+
+			var u pb.User
+			if err := json.Unmarshal([]byte(strVal), &u); err != nil {
+				// 与单查逻辑保持一致，解析失败直接报错
+				l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
+				return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
+			}
+			userMap[id] = &u
+		}
+
+		// 4.1 如果所有用户都在缓存中，则按入参顺序返回
+		if len(missIds) == 0 {
+			users := make([]*pb.User, 0, len(userIds))
+			for _, id := range userIds {
+				if u, ok := userMap[id]; ok {
+					users = append(users, u)
+				}
+			}
+			return &pb.GetUserBatchResponse{Users: users}, nil
+		}
+	} else if errors.Is(err, redis.Nil) {
+		// 3.5 如果 Redis 返回 key 不存在，记日志，继续走数据库
 		l.Logger.Infof("get user profile from redis failed: %v", err)
-	} else if err != nil {
-		// 3.5 如果 Redis 返回错误，记日志，返回缓存获取失败
+	} else {
+		// 3.6 如果 Redis 返回错误，记日志，返回缓存获取失败
 		l.Logger.Errorf("get user profile from redis failed: %v", err)
 		return nil, errors.WithCode(code.CodeCacheGetFailed, "get user profile from redis failed")
 	}
 
-	// 3.6 解析缓存命中的用户，记录遗漏的 user_id
-	for i, val := range values {
-		id := userIds[i]
-		if val == nil {
-			// 未命中缓存
-			missIds = append(missIds, id)
-			continue
-		}
-
-		strVal, ok := val.(string)
-		if !ok || strVal == "" {
-			// 类型异常或空字符串，当作未命中
-			missIds = append(missIds, id)
-			continue
-		}
-
-		var u pb.User
-		if err := json.Unmarshal([]byte(strVal), &u); err != nil {
-			// 与单查逻辑保持一致，解析失败直接报错
-			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
-			return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
-		}
-		userMap[id] = &u
-	}
-
-	// 4.1 如果所有用户都在缓存中，则按入参顺序返回
-	if len(missIds) == 0 {
-		users := make([]*pb.User, 0, len(userIds))
-		for _, id := range userIds {
-			if u, ok := userMap[id]; ok {
-				users = append(users, u)
-			}
-		}
-		return &pb.GetUserBatchResponse{Users: users}, nil
-	}
-
-	// 4.2 查询数据库中遗漏的用户
+	// 5.1 查询数据库中遗漏的用户
 	var dbUsers []*pb.User
 	tx := l.svcCtx.DB.Where("user_id IN ?", missIds).Find(&dbUsers)
 	if tx.Error != nil && errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-		// 所有遗漏的用户都不存在，继续返回已命中的部分
+		// 5.2 所有遗漏的用户都不存在，继续返回已命中的部分
 		l.Logger.Infof("some users not found in database, user_ids: %v", missIds)
 	} else if tx.Error != nil {
-		// 4.3 如果查询失败，并且不是记录不存在，则返回数据库错误
+		// 5.3 如果查询失败，并且不是记录不存在，则返回数据库错误
 		l.Logger.Errorf("query users in database failed: %v", tx.Error)
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query users in database failed")
 	}
 
-	// 4.3 将数据库中查到的用户写入 map，并回写缓存
+	// 6.1 将数据库中查到的用户写入 map，并回写缓存
 	for _, u := range dbUsers {
+		// 6.2 如果用户为 nil，则跳过
 		if u == nil {
 			continue
 		}
+		// 6.3 如果 user_id 为 0，则跳过
 		id := u.GetUserId()
 		if id == 0 {
 			continue
@@ -130,21 +132,26 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 
 		userMap[id] = u
 
-		// 回写缓存（与单查逻辑保持一致）
+		// 6.4 序列化用户
 		userBytes, err := json.Marshal(u)
 		if err != nil {
+			// 6.5 如果序列化失败，则返回序列化失败
 			l.Logger.Errorf("marshal user profile to json failed: %v", err)
 			return nil, errors.WithCode(code.CodeUnmarshalFailed, "marshal failed")
 		}
 
+		// 6.6 回写缓存
+		// key: user:profile:{id}
+		// value: user json
 		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", id), userBytes, 0).Err()
 		if err != nil {
+			// 6.7 如果回写缓存失败，则返回缓存错误
 			l.Logger.Errorf("set user profile to redis failed: %v", err)
 			return nil, errors.WithCode(code.CodeCacheSetFailed, "set user profile to cache failed")
 		}
 	}
 
-	// 5. 按照入参 user_ids 的顺序组装返回结果；未找到的用户直接跳过
+	// 7.1 按照入参 user_ids 的顺序组装返回结果；未找到的用户直接跳过
 	users := make([]*pb.User, 0, len(userIds))
 	for _, id := range userIds {
 		if u, ok := userMap[id]; ok {
@@ -152,5 +159,6 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		}
 	}
 
+	// 8. 返回结果
 	return &pb.GetUserBatchResponse{Users: users}, nil
 }
