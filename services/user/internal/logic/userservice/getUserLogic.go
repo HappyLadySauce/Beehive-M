@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
 	"github.com/HappyLadySauce/Beehive-M/pkg/code"
+	"github.com/HappyLadySauce/Beehive-M/services/user/internal/svc"
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/HappyLadySauce/errors"
 	"github.com/redis/go-redis/v9"
+	"github.com/zeromicro/go-zero/core/logx"
+	"gorm.io/gorm"
 )
 
 type GetUserLogic struct {
@@ -62,7 +63,7 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 	tx := l.svcCtx.DB.Where("user_id = ?", userId).First(&user)
 	if tx.Error != nil {
 		// 3.2 如果查询失败，并且是记录不存在，则返回用户不存在
-		if tx.RowsAffected == 0 {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			l.Logger.Errorf("user not found in database: %v", tx.Error)
 			return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
 		}

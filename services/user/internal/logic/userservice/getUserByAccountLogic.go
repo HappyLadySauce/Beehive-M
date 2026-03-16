@@ -10,8 +10,9 @@ import (
 	"github.com/HappyLadySauce/Beehive-M/services/user/pb"
 
 	"github.com/HappyLadySauce/errors"
-	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/redis/go-redis/v9"
+	"github.com/zeromicro/go-zero/core/logx"
+	"gorm.io/gorm"
 )
 
 type GetUserByAccountLogic struct {
@@ -68,7 +69,7 @@ func (l *GetUserByAccountLogic) GetUserByAccount(in *pb.GetUserByAccountRequest)
 	tx := l.svcCtx.DB.Where("user_id = ?", userId).First(&user)
 	if tx.Error != nil {
 		// 4.2 如果查询失败，并且是记录不存在，则返回用户不存在
-		if tx.RowsAffected == 0 {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			l.Logger.Errorf("user not found in database: %v", tx.Error)
 			return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
 		}
