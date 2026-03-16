@@ -5,6 +5,7 @@ go 1.26.1
 require (
 	github.com/HappyLadySauce/errors v0.0.0-20251208053748-926a88042146
 	github.com/redis/go-redis/v9 v9.17.3
+	github.com/samber/lo v1.53.0
 	github.com/zeromicro/go-zero v1.10.0
 	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
 	google.golang.org/grpc v1.65.0

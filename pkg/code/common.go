@@ -13,6 +13,8 @@ const (
 	CodeDBQueryFailed = 302
 	// 缓存错误
 	CodeCacheSetFailed = 303
+	// 缓存获取失败
+	CodeCacheGetFailed = 304
 	// 服务端错误
 	CodeInternal = 500
 )

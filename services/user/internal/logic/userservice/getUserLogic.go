@@ -45,10 +45,8 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 	// key: user:profile:{id}
 	// value: user json
 	userBytes, err := l.svcCtx.Redis.Get(l.ctx, fmt.Sprintf("user:profile:%d", userId)).Bytes()
-	// 2.2 如果 Redis 返回其他错误（非 key 不存在），记日志，继续走数据库
-	if err != nil && !errors.Is(err, redis.Nil) {
-		l.Logger.Infof("get user profile from redis failed: %v", err)
-	} else if err == nil && len(userBytes) > 0 {
+	// 2.2 如果 Redis 返回缓存命中，则直接返回
+	if err == nil && len(userBytes) > 0 {
 		// 2.3 如果缓存命中，则直接返回
 		if err := json.Unmarshal(userBytes, &user); err == nil {
 			return &pb.GetUserResponse{User: &user}, nil
@@ -57,16 +55,22 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 			l.Logger.Errorf("unmarshal user profile from redis failed: %v", err)
 			return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
 		}
+	} else if errors.Is(err, redis.Nil) {
+		// 2.4 如果 Redis 返回 key 不存在，记日志，继续走数据库
+		l.Logger.Infof("get user profile from redis failed: %v", err)
+	} else {
+		// 2.5 如果 Redis 返回其他错误，记日志，返回缓存获取失败
+		l.Logger.Errorf("get user profile from redis failed: %v", err)
+		return nil, errors.WithCode(code.CodeCacheGetFailed, "get user profile from redis failed")
 	}
 
 	// 3.1 如果缓存未命中，则查询数据库
 	tx := l.svcCtx.DB.Where("user_id = ?", userId).First(&user)
-	if tx.Error != nil {
+	if tx.Error != nil && errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 		// 3.2 如果查询失败，并且是记录不存在，则返回用户不存在
-		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			l.Logger.Errorf("user not found in database: %v", tx.Error)
-			return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
-		}
+		l.Logger.Errorf("user not found in database: %v", tx.Error)
+		return nil, errors.WithCode(code.CodeUserNotFound, "user not found in database")
+	} else if tx.Error != nil {
 		// 3.3 如果查询失败，并且不是记录不存在，则返回数据库错误
 		l.Logger.Errorf("query user in database failed: %v", tx.Error)
 		return nil, errors.WithCode(code.CodeDBQueryFailed, "query user in database failed")
@@ -74,19 +78,20 @@ func (l *GetUserLogic) GetUser(in *pb.GetUserRequest) (*pb.GetUserResponse, erro
 
 	// 4.1 回写缓存（传指针避免复制含 sync.Mutex 的 pb.User）
 	userBytes, err = json.Marshal(&user)
-	if err != nil {
-		// 4.2 如果序列化失败，则返回序列化失败
+	if err == nil && len(userBytes) > 0 {
+		// 4.2 如果序列化成功，则回写缓存
+		// key: user:profile:{id}
+		// value: user json
+		err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
+		if err != nil {
+			// 4.3 如果回写缓存失败，则返回缓存错误
+			l.Logger.Errorf("set user profile to redis failed: %v", err)
+			return nil, errors.WithCode(code.CodeCacheSetFailed, "set user profile to cache failed")
+		}
+	} else if err != nil {
+		// 4.4 如果序列化失败，则返回序列化失败
 		l.Logger.Errorf("marshal user profile to json failed: %v", err)
 		return nil, errors.WithCode(code.CodeUnmarshalFailed, "marshal failed")
-	}
-	// 4.3 如果序列化成功，则回写缓存
-	// key: user:profile:{id}
-	// value: user json
-	err = l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("user:profile:%d", userId), userBytes, 0).Err()
-	if err != nil {
-		// 4.4 如果回写缓存失败，则返回缓存错误
-		l.Logger.Errorf("set user profile to redis failed: %v", err)
-		return nil, errors.WithCode(code.CodeCacheSetFailed, "set user profile to cache failed")
 	}
 
 	// 5. 返回用户信息
