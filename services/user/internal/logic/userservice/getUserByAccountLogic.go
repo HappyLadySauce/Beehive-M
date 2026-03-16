@@ -113,8 +113,8 @@ func (l *GetUserByAccountLogic) getUserIdByAccount(account string) (int64, error
 		return userId, nil
 	}
 
-	// 2.1 如果缓存未命中，则查询数据库
-	err = l.svcCtx.DB.Where("account = ?", account).Select("user_id").First(&userId).Error
+	// 2.1 如果缓存未命中，则查询数据库，仅查询 user_id 字段
+	err = l.svcCtx.DB.Model(&pb.User{}).Where("account = ?", account).Pluck("user_id", &userId).Error
 	if err != nil {
 		// 2.2 如果查询失败，并且是记录不存在，则返回用户不存在
 		if errors.Is(err, gorm.ErrRecordNotFound) {
