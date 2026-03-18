@@ -92,7 +92,7 @@ func (l *GetUserBatchLogic) GetUserBatch(in *pb.GetUserBatchRequest) (*pb.GetUse
 		}
 		userMap[id] = &u
 	}
- 
+	
 	if len(missIds) != 0 {
 		// 5.1 查询数据库中遗漏的用户
 		var dbUsers []*model.User

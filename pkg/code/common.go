@@ -18,3 +18,15 @@ const (
 	// 服务端错误
 	CodeInternal = 500
 )
+
+// 分布式锁相关错误
+const (
+	// 分布式锁获取失败
+	CodeDistributedLockGetFailed = 305
+	// 分布式锁释放失败
+	CodeDistributedLockUnlockFailed = 306
+	// 分布式锁已存在
+	CodeDistributedLockAlreadyExists = 307
+	// 分布式锁获取超时
+	CodeDistributedLockGetTimeout = 308
+)

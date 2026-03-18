@@ -25,7 +25,5 @@ func NewWsEntryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *WsEntryLo
 }
 
 func (l *WsEntryLogic) WsEntry() error {
-	// todo: add your logic here and delete this line
-
 	return nil
 }
