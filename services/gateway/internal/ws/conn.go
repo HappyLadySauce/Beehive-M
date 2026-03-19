@@ -20,243 +20,339 @@ import (
 )
 
 const (
-	lockKeyPrefix = "ws:lock:"
-	connKeyPrefix = "ws:conn:"
+	lockKeyPrefix    = "ws:lock:"
+	connKeyPrefix    = "ws:conn:"
 	userDevKeyPrefix = "ws:u:d:"
+
+	connTTL = 24 * time.Hour
 )
 
-// 定义 Connection 表示单条 WebSocket 连接，用于管理单条连接的上下文信息
+// Connection 表示单条 WebSocket 连接
 type Connection struct {
-	// 上下文
-	ctx context.Context
-	// 连接ID
-	ConnID string
-	// 用户ID
-	UserID string
-	// 设备ID
-	DeviceID string
-	// 网关ID
+	ConnID    string
+	UserID    string
+	DeviceID  string
 	GatewayID string
-	// 连接
-	conn *websocket.Conn
-	// 写锁
-	writeMu sync.Mutex
+	conn      *websocket.Conn
+	writeMu   sync.Mutex
+
+	ctx    context.Context
+	cancel context.CancelFunc
 }
 
-// redis 中存储的连接信息
+// Context 返回连接的 context，用于监听连接关闭事件
+func (c *Connection) Context() context.Context {
+	return c.ctx
+}
+
+// RawConn 返回底层的 WebSocket 连接，用于设置读写参数
+// 注意：不要直接操作 RawConn，应该通过 Connection 的方法
+func (c *Connection) RawConn() *websocket.Conn {
+	return c.conn
+}
+
+// ConnectionInfo 是存储在 Redis 中的连接元数据
 type ConnectionInfo struct {
 	ConnID    string `json:"connId"`
 	UserID    string `json:"userId"`
 	DeviceID  string `json:"deviceId"`
 	GatewayID string `json:"gatewayId"`
-	Status    string `json:"status"` // "online" 在线 "closing" 已关闭
+	Status    string `json:"status"` // "online" | "closing"
 }
 
-// 定义 Hub 用于管理当前进程所有 WebSocket 连接，用于分配 ConnID 与 Connection 的映射关系
+// Hub 管理当前进程所有 WebSocket 连接
 type Hub struct {
-	// 上下文
-	ctx context.Context
-	// 网关ID
 	gatewayID string
-	// 连接
-	conns map[string]*Connection // ConnID 与 Connection 的映射关系
-	// 读写锁
-	mu sync.RWMutex
-	// Redis 客户端
-	rdb redis.Client
-	// 分布式锁
-	rs *redsync.Redsync
-	// 日志记录器
+	conns     map[string]*Connection
+	mu        sync.RWMutex
+	rdb       *redis.Client // 修复：使用指针类型
+	rs        *redsync.Redsync
 	logx.Logger
+
+	ctx       context.Context
+	cancel 	  context.CancelFunc
+
+	// 跨网关关闭回调：当发现旧连接在其他网关时调用，由外部注入
+	// 参数：旧连接信息；实现者负责通过 MQ 发送 close 指令
+	OnRemoteClose func(info ConnectionInfo)
 }
 
-// NewHub 创建连接管理器，gatewayID 用于多实例部署时区分本实例。
+// NewHub 创建连接管理器，gatewayID 为空时自动生成。
 func NewHub(gatewayID string, cfg config.Config) (*Hub, error) {
-	// 生成网关ID
 	if gatewayID == "" {
 		gatewayID = "gateway-" + uuid.Must(uuid.NewRandom()).String()
 	}
 
-	// 创建 redis 客户端
+	ctx, cancel := context.WithCancel(context.Background())
+
 	client := redis.NewClient(&redis.Options{
 		Addr:     cfg.RedisHost,
 		Password: cfg.RedisPass,
 		DB:       cfg.RedisDB,
 	})
-	// 测试连接
-	_, err := client.Ping(context.Background()).Result()
-	if err != nil {
+	if _, err := client.Ping(context.Background()).Result(); err != nil {
 		return nil, fmt.Errorf("failed to connect to Redis: %w", err)
 	}
-	// 创建 redsync 实例
+
 	pool := goredis.NewPool(client)
 	rs := redsync.New(pool)
 
 	return &Hub{
-		ctx:       context.Background(),
-		gatewayID:  gatewayID,
-		conns:      make(map[string]*Connection),
-		rs:  rs,
-		Logger:	logx.WithContext(context.Background()),
+		ctx:       ctx,
+		cancel:	  cancel,
+		gatewayID: gatewayID,
+		conns:     make(map[string]*Connection),
+		rdb:       client, // 修复：赋值 Redis 客户端
+		rs:        rs,
+		Logger:    logx.WithContext(ctx),
 	}, nil
 }
 
-// Close 关闭连接管理器
-func (h *Hub) Close() []error {
+// GatewayID 返回当前网关 ID（供 MQ 订阅时使用）
+func (h *Hub) GatewayID() string {
+	return h.gatewayID
+}
+
+// Context 返回 Hub 的 context，用于监听 Hub 关闭事件
+func (h *Hub) Context() context.Context {
+	return h.ctx
+}
+
+// Close 关闭 Hub，断开所有连接并释放 Redis 客户端
+// 返回所有关闭过程中的错误（使用 Go 1.20+ 的 errors.Join 合并）
+func (h *Hub) Close() error {
+	h.cancel()
+		
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	var closeErrs []error
-
-	// 关闭所有连接
+	var errs []error
 	for connID, conn := range h.conns {
-		if err := conn.Close(); err != nil {
-			closeErrs = append(closeErrs, errors.Wrap(err, "failed to close connection"))
+		if err := conn.closeConn(); err != nil {
+			errs = append(errs, fmt.Errorf("close conn %s: %w", connID, err))
 		}
 		delete(h.conns, connID)
 	}
 
-	// 关闭 Redis 客户端
 	if err := h.rdb.Close(); err != nil {
-		closeErrs = append(closeErrs, errors.Wrap(err, "failed to close Redis client"))
+		errs = append(errs, fmt.Errorf("close redis: %w", err))
 	}
 
-	return closeErrs
+	if len(errs) == 0 {
+		return nil
+	}
+	// errors.Join 将多个错误合并为一个
+	// 使用 errors.Is / errors.As 可以逐个检查
+	return errors.Join(errs...)
 }
 
-// Close 关闭连接
-func (c *Connection) Close() error {
-	// 连接信息
-	info := fmt.Sprintf("connID: %s, userID: %s, deviceID: %s, gatewayID: %s",
-		c.ConnID, c.UserID, c.DeviceID, c.GatewayID)
+// closeConn 关闭底层 WebSocket（内部使用，调用方需持有 writeMu 或确保安全）
+func (c *Connection) closeConn() error {
 	c.writeMu.Lock()
 	defer c.writeMu.Unlock()
 	if c.conn != nil {
+		// 发送 CloseFrame 给客户端
+		_ = c.conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 		err := c.conn.Close()
-		if err != nil {
-			return errors.Wrap(err, "failed to close WebSocket connection: "+info)
-		}
 		c.conn = nil
+		return err
 	}
 	return nil
 }
 
-// Register 将已升级的 WebSocket 注册到 Hub，返回带 ConnID 的 Connection。
-func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connection, error) {
-	connID := "connID:" + userID + "-" + deviceID
+// Close 关闭连接（对外暴露）
+// 会取消 context、关闭底层 WebSocket，通知所有监听该连接的 goroutine 退出
+func (c *Connection) Close() error {
+	// 先取消 context，通知所有依赖此连接的 goroutine 退出
+	c.cancel()
 
-	// 获取分布式锁
+	info := fmt.Sprintf("connID=%s userID=%s deviceID=%s gatewayID=%s",
+		c.ConnID, c.UserID, c.DeviceID, c.GatewayID)
+	if err := c.closeConn(); err != nil {
+		return errors.Wrapf(err, "failed to close WebSocket connection: %s", info)
+	}
+	return nil
+}
+
+// connKey 生成 Redis 连接 key，使用 ":" 分隔避免 userID/deviceID 拼接碰撞
+func connKey(userID, deviceID string) string {
+	return connKeyPrefix + userID + ":" + deviceID
+}
+
+// userDevKey 生成 user-device 映射 key
+func userDevKey(userID, deviceID string) string {
+	return userDevKeyPrefix + userID + ":" + deviceID
+}
+
+// Register 将已升级的 WebSocket 注册到 Hub，返回带 ConnID 的 Connection。
+// 若同一 user+device 已有旧连接：
+//   - 旧连接在本网关 → 直接关闭
+//   - 旧连接在其他网关 → 触发 OnRemoteClose 回调（由调用方通过 MQ 通知）
+func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connection, error) {
+	// connID 格式：userID:deviceID，与 Redis key 保持一致
+	connID := userID + ":" + deviceID
+	redisConnKey := connKey(userID, deviceID)
+	redisUserDevKey := userDevKey(userID, deviceID)
+
+	// 获取分布式锁，防止同一 connID 并发注册
 	mutex := h.rs.NewMutex(lockKeyPrefix + connID)
-	
 	if err := mutex.Lock(); err != nil {
-		h.Logger.Errorf("failed to lock connection: %v", connID)
-		return nil, errors.WithCode(code.CodeDistributedLockGetFailed, "failed to lock connection")
+		h.Logger.Errorf("failed to acquire lock for connID=%s: %v", connID, err)
+		return nil, errors.WithCode(code.CodeDistributedLockGetFailed, "failed to acquire distributed lock")
 	}
 	defer mutex.Unlock()
 
-	var oldConnInfo ConnectionInfo
-	// 获取 Redis 中旧连接信息 并将其关闭
-	if val, err := h.rdb.Get(h.ctx, connKeyPrefix + connID).Result(); err == nil && val != "" {
-		// 如果连接存在 删除旧连接
-		if err := json.Unmarshal([]byte(val), &oldConnInfo); err != nil {
+	// 查询 Redis 中是否存在旧连接
+	val, err := h.rdb.Get(h.ctx, redisConnKey).Result()
+	if err != nil && err != redis.Nil {
+		h.Logger.Errorf("get connectionInfo from redis failed, connID=%s: %v", connID, err)
+		return nil, errors.WithCode(code.CodeCacheGetFailed, "get connectionInfo from redis failed")
+	}
+
+	if err == nil && val != "" {
+		// 修复：err == nil 表示成功读取，才进行 Unmarshal
+		var oldConnInfo ConnectionInfo
+		if unmarshalErr := json.Unmarshal([]byte(val), &oldConnInfo); unmarshalErr != nil {
+			h.Logger.Errorf("unmarshal connectionInfo failed, connID=%s: %v", connID, unmarshalErr)
+			// 数据损坏，直接清理
+		} else {
 			if oldConnInfo.GatewayID != h.gatewayID {
-				// 通过消息队列向 gateway 频道发送关闭消息
+				// 旧连接在其他网关，通过回调触发 MQ 通知
+				if h.OnRemoteClose != nil {
+					h.OnRemoteClose(oldConnInfo)
+				}
 			} else {
-				// 如果旧连接在当前网关 直接关闭
+				// 旧连接在本网关，直接关闭
 				h.mu.RLock()
 				if oldConn, exists := h.conns[connID]; exists {
-					oldConn.Close()
+					if closeErr := oldConn.Close(); closeErr != nil {
+						h.Logger.Errorf("close old local conn failed, connID=%s: %v", connID, closeErr)
+					}
 				}
 				h.mu.RUnlock()
 			}
-			// 删除旧连接
-			h.rdb.Del(h.ctx, connKeyPrefix + connID)
-
-			// 删除用户 - 设备映射
-			h.rdb.Del(h.ctx, userDevKeyPrefix + userID + deviceID)
-		} else {
-			h.Logger.Errorf("nmarshal connctionInfo from redis failed: %v", err)
-			return nil, errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
 		}
-	} else if err == nil && val == "" {
-		h.Logger.Info("connctionInfo: %v from redis is nil", connID)
-		// 删除旧连接
-		h.rdb.Del(h.ctx, connKeyPrefix + connID)
-		// 删除用户 - 设备映射
-		h.rdb.Del(h.ctx, userDevKeyPrefix + userID + deviceID)
-	} else {
-		h.Logger.Errorf("get connctionInfo from redis failed: %v", err)
-		return nil, errors.WithCode(code.CodeCacheGetFailed, "get connctionInfo from redis failed")
+		// 清理旧 Redis 记录
+		h.rdb.Del(h.ctx, redisConnKey, redisUserDevKey)
 	}
 
-	// 定义连接信息
-	connInfo := ConnectionInfo{
+	// 构建新连接信息并写入 Redis（使用 Set 而非 SetNX，因为旧 key 已删除）
+	newConnInfo := ConnectionInfo{
 		ConnID:    connID,
 		UserID:    userID,
 		DeviceID:  deviceID,
 		GatewayID: h.gatewayID,
 		Status:    "online",
 	}
-
-	// 转换连接信息 并存入 redis
-	if data, err := json.Marshal(connInfo); err == nil {
-		// 将 connectionInfo 存入 redis
-		if err := h.rdb.SetNX(h.ctx, connKeyPrefix + connID, data, 24 * time.Hour).Err(); err != nil {
-			h.Logger.Errorf("set connectionInfo to redis failed: %v", err)
-			return nil, errors.WithCode(code.CodeCacheSetFailed, "set connectionInfo to redis failed")
-		}
-
-		// 将 user-dev 映射存入
-		if err := h.rdb.SetNX(h.ctx, userDevKeyPrefix + userID + deviceID, connID, 24 * time.Hour).Err(); err != nil {
-			h.Logger.Errorf("set user-dev to redis failed: %v", err)
-			return nil, errors.WithCode(code.CodeCacheSetFailed, "set user-dev to redis failed")
-		}
+	data, err := json.Marshal(newConnInfo)
+	if err != nil {
+		h.Logger.Errorf("marshal connectionInfo failed, connID=%s: %v", connID, err)
+		return nil, errors.WithCode(code.CodeMarshalFailed, "marshal connectionInfo failed")
 	}
 
-	// 创建新连接
+	pipe := h.rdb.Pipeline()
+	pipe.Set(h.ctx, redisConnKey, data, connTTL)
+	pipe.Set(h.ctx, redisUserDevKey, connID, connTTL)
+	if _, err := pipe.Exec(h.ctx); err != nil {
+		h.Logger.Errorf("write connectionInfo to redis failed, connID=%s: %v", connID, err)
+		return nil, errors.WithCode(code.CodeCacheSetFailed, "write connectionInfo to redis failed")
+	}
+
+
+	// 继承 Hub 的 context，这样 Hub 关闭时所有连接也会收到信号
+	ctx, cancel := context.WithCancel(h.ctx)
+
 	newConn := &Connection{
-		ctx:       h.ctx,
+		ctx:       ctx,
+		cancel:    cancel,
 		ConnID:    connID,
 		UserID:    userID,
 		DeviceID:  deviceID,
 		GatewayID: h.gatewayID,
 		conn:      conn,
-		writeMu:   sync.Mutex{},
 	}
-	
-	// 保存到本地连接池
+
 	h.mu.Lock()
 	h.conns[connID] = newConn
 	h.mu.Unlock()
 
-	// 启动 gateway 消息队列
-
-	// 返回连接
+	h.Logger.Infof("connection registered: connID=%s gatewayID=%s", connID, h.gatewayID)
 	return newConn, nil
 }
 
-// 注销 Websocket 连接
+// Deregister 注销 WebSocket 连接，清理本地和 Redis 记录
+// 会先关闭连接再清理记录
 func (h *Hub) Deregister(connID string) error {
+	// 先从本地 map 删除并关闭连接
 	h.mu.Lock()
-	delete(h.conns, connID)
+	if conn, exists := h.conns[connID]; exists {
+		_ = conn.Close()
+		delete(h.conns, connID)
+	}
 	h.mu.Unlock()
 
-	var connInfo ConnectionInfo
-	// 从 redis 删除 connectionInfo
-	if val, err := h.rdb.Get(h.ctx, connKeyPrefix + connID).Result(); err != nil {
-		if err := json.Unmarshal([]byte(val), &connInfo); err == nil {
-			// 删除 redis connectionInfo
-			h.rdb.Del(h.ctx, connKeyPrefix + connID)
-			// 删除 user-dev 映射
-			h.rdb.Del(h.ctx, userDevKeyPrefix + connInfo.UserID + connInfo.DeviceID)
-		} else {
-			h.Logger.Errorf("unmarshal connectionInfo from redis failed: %v", err)
-			return errors.WithCode(code.CodeUnmarshalFailed, "unmarshal failed")
-		}
-		
+	// 从 Redis 删除 connectionInfo
+	val, err := h.rdb.Get(h.ctx, connKeyPrefix+connID).Result()
+	if err == redis.Nil {
+		// key 不存在，已清理，忽略
+		return nil
+	}
+	if err != nil {
+		h.Logger.Errorf("get connectionInfo from redis failed, connID=%s: %v", connID, err)
+		return errors.WithCode(code.CodeCacheGetFailed, "get connectionInfo from redis failed")
 	}
 
+	var connInfo ConnectionInfo
+	if err := json.Unmarshal([]byte(val), &connInfo); err != nil {
+		h.Logger.Errorf("unmarshal connectionInfo failed, connID=%s: %v", connID, err)
+		// 数据损坏，强制删除
+		h.rdb.Del(h.ctx, connKeyPrefix+connID)
+		return errors.WithCode(code.CodeUnmarshalFailed, "unmarshal connectionInfo failed")
+	}
+
+	pipe := h.rdb.Pipeline()
+	pipe.Del(h.ctx, connKeyPrefix+connID)
+	pipe.Del(h.ctx, userDevKey(connInfo.UserID, connInfo.DeviceID))
+	if _, err := pipe.Exec(h.ctx); err != nil {
+		h.Logger.Errorf("delete connectionInfo from redis failed, connID=%s: %v", connID, err)
+		return errors.WithCode(code.CodeCacheDeleteFailed, "delete connectionInfo from redis failed")
+	}
+
+	h.Logger.Infof("connection deregistered: connID=%s", connID)
 	return nil
 }
 
+// GetConn 根据 connID 获取本地连接（不存在返回 nil）
+func (h *Hub) GetConn(connID string) *Connection {
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+	return h.conns[connID]
+}
 
+// SendToConn 向指定 connID 的本地连接发送消息
+func (h *Hub) SendToConn(connID string, msg []byte) error {
+	conn := h.GetConn(connID)
+	if conn == nil {
+		return errors.WithCode(code.CodeCacheGetFailed, "connection not found: %s", connID)
+	}
+	return conn.WriteMessage(msg)
+}
+
+// WriteMessage 线程安全地向 WebSocket 写入消息
+// 如果连接已关闭或 context 已取消，返回错误
+func (c *Connection) WriteMessage(msg []byte) error {
+	c.writeMu.Lock()
+	defer c.writeMu.Unlock()
+
+	// 检查 context 是否已取消
+	select {
+	case <-c.ctx.Done():
+		return errors.WithCode(code.CodeCacheGetFailed, "connection context canceled")
+	default:
+	}
+
+	if c.conn == nil {
+		return errors.WithCode(code.CodeCacheGetFailed, "connection already closed")
+	}
+	return c.conn.WriteMessage(websocket.TextMessage, msg)
+}

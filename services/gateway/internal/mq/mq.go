@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/HappyLadySauce/Beehive-M/pkg/code"
@@ -14,8 +15,17 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+const (
+	exchangeName    = "gateway_exchange"
+	exchangeType    = "direct"
+
+	reconnectDelay  = 3 * time.Second
+	publishTimeout  = 5 * time.Second
+)
+
+// Message 是网关间通信的消息结构
 type Message struct {
-	Action	string `json:"action"`
+	Action    string                 `json:"action"`
 	ConnID    string                 `json:"connId"`
 	UserID    string                 `json:"userId"`
 	DeviceID  string                 `json:"deviceId"`
@@ -25,220 +35,267 @@ type Message struct {
 	Data      map[string]interface{} `json:"data,omitempty"`
 }
 
-// MQ RabbitMQ 客户端
+// MQ RabbitMQ 客户端，支持断线重连
 type MQ struct {
+	url    string
+	mu     sync.RWMutex
 	conn    *amqp.Connection
 	channel *amqp.Channel
 	logger  logx.Logger
+
+	ctx    context.Context
+	cancel context.CancelFunc
 }
 
+// NewMQ 创建 MQ 客户端并建立连接
 func NewMQ(cfg config.Config) (*MQ, error) {
-	conn, err := amqp.Dial(cfg.RabbitMQURL)
+	ctx, cancel := context.WithCancel(context.Background())
+	m := &MQ{
+		url:    cfg.RabbitMQURL,
+		logger: logx.WithContext(ctx),
+		ctx:    ctx,
+		cancel: cancel,
+	}
+
+	if err := m.connect(); err != nil {
+		cancel()
+		return nil, err
+	}
+
+	// 启动后台重连 goroutine
+	go m.watchReconnect()
+
+	return m, nil
+}
+
+// connect 建立 AMQP 连接并声明 exchange
+func (m *MQ) connect() error {
+	conn, err := amqp.Dial(m.url)
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to RabbitMQ: %w", err)
+		return fmt.Errorf("failed to connect to RabbitMQ: %w", err)
 	}
 
-	channel, err := conn.Channel()
+	ch, err := conn.Channel()
 	if err != nil {
 		conn.Close()
-		return nil, fmt.Errorf("failed to open channel: %w", err)
+		return fmt.Errorf("failed to open channel: %w", err)
 	}
 
-	// 声明交换机
-	if err := channel.ExchangeDeclare(
-		"gateway_exchange",		// 交换机名称
-		"direct",       // 类型
-		true,           // 持久化
-		false,          // 自动删除
-		false,          // 内部
-		false,          // 不等待
-		nil,            // 参数
-	); err != nil {
-		channel.Close()
-		conn.Close()
-		return nil, fmt.Errorf("failed to declare exchange: %w", err)
-	}
-
-	// 声明队列
-	if _, err := channel.QueueDeclare(
-		"gateway_queue", // 队列名称
-		true,      // 持久化
-		false,     // 自动删除
-		false,     // 排他
-		false,     // 不等待
-		nil,       // 参数
-	); err != nil {
-		channel.Close()
-		conn.Close()
-		return nil, fmt.Errorf("failed to declare queue: %w", err)
-	}
-
-	// 绑定队列到交换机
-	if err := channel.QueueBind(
-		"gateway_queue",			// 队列名称
-		"gateway_event",	// 路由键
-		"gateway_exchange",			// 交换机名称
-		false,
+	// 声明 direct 交换机（幂等，多次声明安全）
+	if err := ch.ExchangeDeclare(
+		exchangeName,
+		exchangeType,
+		true,  // durable
+		false, // auto-delete
+		false, // internal
+		false, // no-wait
 		nil,
 	); err != nil {
-		channel.Close()
+		ch.Close()
 		conn.Close()
-		return nil, fmt.Errorf("failed to bind queue: %w", err)
+		return fmt.Errorf("failed to declare exchange: %w", err)
 	}
 
-	return &MQ{
-		conn: conn,
-		channel: channel,
-		logger:	logx.WithContext(context.Background()),
-	}, nil
+	m.mu.Lock()
+	m.conn = conn
+	m.channel = ch
+	m.mu.Unlock()
+
+	m.logger.Infof("RabbitMQ connected: %s", m.url)
+	return nil
 }
 
-func (m *MQ) Close() error {
-	if m.channel != nil {
-		if err := m.channel.Close(); err != nil {
-			m.logger.Errorf("failed to close channel: %v", err)
+// watchReconnect 监听连接关闭事件，自动重连
+func (m *MQ) watchReconnect() {
+	for {
+		m.mu.RLock()
+		conn := m.conn
+		m.mu.RUnlock()
+
+		if conn == nil {
+			return
 		}
+
+		// 阻塞等待连接关闭通知
+		reason, ok := <-conn.NotifyClose(make(chan *amqp.Error, 1))
+		if !ok {
+			// 连接被主动关闭（调用了 Close()），退出
+			return
+		}
+		m.logger.Errorf("RabbitMQ connection closed, reason: %v, reconnecting...", reason)
+
+		// 退避重连
+		for {
+			select {
+			case <-m.ctx.Done():
+				return
+			case <-time.After(reconnectDelay):
+			}
+
+			if err := m.connect(); err != nil {
+				m.logger.Errorf("RabbitMQ reconnect failed: %v, retrying in %s", err, reconnectDelay)
+				continue
+			}
+			m.logger.Info("RabbitMQ reconnected successfully")
+			break
+		}
+	}
+}
+
+// Close 关闭 MQ 客户端
+func (m *MQ) Close() error {
+	m.cancel() // 通知 watchReconnect 退出
+
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if m.channel != nil {
+		m.channel.Close()
+		m.channel = nil
 	}
 	if m.conn != nil {
 		if err := m.conn.Close(); err != nil {
-			m.logger.Errorf("failed to close connection: %v", err)
+			return fmt.Errorf("close RabbitMQ connection: %w", err)
 		}
+		m.conn = nil
 	}
 	return nil
 }
 
-// Publish 发布消息
+// channel 安全获取当前 channel
+func (m *MQ) getChannel() *amqp.Channel {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	return m.channel
+}
+
+// Publish 向指定 routingKey 发布消息
 func (m *MQ) Publish(routingKey string, msg *Message) error {
+	msg.Timestamp = time.Now().UnixMilli()
+
 	data, err := json.Marshal(msg)
 	if err != nil {
-		m.logger.Errorf("failed to marshal message: %w", err)
 		return errors.WithCode(code.CodeMarshalFailed, "failed to marshal message")
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
+	ch := m.getChannel()
+	if ch == nil {
+		return errors.WithCode(code.CodeMQPushFailed, "channel not available, reconnecting")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), publishTimeout)
 	defer cancel()
 
-	if err := m.channel.PublishWithContext(
+	if err := ch.PublishWithContext(
 		ctx,
-		"gateway_exchange",	// 交换机
-		routingKey,			// 路由键
-		false,				// 强制
-		false,				// 立即
+		exchangeName,
+		routingKey,
+		false, // mandatory
+		false, // immediate
 		amqp.Publishing{
-			ContentType: "application/json",
-			DeliveryMode: amqp.Persistent,	// 持久化消息
-			Timestamp: time.Now(),
-			Body: data,
+			ContentType:  "application/json",
+			DeliveryMode: amqp.Persistent,
+			Timestamp:    time.Now(),
+			Body:         data,
 		},
 	); err != nil {
-		m.logger.Errorf("failed to publish message: %w", err)
+		m.logger.Errorf("failed to publish message to routingKey=%s: %v", routingKey, err)
 		return errors.WithCode(code.CodeMQPushFailed, "failed to publish message")
 	}
 
 	return nil
 }
 
-// Subscribe 订阅消息
-func (m *MQ) Subscribe(queueName, routingKey string) (<- chan *Message, error) {
-	// 确保队列存在
-	if _, err := m.channel.QueueDeclare(
-		queueName,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	); err != nil {
-		m.logger.Errorf("failed to declare queue: %w", err)
-		return nil, errors.WithCode(code.CodeMQDeclareFailed, "failed to declare queue")
+// SubscribeGateway 为当前网关实例订阅专属队列。
+//
+// 每个网关实例使用独立队列（queueName 通常为 "gateway.{gatewayID}"），
+// 绑定到 exchangeName，routingKey 为 gatewayID，
+// 这样 Publish 时指定 routingKey=gatewayID 即可精准投递到目标网关。
+//
+// 返回的 chan 会在连接断开或 ctx 取消时关闭。
+func (m *MQ) SubscribeGateway(ctx context.Context, queueName, routingKey string) (<-chan *Message, error) {
+	ch := m.getChannel()
+	if ch == nil {
+		return nil, errors.WithCode(code.CodeMQConsumeFailed, "channel not available")
 	}
 
-	// 绑定队列
-	if err := m.channel.QueueBind(
+	// 声明专属队列（exclusive=false 允许重连后重新消费；auto-delete=true 断开后自动删除）
+	if _, err := ch.QueueDeclare(
+		queueName,
+		false, // durable：网关重启后重新订阅，无需持久化
+		true,  // auto-delete：所有消费者断开后自动删除
+		false, // exclusive
+		false, // no-wait
+		nil,
+	); err != nil {
+		return nil, errors.WithCode(code.CodeMQDeclareFailed, "failed to declare queue: "+queueName)
+	}
+
+	if err := ch.QueueBind(
 		queueName,
 		routingKey,
-		"gateway_exchange",
+		exchangeName,
 		false,
 		nil,
 	); err != nil {
-		m.logger.Errorf("failed to bind queue: %w", err)
-		return nil, errors.WithCode(code.CodeMQBindQueueFailed, "failed to bind queue")	
+		return nil, errors.WithCode(code.CodeMQBindQueueFailed, "failed to bind queue: "+queueName)
 	}
 
-	// 设置 QoS
-	if err := m.channel.Qos(
-		1,     // prefetch count
-		0,     // prefetch size
-		false, // global
-	); err != nil {
-		m.logger.Errorf("failed to set Qos: %w", err)
-		return nil, errors.WithCode(code.CodeMQSetQosFailed, "failed to set Qos")	
+	// 每次只处理一条消息，避免消息积压
+	if err := ch.Qos(1, 0, false); err != nil {
+		return nil, errors.WithCode(code.CodeMQSetQosFailed, "failed to set QoS")
 	}
-	
-	msgs, err := m.channel.Consume(
+
+	deliveries, err := ch.Consume(
 		queueName,
-		"",
-		false,	// auto-ack
-		false,	// exclusive
-		false,	// no-local
-		false,	// no-wait
+		"",    // consumer tag，空则自动生成
+		false, // auto-ack：手动 ack 保证可靠性
+		false, // exclusive
+		false, // no-local
+		false, // no-wait
 		nil,
 	)
 	if err != nil {
-		m.logger.Errorf("failed to consume messages: %w", err)
-		return nil, errors.WithCode(code.CodeMQConsumeFailed, "failed to consume messages")
+		return nil, errors.WithCode(code.CodeMQConsumeFailed, "failed to start consuming: "+queueName)
 	}
 
-	messageChan := make(chan *Message, 100)
+	out := make(chan *Message, 64)
 
 	go func() {
-		defer close(messageChan)
-		for d := range msgs {
-			var msg Message
-			if err := json.Unmarshal(d.Body, &msg); err != nil {
-				m.logger.Errorf("failed to unmarshal message: %v", err)
-				d.Nack(false, true)
-				continue
-			}
-
+		defer close(out)
+		for {
 			select {
-			case messageChan <- &msg:
-				d.Ack(false)
-			default:
-				m.logger.Errorf("message channel full, dropping message: %s", msg.ConnID)
-				d.Nack(false, false) // 丢弃消息		
+			case <-ctx.Done():
+				return
+			case d, ok := <-deliveries:
+				if !ok {
+					// channel 被关闭（连接断开），退出等待重连
+					m.logger.Errorf("delivery channel closed for queue=%s", queueName)
+					return
+				}
+
+				var msg Message
+				if err := json.Unmarshal(d.Body, &msg); err != nil {
+					m.logger.Errorf("unmarshal message failed, queue=%s: %v", queueName, err)
+					d.Nack(false, false) // 解析失败，丢弃（避免死循环）
+					continue
+				}
+
+				select {
+				case out <- &msg:
+					d.Ack(false)
+				case <-ctx.Done():
+					d.Nack(false, true) // 重新入队
+					return
+				default:
+					// 消费者处理太慢，消息重新入队
+					m.logger.Errorf("message channel full, requeue message connID=%s", msg.ConnID)
+					d.Nack(false, true)
+				}
 			}
 		}
 	}()
 
-	return messageChan, nil
+	m.logger.Infof("subscribed queue=%s routingKey=%s", queueName, routingKey)
+	return out, nil
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

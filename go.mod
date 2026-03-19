@@ -3,7 +3,7 @@ module github.com/HappyLadySauce/Beehive-M
 go 1.26.1
 
 require (
-	github.com/HappyLadySauce/errors v0.0.0-20251208053748-926a88042146
+	github.com/HappyLadySauce/errors v0.0.0-20260319114128-bb6524be1dcd
 	github.com/go-redsync/redsync/v4 v4.16.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3

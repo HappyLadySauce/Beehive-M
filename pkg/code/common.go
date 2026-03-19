@@ -17,6 +17,8 @@ const (
 	CodeCacheSetFailed = 304
 	// 缓存获取失败
 	CodeCacheGetFailed = 305
+	// 缓存删除失败
+	CodeCacheDeleteFailed = 306
 	// 服务端错误
 	CodeInternal = 500
 )
