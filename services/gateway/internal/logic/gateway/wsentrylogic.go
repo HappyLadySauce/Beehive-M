@@ -27,3 +27,4 @@ func NewWsEntryLogic(ctx context.Context, svcCtx *svc.ServiceContext) *WsEntryLo
 func (l *WsEntryLogic) WsEntry() error {
 	return nil
 }
+
