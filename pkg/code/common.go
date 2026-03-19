@@ -8,13 +8,15 @@ const (
 	// 请求/参数错误
 	CodeInvalidParam = 300
 	// 解析失败
-	CodeUnmarshalFailed = 301
+	CodeUnmarshalFailed = 302
+	// Marshal 失败
+	CodeMarshalFailed = 301
 	// 数据库错误
-	CodeDBQueryFailed = 302
+	CodeDBQueryFailed = 303
 	// 缓存错误
-	CodeCacheSetFailed = 303
+	CodeCacheSetFailed = 304
 	// 缓存获取失败
-	CodeCacheGetFailed = 304
+	CodeCacheGetFailed = 305
 	// 服务端错误
 	CodeInternal = 500
 )
@@ -22,11 +24,20 @@ const (
 // 分布式锁相关错误
 const (
 	// 分布式锁获取失败
-	CodeDistributedLockGetFailed = 305
+	CodeDistributedLockGetFailed = 343
 	// 分布式锁释放失败
-	CodeDistributedLockUnlockFailed = 306
+	CodeDistributedLockUnlockFailed = 344
 	// 分布式锁已存在
-	CodeDistributedLockAlreadyExists = 307
+	CodeDistributedLockAlreadyExists = 341
 	// 分布式锁获取超时
-	CodeDistributedLockGetTimeout = 308
+	CodeDistributedLockGetTimeout = 342
+)
+
+// 消息队列相关错误
+const (
+	CodeMQDeclareFailed = 351
+	CodeMQBindQueueFailed = 352
+	CodeMQConsumeFailed = 355
+	CodeMQPushFailed = 353
+	CodeMQSetQosFailed = 354
 )
