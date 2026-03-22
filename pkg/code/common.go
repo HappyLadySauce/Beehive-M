@@ -11,16 +11,27 @@ const (
 	CodeUnmarshalFailed = 302
 	// Marshal 失败
 	CodeMarshalFailed = 301
-	// 数据库错误
-	CodeDBQueryFailed = 303
-	// 缓存错误
-	CodeCacheSetFailed = 304
-	// 缓存获取失败
-	CodeCacheGetFailed = 305
-	// 缓存删除失败
-	CodeCacheDeleteFailed = 306
 	// 服务端错误
 	CodeInternal = 500
+)
+
+// 数据库相关错误
+const (
+	CodeDBQueryFailed = 321
+	// 数据库添加失败
+	CodeDBAddFailed = 322
+	// 数据库删除失败
+	CodeDBDeleteFailed = 324
+)
+
+// 缓存相关错误
+const (
+	// 缓存设置失败
+	CodeCacheSetFailed = 331
+	// 缓存获取失败
+	CodeCacheGetFailed = 332
+	// 缓存删除失败
+	CodeCacheDeleteFailed = 333
 )
 
 // 分布式锁相关错误
@@ -37,9 +48,22 @@ const (
 
 // 消息队列相关错误
 const (
-	CodeMQDeclareFailed = 351
+	// 消息队列声明失败
+	CodeMQDeclareFailed   = 351
+	// 消息队列绑定失败
 	CodeMQBindQueueFailed = 352
-	CodeMQConsumeFailed = 355
-	CodeMQPushFailed = 353
-	CodeMQSetQosFailed = 354
+	// 消息队列消费失败
+	CodeMQConsumeFailed   = 355
+	// 消息队列推送失败
+	CodeMQPushFailed      = 353
+	// 消息队列设置QoS失败
+	CodeMQSetQosFailed    = 354
+)
+
+// WebSocket 连接相关错误
+const (
+	// 连接不存在或已关闭
+	CodeConnNotFound = 361
+	// 连接写入失败
+	CodeConnWriteFailed = 362
 )

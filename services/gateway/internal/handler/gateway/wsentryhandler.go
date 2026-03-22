@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/HappyLadySauce/Beehive-M/pkg/utils/ip"
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/svc"
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/ws"
 	"github.com/gorilla/websocket"
@@ -28,7 +29,7 @@ func WsEntryHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	upgrader := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
-		CheckOrigin: func(r *http.Request) bool { return true },
+		CheckOrigin:     func(r *http.Request) bool { return true },
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +47,18 @@ func WsEntryHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		conn, err := svcCtx.Hub.Register(wsConn, userID, deviceID)
+		// 获取客户端 IP
+		clientIP := ip.GetClientIP(r)
+
+		// 查询 IP 地理位置
+		location := ""
+		if svcCtx.IPManager != nil {
+			loc := svcCtx.IPManager.MustQuery(clientIP)
+			location = loc.String()
+			logx.Infof("IP %s location: %s", clientIP, location)
+		}
+
+		conn, err := svcCtx.Hub.Register(wsConn, userID, deviceID, clientIP, location)
 		if err != nil {
 			logx.Errorf("register connection failed: userID=%s deviceID=%s err=%v", userID, deviceID, err)
 			wsConn.Close()
@@ -113,4 +125,3 @@ func readPump(conn *ws.Connection) {
 		}
 	}
 }
-

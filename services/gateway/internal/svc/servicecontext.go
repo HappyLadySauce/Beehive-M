@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/HappyLadySauce/Beehive-M/pkg/utils/ip"
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/config"
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/mq"
 	"github.com/HappyLadySauce/Beehive-M/services/gateway/internal/ws"
@@ -14,9 +15,10 @@ import (
 )
 
 type ServiceContext struct {
-	Config config.Config
-	Hub    *ws.Hub
-	MQ     *mq.MQ
+	Config    config.Config
+	Hub       *ws.Hub
+	MQ        *mq.MQ
+	IPManager *ip.Manager
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -54,10 +56,24 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		}
 	}
 
+	// 初始化 IP 查询管理器
+	var ipManager *ip.Manager
+	if c.IPQuery.GeoIP2Enabled || c.IPQuery.IPIPEnabled || c.IPQuery.BaiduEnabled || c.IPQuery.IPAPIEnabled {
+		var err error
+		ipManager, err = ip.NewManager(c.IPQuery)
+		if err != nil {
+			logx.Errorf("Failed to initialize IP manager: %v", err)
+			// 不 panic，允许服务继续启动
+		}
+	} else {
+		logx.Info("IP query not configured")
+	}
+
 	svc := &ServiceContext{
-		Config: c,
-		Hub:    hub,
-		MQ:     messageQueue,
+		Config:    c,
+		Hub:       hub,
+		MQ:        messageQueue,
+		IPManager: ipManager,
 	}
 
 	// 启动 MQ 订阅，监听发给本网关的消息

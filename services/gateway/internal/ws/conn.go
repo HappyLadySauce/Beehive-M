@@ -33,6 +33,8 @@ type Connection struct {
 	UserID    string
 	DeviceID  string
 	GatewayID string
+	IP        string
+	Region    string
 	conn      *websocket.Conn
 	writeMu   sync.Mutex
 
@@ -57,6 +59,8 @@ type ConnectionInfo struct {
 	UserID    string `json:"userId"`
 	DeviceID  string `json:"deviceId"`
 	GatewayID string `json:"gatewayId"`
+	IP        string `json:"ip"`
+	Region    string `json:"region"`
 	Status    string `json:"status"` // "online" | "closing"
 }
 
@@ -69,8 +73,8 @@ type Hub struct {
 	rs        *redsync.Redsync
 	logx.Logger
 
-	ctx       context.Context
-	cancel 	  context.CancelFunc
+	ctx    context.Context
+	cancel context.CancelFunc
 
 	// 跨网关关闭回调：当发现旧连接在其他网关时调用，由外部注入
 	// 参数：旧连接信息；实现者负责通过 MQ 发送 close 指令
@@ -84,6 +88,12 @@ func NewHub(gatewayID string, cfg config.Config) (*Hub, error) {
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
+	registered := false
+	defer func() {
+		if !registered {
+			cancel()
+		}
+	}()
 
 	client := redis.NewClient(&redis.Options{
 		Addr:     cfg.RedisHost,
@@ -97,9 +107,11 @@ func NewHub(gatewayID string, cfg config.Config) (*Hub, error) {
 	pool := goredis.NewPool(client)
 	rs := redsync.New(pool)
 
+	registered = true
+
 	return &Hub{
 		ctx:       ctx,
-		cancel:	  cancel,
+		cancel:    cancel,
 		gatewayID: gatewayID,
 		conns:     make(map[string]*Connection),
 		rdb:       client, // 修复：赋值 Redis 客户端
@@ -122,28 +134,30 @@ func (h *Hub) Context() context.Context {
 // 返回所有关闭过程中的错误（使用 Go 1.20+ 的 errors.Join 合并）
 func (h *Hub) Close() error {
 	h.cancel()
-		
+
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	var errs []error
+	var errs error
 	for connID, conn := range h.conns {
 		if err := conn.closeConn(); err != nil {
-			errs = append(errs, fmt.Errorf("close conn %s: %w", connID, err))
+			errs = errors.Join(errs, fmt.Errorf("close conn %s: %w", connID, err))
 		}
 		delete(h.conns, connID)
 	}
 
-	if err := h.rdb.Close(); err != nil {
-		errs = append(errs, fmt.Errorf("close redis: %w", err))
+	if h.rdb != nil {
+		if err := h.rdb.Close(); err != nil {
+			errs = errors.Join(errs, fmt.Errorf("close redis: %w", err))
+		}
 	}
 
-	if len(errs) == 0 {
+	if errs == nil {
 		return nil
 	}
 	// errors.Join 将多个错误合并为一个
 	// 使用 errors.Is / errors.As 可以逐个检查
-	return errors.Join(errs...)
+	return errs
 }
 
 // closeConn 关闭底层 WebSocket（内部使用，调用方需持有 writeMu 或确保安全）
@@ -188,7 +202,9 @@ func userDevKey(userID, deviceID string) string {
 // 若同一 user+device 已有旧连接：
 //   - 旧连接在本网关 → 直接关闭
 //   - 旧连接在其他网关 → 触发 OnRemoteClose 回调（由调用方通过 MQ 通知）
-func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connection, error) {
+//
+// location 参数为可选的地理位置信息（如 "中国 广东 深圳 电信"）
+func (h *Hub) Register(conn *websocket.Conn, userID, deviceID, ip, location string) (*Connection, error) {
 	// connID 格式：userID:deviceID，与 Redis key 保持一致
 	connID := userID + ":" + deviceID
 	redisConnKey := connKey(userID, deviceID)
@@ -242,6 +258,7 @@ func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connecti
 		UserID:    userID,
 		DeviceID:  deviceID,
 		GatewayID: h.gatewayID,
+		IP:        ip,
 		Status:    "online",
 	}
 	data, err := json.Marshal(newConnInfo)
@@ -258,9 +275,14 @@ func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connecti
 		return nil, errors.WithCode(code.CodeCacheSetFailed, "write connectionInfo to redis failed")
 	}
 
-
 	// 继承 Hub 的 context，这样 Hub 关闭时所有连接也会收到信号
 	ctx, cancel := context.WithCancel(h.ctx)
+	registered := false
+	defer func() {
+		if !registered {
+			cancel()
+		}
+	}()
 
 	newConn := &Connection{
 		ctx:       ctx,
@@ -269,6 +291,8 @@ func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connecti
 		UserID:    userID,
 		DeviceID:  deviceID,
 		GatewayID: h.gatewayID,
+		IP:        ip,
+		Region:    location,
 		conn:      conn,
 	}
 
@@ -276,6 +300,7 @@ func (h *Hub) Register(conn *websocket.Conn, userID, deviceID string) (*Connecti
 	h.conns[connID] = newConn
 	h.mu.Unlock()
 
+	registered = true
 	h.Logger.Infof("connection registered: connID=%s gatewayID=%s", connID, h.gatewayID)
 	return newConn, nil
 }
@@ -352,7 +377,7 @@ func (c *Connection) WriteMessage(msg []byte) error {
 	}
 
 	if c.conn == nil {
-		return errors.WithCode(code.CodeCacheGetFailed, "connection already closed")
+		return errors.WithCode(code.CodeConnNotFound, "connection already closed")
 	}
 	return c.conn.WriteMessage(websocket.TextMessage, msg)
 }
