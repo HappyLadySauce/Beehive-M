@@ -29,20 +29,20 @@ IPQuery:
   
   # GeoLite2 自动下载配置
   # 启用后会自动下载并每日更新数据库
-  # ⚠️ 建议通过环境变量 GEO_LITE2_LICENSE_KEY 传入，不要硬编码在配置文件中
+  # ⚠️ 敏感信息建议通过环境变量 GEO_LITE2_LICENSE_KEY 传入，不要硬编码在配置文件中
   GeoLite2AutoDownload: true
-  GeoLite2LicenseKey: "${GEO_LITE2_LICENSE_KEY}"
+  GeoLite2LicenseKey: ""  # 留空则从环境变量 GEO_LITE2_LICENSE_KEY 读取
   GeoLite2DataDir: "./data"
   
   # IPIP.net 在线API（国内精准，需要申请 Token）
   # 官网：https://www.ipip.net/
   IPIPEnabled: false
-  IPIPToken: "${IPIPToken}"
+  IPIPToken: ""  # 留空则从环境变量 IPIP_TOKEN 读取
   
   # 百度地图 IP 定位 API（国内）
   # 官网：https://lbsyun.baidu.com/
   BaiduEnabled: false
-  BaiduAK: "${BaiduAK}"
+  BaiduAK: ""  # 留空则从环境变量 BAIDU_AK 读取
   
   # ip-api.com 免费 API（国内外，无需注册，有速率限制）
   # 适合开发测试使用

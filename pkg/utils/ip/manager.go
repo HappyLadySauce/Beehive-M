@@ -2,6 +2,7 @@ package ip
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -30,20 +31,34 @@ type ManagerConfig struct {
 
 	// GeoLite2 自动下载配置
 	GeoLite2AutoDownload bool   `json:"GeoLite2AutoDownload,optional"` // 是否自动下载 GeoLite2
-	GeoLite2LicenseKey   string `json:"GeoLite2LicenseKey,optional"`   // MaxMind License Key
+	GeoLite2LicenseKey   string `json:"GeoLite2LicenseKey,optional"`   // MaxMind License Key（建议从环境变量 GEO_LITE2_LICENSE_KEY 读取）
 	GeoLite2DataDir      string `json:"GeoLite2DataDir,optional"`      // 数据存放目录，默认 ./data
 
 	// IPIP.net 配置
 	IPIPEnabled bool   `json:"IPIPEnabled,optional"` // 是否启用 IPIP
-	IPIPToken   string `json:"IPIPToken,optional"`   // IPIP Token
+	IPIPToken   string `json:"IPIPToken,optional"`   // IPIP Token（建议从环境变量 IPIP_TOKEN 读取）
 
 	// 百度地图配置
 	BaiduEnabled bool   `json:"BaiduEnabled,optional"` // 是否启用百度
-	BaiduAK      string `json:"BaiduAK,optional"`      // 百度 AK
+	BaiduAK      string `json:"BaiduAK,optional"`      // 百度 AK（建议从环境变量 BAIDU_AK 读取）
 
 	// ip-api.com 配置
 	IPAPIEnabled bool   `json:"IPAPIEnabled,optional"` // 是否启用 IPAPI
 	IPAPILang    string `json:"IPAPILang,optional"`    // 语言，默认 zh-CN
+}
+
+// loadFromEnv 从环境变量加载敏感配置
+func (c *ManagerConfig) loadFromEnv() {
+	// 如果配置为空，尝试从环境变量读取
+	if c.GeoLite2LicenseKey == "" {
+		c.GeoLite2LicenseKey = os.Getenv("GEO_LITE2_LICENSE_KEY")
+	}
+	if c.IPIPToken == "" {
+		c.IPIPToken = os.Getenv("IPIP_TOKEN")
+	}
+	if c.BaiduAK == "" {
+		c.BaiduAK = os.Getenv("BAIDU_AK")
+	}
 }
 
 // Manager IP查询管理器
@@ -63,6 +78,9 @@ var (
 
 // NewManager 创建查询管理器
 func NewManager(cfg ManagerConfig) (*Manager, error) {
+	// 从环境变量加载敏感配置
+	cfg.loadFromEnv()
+
 	m := &Manager{
 		config:   cfg,
 		queriers: make(map[QuerySource]Querier),
