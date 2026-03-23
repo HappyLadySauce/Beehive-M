@@ -48,7 +48,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 				UserID:    info.UserID,
 				DeviceID:  info.DeviceID,
 				GatewayID: info.GatewayID,
-				Reason:    "kicked by new connection",
+				Region:    info.Region,
 			}
 			if err := messageQueue.Publish(info.GatewayID, msg); err != nil {
 				logx.Errorf("publish close msg to gateway %s failed: %v", info.GatewayID, err)
@@ -108,7 +108,7 @@ func (s *ServiceContext) startGatewayConsumer() {
 				if err := conn.Close(); err != nil {
 					logx.Errorf("close conn %s by mq failed: %v", msg.ConnID, err)
 				} else {
-					logx.Infof("closed conn %s by mq (reason: %s)", msg.ConnID, msg.Reason)
+					logx.Infof("closed conn %s by mq (region: %s)", msg.ConnID, msg.Region)
 				}
 			} else {
 				logx.Infof("conn %s not found in local hub, skip close", msg.ConnID)

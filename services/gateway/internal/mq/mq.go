@@ -30,7 +30,7 @@ type Message struct {
 	UserID    string                 `json:"userId"`
 	DeviceID  string                 `json:"deviceId"`
 	GatewayID string                 `json:"gatewayId"`
-	Reason    string                 `json:"reason,omitempty"`
+	Region    string                 `json:"region,omitempty"`
 	Timestamp int64                  `json:"timestamp"`
 	Data      map[string]interface{} `json:"data,omitempty"`
 }
